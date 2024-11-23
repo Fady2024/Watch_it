@@ -3,15 +3,18 @@ package com.example.fms_market;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+
 public class HomePageFX {
 
     private static final String WELCOME_FONT = "-fx-font-size: 24px; -fx-font-weight: bold; -fx-font-family: 'Arial';";
@@ -20,27 +23,43 @@ public class HomePageFX {
 
     private final Stage stage;
     private final Pane contentPane;
-    private Label welcomeLabel;
-    private Label nameLabel;
-    private Button logOutButton;
-    private ImageView userImageView;
+    private final Label welcomeLabel;
+    private final Label nameLabel;
+    private final Button logOutButton;
+    private final ImageView userImageView;
 
-    public HomePageFX(String username, String role, Stage primaryStage, String userPhotoPath) throws IOException {
+    // Editable fields for user details
+    private final TextField emailField;
+    private final TextField phoneField;
+    private final TextField ageField;
+    private final Button saveButton;
+
+    private final User currentUser;
+
+    public HomePageFX(User user, Stage primaryStage) throws IOException {
+        this.currentUser = user;
         this.stage = primaryStage;
         primaryStage.setTitle("Home Page");
 
         // Create UI components
-        welcomeLabel = createWelcomeLabel(role);
-        nameLabel = createNameLabel(username);
+        welcomeLabel = createWelcomeLabel(user.getRole());
+        nameLabel = createNameLabel(user.getEmail());
         logOutButton = createLogOutButton();
-        userImageView = createUserImageView(userPhotoPath);
+        userImageView = createUserImageView(user.getUser_photo_path());
 
+        // Editable user information fields
+        emailField = createTextField(user.getEmail());
+        phoneField = createTextField(user.getPhone());
+        ageField = createTextField(user.getAge());
+        saveButton = createSaveButton();
+
+        // Set up the content pane
         TopPanel dayNightSwitch = new TopPanel();
         dayNightSwitch.addActionListener(this::updateColors);
-
-        // Set initial window size
         contentPane = new Pane();
         setupContentPane(dayNightSwitch);
+
+        // Set the initial window size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
@@ -55,7 +74,17 @@ public class HomePageFX {
     }
 
     private void setupContentPane(TopPanel dayNightSwitch) {
-        contentPane.getChildren().addAll(dayNightSwitch.getCanvas(), welcomeLabel, nameLabel, userImageView, logOutButton);
+        contentPane.getChildren().addAll(
+                dayNightSwitch.getCanvas(),
+                welcomeLabel,
+                nameLabel,
+                userImageView,
+                logOutButton,
+                emailField,
+                phoneField,
+                ageField,
+                saveButton
+        );
 
         // Initial layout (before resize)
         updateLayout(contentPane.getWidth(), contentPane.getHeight());
@@ -84,13 +113,13 @@ public class HomePageFX {
         logOutButton.setOnAction(_ -> new WelcomePage(stage));
 
         // Hover effects
-        logOutButton.setOnMouseEntered(event -> logOutButton.setStyle("-fx-background-color: #ff4500; -fx-text-fill: white; -fx-background-radius: 10px;"));
-        logOutButton.setOnMouseExited(event -> logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;"));
+        logOutButton.setOnMouseEntered(_ -> logOutButton.setStyle("-fx-background-color: #ff4500; -fx-text-fill: white; -fx-background-radius: 10px;"));
+        logOutButton.setOnMouseExited(_ -> logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;"));
 
         return logOutButton;
     }
 
-    private ImageView createUserImageView(String userPhotoPath) throws IOException {
+    private ImageView createUserImageView(String userPhotoPath) {
         File imageFile = new File(userPhotoPath);
         Image image = new Image(imageFile.toURI().toString());
         ImageView imageView = new ImageView(image);
@@ -110,7 +139,35 @@ public class HomePageFX {
         return imageView;
     }
 
+    private TextField createTextField(String text) {
+        TextField textField = new TextField(text);
+        textField.setStyle("-fx-font-size: 16px; -fx-font-family: 'Arial'; -fx-background-color: #f0f0f0;");
+        return textField;
+    }
 
+    private Button createSaveButton() {
+        Button saveButton = new Button("Save");
+        saveButton.setStyle(BUTTON_FONT);
+        saveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10px;");
+        saveButton.setOnAction(_ -> saveUserDetails());
+        return saveButton;
+    }
+
+    private void saveUserDetails() {
+        // Update the user object with the new details
+        currentUser.setEmail(emailField.getText());
+        currentUser.setPhone(phoneField.getText());
+        currentUser.setAge(ageField.getText());
+
+        // Save the updated user details to the JSON file
+        try {
+            JsonHandler.saveUser(currentUser);
+            System.out.println("Updated user details saved.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to save updated user details.");
+        }
+    }
 
     private void updateLayout(double width, double height) {
         // Center the elements based on the new window size
@@ -126,9 +183,20 @@ public class HomePageFX {
         nameLabel.setLayoutX(centerX - 80);  // Adjust to center
         nameLabel.setLayoutY(centerY);
 
-        logOutButton.setLayoutX(centerX +300);
-        logOutButton.setLayoutY(centerY + 250);
+        emailField.setLayoutX(centerX - 100);
+        emailField.setLayoutY(centerY + 30);
 
+        phoneField.setLayoutX(centerX - 100);
+        phoneField.setLayoutY(centerY + 80);
+
+        ageField.setLayoutX(centerX - 100);
+        ageField.setLayoutY(centerY + 130);
+
+        saveButton.setLayoutX(centerX + 120);
+        saveButton.setLayoutY(centerY + 180);
+
+        logOutButton.setLayoutX(centerX + 300);
+        logOutButton.setLayoutY(centerY + 250);
     }
 
     private void updateColors() {
@@ -137,11 +205,17 @@ public class HomePageFX {
             contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #f5f7fa, #c3cfe2);");
             welcomeLabel.setTextFill(Color.BLACK);
             nameLabel.setTextFill(Color.BLACK);
+            emailField.setStyle("-fx-background-color: #f0f0f0;");
+            phoneField.setStyle("-fx-background-color: #f0f0f0;");
+            ageField.setStyle("-fx-background-color: #f0f0f0;");
             logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;");
         } else {
             contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #232526, #414345);");
             welcomeLabel.setTextFill(Color.WHITE);
             nameLabel.setTextFill(Color.WHITE);
+            emailField.setStyle("-fx-background-color: #333;");
+            phoneField.setStyle("-fx-background-color: #333;");
+            ageField.setStyle("-fx-background-color: #333;");
             logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;");
         }
     }

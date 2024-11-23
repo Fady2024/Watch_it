@@ -15,7 +15,6 @@ import java.awt.*;
 import java.io.IOException;
 
 public class LoginPageFX {
-    private final JsonHandler excelHandler;
     private final Pane contentPane;
     private final Label titleLabel;
     private final TextField emailField;
@@ -24,11 +23,10 @@ public class LoginPageFX {
     private final Button backButton;
     private final Text emailErrorText;
     private final Text passwordErrorText;
-    private final Text signUpText; // Declare signUpText as an instance variable
-    private final TopPanel dayNightSwitch; // Declare signUpText as an instance variable
+    private final Text signUpText;
+    private final TopPanel dayNightSwitch;
 
     public LoginPageFX(Stage stage) {
-        this.excelHandler = new JsonHandler();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
@@ -41,18 +39,17 @@ public class LoginPageFX {
         signUpText = createSignUpText(stage);
 
         // Create UI elements
-        titleLabel = createLabel("Login to FMS Market");
-        emailField = createTextField("Email");
+        titleLabel = createLabel();
+        emailField = createTextField();
         passwordField = createPasswordField();
-        loginButton = createButton("Login", Color.rgb(0, 123, 255));
+        loginButton = createButton(Color.rgb(0, 123, 255));
 
         // Create error messages
         emailErrorText = createErrorText();
         passwordErrorText = createErrorText();
 
         // Login action
-        // Assuming the rest of the code in LoginPageFX remains as is
-        loginButton.setOnAction(e -> {
+        loginButton.setOnAction(_ -> {
             String email = emailField.getText().trim().toLowerCase();
             String password = passwordField.getText().trim();
 
@@ -74,10 +71,10 @@ public class LoginPageFX {
 
             if (isValid) {
                 try {
-                    User user = excelHandler.getUserByEmailAndPassword(email, password);
+                    User user = JsonHandler.getUserByEmailAndPassword(email, password);
 
                     if (user != null) {
-                        new HomePageFX(user.getEmail(), user.getRole(), stage, user.getUser_photo_path());
+                        new HomePageFX(user, stage);
                     } else {
                         showMessage("Invalid credentials!");
                     }
@@ -119,7 +116,7 @@ public class LoginPageFX {
                         "-fx-padding: 10px 20px;"
         );
 
-        backButton.setOnMouseEntered(e -> backButton.setStyle(
+        backButton.setOnMouseEntered(_ -> backButton.setStyle(
                 "-fx-background-color: transparent; " +
                         "-fx-font-size: 16px; " +
                         "-fx-text-fill: #0066cc; " +
@@ -131,7 +128,7 @@ public class LoginPageFX {
         ));
 
         // Updated setOnMouseExited handler
-        backButton.setOnMouseExited(e -> {
+        backButton.setOnMouseExited(_ -> {
             if (TopPanel.isDayValue()) {
                 // Day theme styles
                 backButton.setStyle(
@@ -159,7 +156,7 @@ public class LoginPageFX {
             }
         });
 
-        backButton.setOnAction(e -> new WelcomePage(stage));
+        backButton.setOnAction(_ -> new WelcomePage(stage));
         return backButton;
     }
 
@@ -173,7 +170,7 @@ public class LoginPageFX {
 
         signUpText.setFill(gradient);
         signUpText.setStyle("-fx-font-size: 14px; -fx-cursor: hand;");
-        signUpText.setOnMouseClicked((MouseEvent e) -> new SignUpPage(stage));
+        signUpText.setOnMouseClicked((MouseEvent _) -> new SignUpPage(stage));
         return signUpText;
     }
 
@@ -186,16 +183,16 @@ public class LoginPageFX {
         alert.showAndWait();
     }
 
-    private Label createLabel(String text) {
-        Label label = new Label(text);
+    private Label createLabel() {
+        Label label = new Label("Login to FMS Market");
         label.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, gray, 5, 0.5, 2, 2);");
         label.setTextFill(Color.BLACK);
         return label;
     }
 
-    private TextField createTextField(String promptText) {
+    private TextField createTextField() {
         TextField textField = new TextField();
-        textField.setPromptText(promptText);
+        textField.setPromptText("Email");
         textField.setStyle("-fx-font-size: 16px; -fx-effect: dropshadow(gaussian, gray, 5, 0.5, 2, 2);");
         return textField;
     }
@@ -207,8 +204,8 @@ public class LoginPageFX {
         return passwordField;
     }
 
-    private Button createButton(String text, Color backgroundColor) {
-        Button button = new Button(text);
+    private Button createButton(Color backgroundColor) {
+        Button button = new Button("Login");
         button.setStyle("-fx-background-color: " + toRgbString(backgroundColor) + "; -fx-text-fill: white; -fx-font-size: 16px; -fx-effect: dropshadow(gaussian, gray, 10, 0.5, 2, 2);");
         return button;
     }

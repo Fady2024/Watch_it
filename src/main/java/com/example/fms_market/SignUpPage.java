@@ -8,18 +8,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.animation.TranslateTransition;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +76,7 @@ public class SignUpPage {
         cameraEmoji.setTranslateY(25); // Adjust this value to control how far down the emoji moves
 
 // Set mouse event to select profile image on click
-        profileImagePanel.setOnMouseClicked(e -> {
+        profileImagePanel.setOnMouseClicked(_ -> {
             selectProfileImage(primaryStage);
             stackPane.getChildren().clear();  // Remove camera emoji when image is selected
         });
@@ -98,13 +94,13 @@ public class SignUpPage {
         strengthPanel.setVisible(false);
 
         // Password field logic
-        passwordField.setOnKeyReleased(e -> validatePasswordStrength(passwordField.getText()));
+        passwordField.setOnKeyReleased(_ -> validatePasswordStrength(passwordField.getText()));
         dayNightSwitch = new TopPanel();
 
         // Sign-up button
          signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white;");
-        signUpButton.setOnAction(e -> handleSignUp(primaryStage));
+        signUpButton.setOnAction(_ -> handleSignUp(primaryStage));
 
         // Login label
         loginLabel=createLoginText(primaryStage);
@@ -119,8 +115,8 @@ public class SignUpPage {
 
         // Create the scene and add resize listener
         Scene scene = new Scene(contentPane, stageWidth, stageHeight);
-        scene.widthProperty().addListener((obs, oldVal, newVal) -> updateLayout(newVal.doubleValue(), scene.getHeight()));
-        scene.heightProperty().addListener((obs, oldVal, newVal) -> updateLayout(scene.getWidth(), newVal.doubleValue()));
+        scene.widthProperty().addListener((_, _, newVal) -> updateLayout(newVal.doubleValue(), scene.getHeight()));
+        scene.heightProperty().addListener((_, _, newVal) -> updateLayout(scene.getWidth(), newVal.doubleValue()));
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -230,7 +226,7 @@ public class SignUpPage {
 
         loginText.setFill(gradient);
         loginText.setStyle("-fx-font-size: 14px; -fx-cursor: hand;");
-        loginText.setOnMouseClicked((MouseEvent e) -> new LoginPageFX(stage));
+        loginText.setOnMouseClicked((MouseEvent _) -> new LoginPageFX(stage));
         return loginText;
     }
     private void handleSignUp(Stage primaryStage) {
@@ -244,7 +240,7 @@ public class SignUpPage {
             return;
         }
 
-        if (isValidPassword(password)) {
+        if (isValidPassword()) {
             try {
                 if (JsonHandler.emailExists(email)) {
                     showAlert(Alert.AlertType.ERROR, "Email already exists! Please use a different email.");
@@ -322,7 +318,7 @@ public class SignUpPage {
                         "-fx-padding: 10px 20px;"
         );
 
-        backButton.setOnMouseEntered(e -> backButton.setStyle(
+        backButton.setOnMouseEntered(_ -> backButton.setStyle(
                 "-fx-background-color: transparent; " +
                         "-fx-font-size: 16px; " +
                         "-fx-text-fill: #0066cc; " +
@@ -334,7 +330,7 @@ public class SignUpPage {
         ));
 
         // Updated setOnMouseExited handler
-        backButton.setOnMouseExited(e -> {
+        backButton.setOnMouseExited(_ -> {
             if (TopPanel.isDayValue()) {
                 // Day theme styles
                 backButton.setStyle(
@@ -362,11 +358,11 @@ public class SignUpPage {
             }
         });
 
-        backButton.setOnAction(e -> new WelcomePage(stage));
+        backButton.setOnAction(_ -> new WelcomePage(stage));
         return backButton;
     }
 
-    private boolean isValidPassword(String password) {
+    private boolean isValidPassword() {
         return _hasDigits && _hasSpecialChar && _hasUppercase && _hasLowercase;
     }
     private void updateColors() {

@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({"id", "email", "password", "role", "phone", "age", "user_photo_path"})
 public class User {
     private int id;
-    private final String email;
+    private String email;
     private final String password;
     private final String role;
-    private final String phone;
-    private final String age;
+    private String phone;
+    private String age;
     private final String user_photo_path;
 
     @JsonCreator
@@ -32,6 +32,18 @@ public class User {
     // Setter for id
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     // Getter methods
