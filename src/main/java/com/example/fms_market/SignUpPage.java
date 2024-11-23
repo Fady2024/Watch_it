@@ -234,7 +234,7 @@ public class SignUpPage {
         return loginText;
     }
     private void handleSignUp(Stage primaryStage) {
-        String email = emailField.getText().trim();
+        String email = emailField.getText().trim().toLowerCase();
         String password = passwordField.getText().trim();
         String phone = phoneField.getText().trim();
         String age = ageField.getText().trim();

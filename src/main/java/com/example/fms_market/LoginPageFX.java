@@ -53,7 +53,7 @@ public class LoginPageFX {
         // Login action
         // Assuming the rest of the code in LoginPageFX remains as is
         loginButton.setOnAction(e -> {
-            String email = emailField.getText().trim();
+            String email = emailField.getText().trim().toLowerCase();
             String password = passwordField.getText().trim();
 
             boolean isValid = true;
