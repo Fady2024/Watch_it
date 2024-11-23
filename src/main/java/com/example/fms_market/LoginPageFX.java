@@ -15,7 +15,7 @@ import java.awt.*;
 import java.io.IOException;
 
 public class LoginPageFX {
-    private final ExcelHandler excelHandler;
+    private final JsonHandler excelHandler;
     private final Pane contentPane;
     private final Label titleLabel;
     private final TextField emailField;
@@ -28,7 +28,7 @@ public class LoginPageFX {
     private final TopPanel dayNightSwitch; // Declare signUpText as an instance variable
 
     public LoginPageFX(Stage stage) {
-        this.excelHandler = new ExcelHandler();
+        this.excelHandler = new JsonHandler();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();

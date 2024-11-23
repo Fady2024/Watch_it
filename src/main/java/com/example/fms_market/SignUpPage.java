@@ -246,7 +246,7 @@ public class SignUpPage {
 
         if (isValidPassword(password)) {
             try {
-                if (ExcelHandler.emailExists(email)) {
+                if (JsonHandler.emailExists(email)) {
                     showAlert(Alert.AlertType.ERROR, "Email already exists! Please use a different email.");
                     return;
                 }
@@ -256,7 +256,7 @@ public class SignUpPage {
                     user_photo_path = profileImage.getAbsolutePath();
                 }
 
-                ExcelHandler.saveUser(new User(email, password, "customer", phone, age, user_photo_path));
+                JsonHandler.saveUser(new User(email, password, "customer", phone, age, user_photo_path));
                 showAlert(Alert.AlertType.INFORMATION, "Sign Up Successful!");
                 new LoginPageFX(primaryStage);
             } catch (IOException ex) {

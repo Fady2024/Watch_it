@@ -1,22 +1,42 @@
 package com.example.fms_market;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"id", "email", "password", "role", "phone", "age", "user_photo_path"})
 public class User {
+    private int id;
     private final String email;
     private final String password;
     private final String role;
-    private final String Phone;
+    private final String phone;
     private final String age;
     private final String user_photo_path;
 
-
-
-    public User(String email, String password, String role, String phone, String age, String userPhotoPath) {
+    @JsonCreator
+    public User(@JsonProperty("email") String email,
+                @JsonProperty("password") String password,
+                @JsonProperty("role") String role,
+                @JsonProperty("phone") String phone,
+                @JsonProperty("age") String age,
+                @JsonProperty("user_photo_path") String userPhotoPath) {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.Phone = phone;
+        this.phone = phone;
         this.age = age;
-        user_photo_path = userPhotoPath;
+        this.user_photo_path = userPhotoPath;
+    }
+
+    // Setter for id
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    // Getter methods
+    public int getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -32,11 +52,13 @@ public class User {
     }
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
+
     public String getAge() {
         return age;
     }
+
     public String getUser_photo_path() {
         return user_photo_path;
     }
