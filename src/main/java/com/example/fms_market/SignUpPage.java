@@ -242,7 +242,7 @@ public class SignUpPage {
 
         if (isValidPassword()) {
             try {
-                if (JsonHandler.emailExists(email)) {
+                if (UserJsonHandler.emailExists(email)) {
                     showAlert(Alert.AlertType.ERROR, "Email already exists! Please use a different email.");
                     return;
                 }
@@ -252,7 +252,7 @@ public class SignUpPage {
                     user_photo_path = profileImage.getAbsolutePath();
                 }
 
-                JsonHandler.saveUser(new User(email, password, "customer", phone, age, user_photo_path));
+                UserJsonHandler.saveUser(new User(email, password, "customer", phone, age, user_photo_path));
                 showAlert(Alert.AlertType.INFORMATION, "Sign Up Successful!");
                 new LoginPageFX(primaryStage);
             } catch (IOException ex) {

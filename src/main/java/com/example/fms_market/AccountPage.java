@@ -15,7 +15,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 
-public class HomePageFX {
+public class AccountPage {
 
     private static final String WELCOME_FONT = "-fx-font-size: 24px; -fx-font-weight: bold; -fx-font-family: 'Arial';";
     private static final String NAME_FONT = "-fx-font-size: 20px; -fx-font-family: 'Arial';";
@@ -36,7 +36,7 @@ public class HomePageFX {
 
     private final User currentUser;
 
-    public HomePageFX(User user, Stage primaryStage) throws IOException {
+    public AccountPage(User user, Stage primaryStage) throws IOException {
         this.currentUser = user;
         this.stage = primaryStage;
         primaryStage.setTitle("Home Page");
@@ -161,7 +161,7 @@ public class HomePageFX {
 
         // Save the updated user details to the JSON file
         try {
-            JsonHandler.saveUser(currentUser);
+            UserJsonHandler.saveUser(currentUser);
             System.out.println("Updated user details saved.");
         } catch (IOException e) {
             e.printStackTrace();

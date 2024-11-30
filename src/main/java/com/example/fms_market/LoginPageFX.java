@@ -71,10 +71,10 @@ public class LoginPageFX {
 
             if (isValid) {
                 try {
-                    User user = JsonHandler.getUserByEmailAndPassword(email, password);
+                    User user = UserJsonHandler.getUserByEmailAndPassword(email, password);
 
                     if (user != null) {
-                        new HomePageFX(user, stage);
+                        new HomePage(user, stage);
                     } else {
                         showMessage("Invalid credentials!");
                     }
