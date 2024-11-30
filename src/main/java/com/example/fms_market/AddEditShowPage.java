@@ -33,7 +33,7 @@ public class AddEditShowPage {
         grid.add(releaseDateField, 1, 1);
 
         // Duration
-        Label durationLabel = new Label("Duration (HH:MM):");
+        Label durationLabel = new Label("Duration:");
         TextField durationField = new TextField();
         grid.add(durationLabel, 0, 2);
         grid.add(durationField, 1, 2);
@@ -68,18 +68,24 @@ public class AddEditShowPage {
         grid.add(budgetLabel, 0, 7);
         grid.add(budgetField, 1, 7);
 
+        // Revenue
+        Label revenueLabel = new Label("Revenue:");
+        TextField revenueField = new TextField();
+        grid.add(revenueLabel, 0, 8);
+        grid.add(revenueField, 1, 8);
+
         // Poster (file path or URL)
         Label posterLabel = new Label("Poster (URL):");
         TextField posterField = new TextField();
-        grid.add(posterLabel, 0, 8);
-        grid.add(posterField, 1, 8);
+        grid.add(posterLabel, 0, 9);
+        grid.add(posterField, 1, 9);
 
         // Description
         Label descriptionLabel = new Label("Description:");
         TextArea descriptionField = new TextArea();
         descriptionField.setPrefRowCount(3);
-        grid.add(descriptionLabel, 0, 9);
-        grid.add(descriptionField, 1, 9);
+        grid.add(descriptionLabel, 0, 10);
+        grid.add(descriptionField, 1, 10);
 
         // Toggle for Movie or Series
         ToggleGroup group = new ToggleGroup();
@@ -88,14 +94,14 @@ public class AddEditShowPage {
         movieButton.setSelected(true);
         RadioButton seriesButton = new RadioButton("Series");
         seriesButton.setToggleGroup(group);
-        grid.add(movieButton, 0, 10);
-        grid.add(seriesButton, 1, 10);
+        grid.add(movieButton, 0, 11);
+        grid.add(seriesButton, 1, 11);
 
         // Series-specific fields
         Label episodeCountLabel = new Label("Number of Episodes:");
         TextField episodeCountField = new TextField();
-        grid.add(episodeCountLabel, 0, 11);
-        grid.add(episodeCountField, 1, 11);
+        grid.add(episodeCountLabel, 0, 12);
+        grid.add(episodeCountField, 1, 12);
 
         episodeCountLabel.setVisible(false);
         episodeCountField.setVisible(false);
@@ -124,15 +130,13 @@ public class AddEditShowPage {
                     Movie movie = new Movie();
                     movie.setTitle(titleField.getText());
                     movie.setDate(releaseDate);
-                    String[] durationParts = durationField.getText().split(":");
-                    int hours = Integer.parseInt(durationParts[0]);
-                    int minutes = Integer.parseInt(durationParts[1]);
-                    movie.setDuration(new Time(hours, minutes)); // Parse the duration
+                    movie.setDuration(Integer.parseInt(durationField.getText())); // Parse the duration
                     movie.setGenres(genresField.getText().split(","));
                     movie.setLanguage(languageField.getText().split(","));
                     movie.setImdb_score(Float.parseFloat(imdbScoreField.getText()));
                     movie.setCountry(countryField.getText());
                     movie.setBudget(Long.parseLong(budgetField.getText()));
+                    movie.setRevenue(Long.parseLong(revenueField.getText()));
                     movie.setDescription(descriptionField.getText());
                     movie.setPoster(posterField.getText()); // Set poster
                     movie.setType("movie"); // Set type
@@ -141,15 +145,13 @@ public class AddEditShowPage {
                     Series series = new Series();
                     series.setTitle(titleField.getText());
                     series.setDate(releaseDate);
-                    String[] durationParts = durationField.getText().split(":");
-                    int hours = Integer.parseInt(durationParts[0]);
-                    int minutes = Integer.parseInt(durationParts[1]);
-                    series.setDuration(new Time(hours, minutes)); // Parse the duration
+                    series.setDuration(Integer.parseInt(durationField.getText())); // Parse the duration
                     series.setGenres(genresField.getText().split(","));
                     series.setLanguage(languageField.getText().split(","));
                     series.setImdb_score(Float.parseFloat(imdbScoreField.getText()));
                     series.setCountry(countryField.getText());
                     series.setBudget(Long.parseLong(budgetField.getText()));
+                    series.setRevenue(Long.parseLong(revenueField.getText()));
                     series.setPoster(posterField.getText()); // Set poster
                     series.setDescription(descriptionField.getText());
                     series.setSeriesEp(Integer.parseInt(episodeCountField.getText()));

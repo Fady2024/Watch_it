@@ -9,7 +9,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) {
         // Show Add/Edit page for Movie or Series
-        new LoginPageFX(stage); // Add Movie or Series
+        new AddEditShowPage(stage); // Add Movie or Series
     }
 
     public static void main(String[] args) {
