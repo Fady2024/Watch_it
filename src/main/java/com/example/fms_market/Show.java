@@ -16,16 +16,16 @@ public abstract class Show {
     private int id;
     private String title;
     private Date release_date;
-    private int duration;
+    private Time duration;
   //  private Cast[] cast;
     private String[] genres;
   //  private Director director;
     private String[] language;
-    private double imdb_score;
+    private float imdb_score;
     private String country;
     private long budget;
     private String poster;
-    private String category;
+    private String type;
     private String description; // New field for show description
 
     public void setId(int id) {
@@ -52,11 +52,11 @@ public abstract class Show {
         return release_date;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Time duration) {
         this.duration = duration;
     }
 
-    public int getDuration() {
+    public Time getDuration() {
         return duration;
     }
 
@@ -92,11 +92,11 @@ public abstract class Show {
         return language;
     }
 
-    public void setImdb_score(double imdb_score) {
+    public void setImdb_score(float imdb_score) {
         this.imdb_score = imdb_score;
     }
 
-    public double getImdb_score() {
+    public float getImdb_score() {
         return imdb_score;
     }
 
@@ -124,8 +124,8 @@ public abstract class Show {
         return poster;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setType(String category) {
+        this.type = category;
     }
 
     public String getType() {
