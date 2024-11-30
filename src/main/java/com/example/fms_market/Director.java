@@ -16,7 +16,7 @@ public class Director {
         this.last_name=last_name;
         this.movies=movies;
     }
-    public String getFullname(){
+    public String getFullName(){
         return first_name+" "+last_name;
     }
 
@@ -47,8 +47,8 @@ public class Director {
 
         // Search through directors
         for (Director director : directors) {
-            if (director.getFullname().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add("Director: " + director.getFullname() + " | Age of Director: " +director.getAge() + " | List of movies:"+director.getMovies());
+            if (director.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
+                results.add("Director: " + director.getFullName() + " | Age of Director: " +director.getAge() + " | List of movies:"+director.getMovies());
             }
 
         }
