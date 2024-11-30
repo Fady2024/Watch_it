@@ -1,5 +1,4 @@
 package com.example.fms_market;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,34 +13,33 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
 public class HomePage {
 
-    private static final double MOVIE_CARD_WIDTH = 250;
-    private static final double MOVIE_CARD_HEIGHT = 353.67;
+    private static final double MOVIE_CARD_WIDTH = 150;
+    private static final double MOVIE_CARD_HEIGHT = 280;
 
     public HomePage(User user, Stage stage) {
         try {
             Banner.setCurrentUser(user);
 
-            //Fetch all movies
-            List<Movie> allMovies = ShowJsonHandler.readMovies();
+            // Fetch all shows (movies and series)
+            List<Show> allShows = ShowJsonHandler.readShows();
 
-            // GridPane to display movies
-            GridPane movieContainer = new GridPane();
-            movieContainer.setPadding(new Insets(20));
-            movieContainer.setHgap(20);
-            movieContainer.setVgap(20);
-            movieContainer.setAlignment(Pos.TOP_CENTER);
-            movieContainer.setStyle("-fx-background-color: #2B2B2B;");
+            // GridPane to display shows
+            GridPane showContainer = new GridPane();
+            showContainer.setPadding(new Insets(20));
+            showContainer.setHgap(20);
+            showContainer.setVgap(20);
+            showContainer.setAlignment(Pos.TOP_CENTER);
+            showContainer.setStyle("-fx-background-color: #2B2B2B;");
 
             BorderPane layout = new BorderPane();
             layout.setTop(Banner.getBanner(stage, "Home")); // Use the Banner class here and pass the current page
-            layout.setCenter(movieContainer);
+            layout.setCenter(showContainer);
 
             // Adjust stage dimensions
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -54,24 +52,24 @@ public class HomePage {
             stage.show();
 
             // Dynamically adjust layout
-            scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(movieContainer, newValue.doubleValue(), allMovies, user.getId()));
-            adjustLayout(movieContainer, stageWidth, allMovies, user.getId());
+            scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), allShows, user.getId()));
+            adjustLayout(showContainer, stageWidth, allShows, user.getId());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void adjustLayout(GridPane movieContainer, double width, List<Movie> allMovies, int userId) {
+    private void adjustLayout(GridPane showContainer, double width, List<Show> allShows, int userId) {
         int columns = (int) (width / (MOVIE_CARD_WIDTH + 20));
-        movieContainer.getChildren().clear();
+        showContainer.getChildren().clear();
 
         int column = 0;
         int row = 0;
 
-        for (Movie movie : allMovies) {
-            VBox movieCard = createMovieCard(movie, userId);
-            movieContainer.add(movieCard, column, row);
+        for (Show show : allShows) {
+            VBox showCard = createShowCard(show, userId);
+            showContainer.add(showCard, column, row);
 
             column++;
             if (column == columns) {
@@ -81,22 +79,22 @@ public class HomePage {
         }
     }
 
-    private VBox createMovieCard(Movie movie, int userId) {
-        VBox movieCard = new VBox(5);
-        movieCard.setAlignment(Pos.TOP_CENTER);
+    private VBox createShowCard(Show show, int userId) {
+        VBox showCard = new VBox(5);
+        showCard.setAlignment(Pos.TOP_CENTER);
 
-        ImageView posterView = createPosterView(movie.getPoster());
-        Label title = new Label(movie.getTitle());
+        ImageView posterView = createPosterView(show.getPoster());
+        Label title = new Label(show.getTitle());
         title.setFont(Font.font("Arial", 14));
         title.setTextFill(Color.WHITE);
         title.setAlignment(Pos.CENTER);
         title.setWrapText(true);
         title.setMaxWidth(MOVIE_CARD_WIDTH);
 
-        StackPane posterContainer = new StackPane(posterView, createFavoriteIcon(movie, userId));
-        movieCard.getChildren().addAll(posterContainer, title);
+        StackPane posterContainer = new StackPane(posterView, createFavoriteIcon(show, userId));
+        showCard.getChildren().addAll(posterContainer, title);
 
-        return movieCard;
+        return showCard;
     }
 
     private ImageView createPosterView(String posterPath) {
@@ -113,11 +111,11 @@ public class HomePage {
         return posterView;
     }
 
-    private StackPane createFavoriteIcon(Movie movie, int userId) {
+    private StackPane createFavoriteIcon(Show show, int userId) {
         Label favoriteIcon = new Label("♥");
-        boolean isFavorite = isMovieFavorite(userId, movie.getId());
+        boolean isFavorite = isShowFavorite(userId, show.getId());
         favoriteIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: " + (isFavorite ? "red" : "gray") + ";");
-        favoriteIcon.setOnMouseClicked(event -> toggleFavorite(userId, movie.getId(), favoriteIcon));
+        favoriteIcon.setOnMouseClicked(event -> toggleFavorite(userId, show.getId(), favoriteIcon));
 
         Rectangle background = new Rectangle(30, 30);
         background.setArcWidth(10);
@@ -127,23 +125,23 @@ public class HomePage {
         return new StackPane(background, favoriteIcon);
     }
 
-    private boolean isMovieFavorite(int userId, int movieId) {
+    private boolean isShowFavorite(int userId, int showId) {
         try {
-            List<Integer> favoriteMovies = UserJsonHandler.getFavoriteShows(userId);
-            return favoriteMovies.contains(movieId);
+            List<Integer> favoriteShows = UserJsonHandler.getFavoriteShows(userId);
+            return favoriteShows.contains(showId);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    private void toggleFavorite(int userId, int movieId, Label favoriteIcon) {
+    private void toggleFavorite(int userId, int showId, Label favoriteIcon) {
         try {
             // Toggle favorite status
-            UserJsonHandler.addFavoriteShow(userId, movieId);
+            UserJsonHandler.addFavoriteShow(userId, showId);
 
             // Update the favorite icon color
-            boolean isFavorite = isMovieFavorite(userId, movieId);
+            boolean isFavorite = isShowFavorite(userId, showId);
             favoriteIcon.setStyle("-fx-text-fill: " + (isFavorite ? "red" : "gray") + ";");
         } catch (IOException e) {
             e.printStackTrace();
