@@ -26,23 +26,21 @@ public class FavoritesPage {
     private static final double MOVIE_CARD_HEIGHT = 280;
 
     public FavoritesPage(User user, Stage stage) throws IOException {
-        // Get the favorite shows from the user's data
         List<Integer> favoriteShowIds = UserJsonHandler.getFavoriteShows(user.getId());
         List<Show> allShows = ShowJsonHandler.readShows();
-        List<Movie> favoriteMovies = allShows.stream()
-                .filter(show -> favoriteShowIds.contains(show.getId()) && show instanceof Movie)
-                .map(show -> (Movie) show)
+        List<Show> favoriteShows = allShows.stream()
+                .filter(show -> favoriteShowIds.contains(show.getId()))
                 .collect(Collectors.toList());
 
-        GridPane movieContainer = new GridPane();
-        movieContainer.setStyle("-fx-background-color: #2B2B2B;");
-        movieContainer.setPadding(new Insets(20));
-        movieContainer.setHgap(20);
-        movieContainer.setVgap(20);
+        GridPane showContainer = new GridPane();
+        showContainer.setStyle("-fx-background-color: #2B2B2B;");
+        showContainer.setPadding(new Insets(20));
+        showContainer.setHgap(20);
+        showContainer.setVgap(20);
 
         BorderPane layout = new BorderPane();
         layout.setTop(Banner.getBanner(stage, "Favorites"));
-        layout.setCenter(movieContainer);
+        layout.setCenter(showContainer);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
@@ -54,29 +52,29 @@ public class FavoritesPage {
         stage.show();
 
         // Adjust layout dynamically
-        scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(movieContainer, newValue.doubleValue(), favoriteMovies,user));
-        adjustLayout(movieContainer, stageWidth, favoriteMovies,user);
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), favoriteShows, user));
+        adjustLayout(showContainer, stageWidth, favoriteShows, user);
     }
 
-    private void adjustLayout(GridPane movieContainer, double width, List<Movie> favoriteMovies, User user) {
+    private void adjustLayout(GridPane showContainer, double width, List<Show> favoriteShows, User user) {
         int columns = (int) (width / (MOVIE_CARD_WIDTH + 20));
-        movieContainer.getChildren().clear();
+        showContainer.getChildren().clear();
 
         int column = 0;
         int row = 0;
 
-        for (Movie movie : favoriteMovies) {
-            VBox movieCard = new VBox(5);
-            movieCard.setAlignment(Pos.TOP_CENTER);
+        for (Show show : favoriteShows) {
+            VBox showCard = new VBox(5);
+            showCard.setAlignment(Pos.TOP_CENTER);
 
-            Image moviePoster = new Image(movie.getPoster(), false);
+            Image showPoster = new Image(show.getPoster(), false);
 
             Rectangle roundedRectangle = new Rectangle(MOVIE_CARD_WIDTH, MOVIE_CARD_HEIGHT);
             roundedRectangle.setArcWidth(20);
             roundedRectangle.setArcHeight(20);
             roundedRectangle.setFill(Color.GRAY);
 
-            ImageView posterView = new ImageView(moviePoster);
+            ImageView posterView = new ImageView(showPoster);
             posterView.setFitWidth(MOVIE_CARD_WIDTH);
             posterView.setFitHeight(MOVIE_CARD_HEIGHT);
             posterView.setClip(roundedRectangle);
@@ -98,7 +96,7 @@ public class FavoritesPage {
             StackPane posterContainer = new StackPane(posterView, heartContainer);
             posterContainer.setAlignment(Pos.TOP_LEFT);
 
-            Label title = new Label(movie.getTitle());
+            Label title = new Label(show.getTitle());
             title.setFont(Font.font("Arial", 14));
             title.setTextFill(Color.WHITE);
             title.setAlignment(Pos.CENTER);
@@ -107,15 +105,15 @@ public class FavoritesPage {
 
             favoriteIcon.setOnMouseClicked(event -> {
                 try {
-                    UserJsonHandler.removeFavoriteShow(user.getId(), movie.getId());
-                    movieContainer.getChildren().remove(movieCard);
+                    UserJsonHandler.removeFavoriteShow(user.getId(), show.getId());
+                    showContainer.getChildren().remove(showCard);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
 
-            movieCard.getChildren().addAll(posterContainer, title);
-            movieContainer.add(movieCard, column, row);
+            showCard.getChildren().addAll(posterContainer, title);
+            showContainer.add(showCard, column, row);
 
             column++;
             if (column == columns) {
