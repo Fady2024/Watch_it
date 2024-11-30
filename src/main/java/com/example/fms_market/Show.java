@@ -15,7 +15,7 @@ import java.sql.Date;
 public abstract class Show {
     private int id;
     private String title;
-    private Date release_date;
+    private String release_date;
     private int duration;
   //  private Cast[] cast;
     private String[] genres;
@@ -26,6 +26,7 @@ public abstract class Show {
     private long budget;
     private long revenue;
     private String poster;
+    private String video;
     private String type;
     private String description; // New field for show description
 
@@ -45,11 +46,11 @@ public abstract class Show {
         return title;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.release_date = date;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return release_date;
     }
 
@@ -131,6 +132,14 @@ public abstract class Show {
 
     public String getPoster() {
         return poster;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
+
+    public String getVideo() {
+        return video;
     }
 
     public void setType(String type) {

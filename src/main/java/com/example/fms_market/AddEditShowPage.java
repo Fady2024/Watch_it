@@ -1,4 +1,6 @@
 package com.example.fms_market;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -80,12 +82,18 @@ public class AddEditShowPage {
         grid.add(posterLabel, 0, 9);
         grid.add(posterField, 1, 9);
 
+        // Video (file path or URL)
+        Label videoLabel = new Label("Video (URL):");
+        TextField videoField = new TextField();
+        grid.add(videoLabel, 0, 10);
+        grid.add(videoField, 1, 10);
+
         // Description
         Label descriptionLabel = new Label("Description:");
         TextArea descriptionField = new TextArea();
         descriptionField.setPrefRowCount(3);
-        grid.add(descriptionLabel, 0, 10);
-        grid.add(descriptionField, 1, 10);
+        grid.add(descriptionLabel, 0, 11);
+        grid.add(descriptionField, 1, 11);
 
         // Toggle for Movie or Series
         ToggleGroup group = new ToggleGroup();
@@ -94,14 +102,14 @@ public class AddEditShowPage {
         movieButton.setSelected(true);
         RadioButton seriesButton = new RadioButton("Series");
         seriesButton.setToggleGroup(group);
-        grid.add(movieButton, 0, 11);
-        grid.add(seriesButton, 1, 11);
+        grid.add(movieButton, 0, 12);
+        grid.add(seriesButton, 1, 12);
 
         // Series-specific fields
         Label episodeCountLabel = new Label("Number of Episodes:");
         TextField episodeCountField = new TextField();
-        grid.add(episodeCountLabel, 0, 12);
-        grid.add(episodeCountField, 1, 12);
+        grid.add(episodeCountLabel, 0, 13);
+        grid.add(episodeCountField, 1, 13);
 
         episodeCountLabel.setVisible(false);
         episodeCountField.setVisible(false);
@@ -118,41 +126,40 @@ public class AddEditShowPage {
         saveButton.setOnAction(event -> {
             try {
                 String releaseDateText = releaseDateField.getText();
-                // Validate date format before conversion
-                if (!releaseDateText.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                    throw new IllegalArgumentException("Invalid date format. Use YYYY-MM-DD.");
-                }
-
-                Date releaseDate = Date.valueOf(releaseDateText); // Parse the validated date
-
                 Show show;
                 if (movieButton.isSelected()) {
                     Movie movie = new Movie();
                     movie.setTitle(titleField.getText());
-                    movie.setDate(releaseDate);
+                    movie.setDate(releaseDateField.getText());
                     movie.setDuration(Integer.parseInt(durationField.getText())); // Parse the duration
                     movie.setGenres(genresField.getText().split(","));
                     movie.setLanguage(languageField.getText().split(","));
-                    movie.setImdb_score(Float.parseFloat(imdbScoreField.getText()));
+                    movie.setImdb_score(new BigDecimal(imdbScoreField.getText())
+                            .setScale(1, RoundingMode.HALF_UP)
+                            .floatValue());
                     movie.setCountry(countryField.getText());
                     movie.setBudget(Long.parseLong(budgetField.getText()));
                     movie.setRevenue(Long.parseLong(revenueField.getText()));
                     movie.setDescription(descriptionField.getText());
                     movie.setPoster(posterField.getText()); // Set poster
+                    movie.setVideo(videoField.getText()); // Set video
                     movie.setType("movie"); // Set type
                     show = movie;
                 } else {
                     Series series = new Series();
                     series.setTitle(titleField.getText());
-                    series.setDate(releaseDate);
+                    series.setDate(releaseDateField.getText());
                     series.setDuration(Integer.parseInt(durationField.getText())); // Parse the duration
                     series.setGenres(genresField.getText().split(","));
                     series.setLanguage(languageField.getText().split(","));
-                    series.setImdb_score(Float.parseFloat(imdbScoreField.getText()));
+                    series.setImdb_score(new BigDecimal(imdbScoreField.getText())
+                            .setScale(1, RoundingMode.HALF_UP)
+                            .floatValue());
                     series.setCountry(countryField.getText());
                     series.setBudget(Long.parseLong(budgetField.getText()));
                     series.setRevenue(Long.parseLong(revenueField.getText()));
                     series.setPoster(posterField.getText()); // Set poster
+                    series.setVideo(videoField.getText()); // Set video
                     series.setDescription(descriptionField.getText());
                     series.setSeriesEp(Integer.parseInt(episodeCountField.getText()));
                     series.setType("series"); // Set type
