@@ -19,7 +19,7 @@ public abstract class Show {
     private int duration;
   //  private Cast[] cast;
     private String[] genres;
-  //  private Director director;
+    private Director director;
     private String[] language;
     private double imdb_score;
     private String country;
@@ -77,7 +77,7 @@ public abstract class Show {
     public String[] getGenres() {
         return genres;
     }
-/*
+
     public void setDirector(Director director) {
         this.director = director;
     }
@@ -85,7 +85,7 @@ public abstract class Show {
     public Director getDirector() {
         return director;
     }
-*/
+
     public void setLanguage(String[] language) {
         this.language = language;
     }

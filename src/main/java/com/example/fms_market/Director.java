@@ -1,40 +1,69 @@
 package com.example.fms_market;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Director {
-    private String first_name ;
-    private String last_name ;
-    private List<String> movies;
-    private String nationality;
-    private String gender;
-    private int age;
+    private final String first_name;
+    private final String last_name;
+    private final List<String> movies;
+    private final String nationality;
+    private final String gender;
+    private final int age;
+    private final String fullname;
 
-    public Director(String first_name,String last_name,List<String>movies, int age, String gender, String nationality){
-        this.first_name=first_name;
-        this.last_name=last_name;
-        this.movies=movies;
+    @JsonCreator
+    public Director(
+            @JsonProperty("first_name") String first_name,
+            @JsonProperty("last_name") String last_name,
+            @JsonProperty("movies") List<String> movies,
+            @JsonProperty("age") int age,
+            @JsonProperty("gender") String gender,
+            @JsonProperty("nationality") String nationality,
+            @JsonProperty("fullname") String fullname) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.movies = movies;
+        this.age = age;
+        this.gender = gender;
+        this.nationality = nationality;
+        this.fullname = fullname;
     }
-    public String getFullName(){
-        return first_name+" "+last_name;
+
+    @JsonProperty("first_name")
+    public String getFirstName() {
+        return first_name;
+    }
+
+    @JsonProperty("last_name")
+    public String getLastName() {
+        return last_name;
     }
 
     public List<String> getMovies() {
         return movies;
     }
 
-    public int getAge()
-    {
-        return age ;
+    public int getAge() {
+        return age;
     }
-    public String getGender()
-    {
+
+    public String getGender() {
         return gender;
     }
-    public String getNationality()
-    {
-        return nationality ;
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    @JsonProperty("fullname")
+    public String getFullname() {
+        return fullname;
     }
 
     public static List<String> searchDirectorByName(String keyword, List<Director> directors) throws Exception {
@@ -47,8 +76,8 @@ public class Director {
 
         // Search through directors
         for (Director director : directors) {
-            if (director.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add("Director: " + director.getFullName() + " | Age of Director: " +director.getAge() + " | List of movies:"+director.getMovies());
+            if (director.getFullname().toLowerCase().contains(keyword.toLowerCase())) {
+                results.add("Director: " + director.getFullname() + " | Age of Director: " +director.getAge() + " | List of movies:"+director.getMovies());
             }
 
         }
