@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Director {
     private final String first_name;
     private final String last_name;
@@ -15,24 +15,24 @@ public class Director {
     private final String nationality;
     private final String gender;
     private final int age;
-    private final String fullname;
+
 
     @JsonCreator
-    public Director(
-            @JsonProperty("first_name") String first_name,
+            public Director(
+                    @JsonProperty("first_name") String first_name,
             @JsonProperty("last_name") String last_name,
             @JsonProperty("movies") List<String> movies,
             @JsonProperty("age") int age,
             @JsonProperty("gender") String gender,
-            @JsonProperty("nationality") String nationality,
-            @JsonProperty("fullname") String fullname) {
+            @JsonProperty("nationality") String nationality)
+             {
         this.first_name = first_name;
         this.last_name = last_name;
         this.movies = movies;
         this.age = age;
         this.gender = gender;
         this.nationality = nationality;
-        this.fullname = fullname;
+
     }
 
     @JsonProperty("first_name")
@@ -61,11 +61,6 @@ public class Director {
         return nationality;
     }
 
-    @JsonProperty("fullname")
-    public String getFullname() {
-        return fullname;
-    }
-
     public static List<String> searchDirectorByName(String keyword, List<Director> directors) throws Exception {
         List<String> results = new ArrayList<>();
 
@@ -76,8 +71,8 @@ public class Director {
 
         // Search through directors
         for (Director director : directors) {
-            if (director.getFullname().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add("Director: " + director.getFullname() + " | Age of Director: " +director.getAge() + " | List of movies:"+director.getMovies());
+            if (director.getFirstName().toLowerCase().contains(keyword.toLowerCase())|| director.getLastName().toLowerCase().contains(keyword.toLowerCase())) {
+                results.add("Director: " + director.getFirstName() +" "+ director.getLastName() + " | Age:" +director.getAge() + " | List of movies:"+director.getMovies());
             }
 
         }

@@ -2,6 +2,8 @@ package com.example.fms_market;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.sql.Date;
+import java.util.List;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
@@ -15,18 +17,17 @@ import java.sql.Date;
 public abstract class Show {
     private int id;
     private String title;
-    private String release_date;
+    private Date release_date;
     private int duration;
-  //  private Cast[] cast;
-    private String[] genres;
+    private List<Cast> cast;
+    private List<String> genres;
     private Director director;
-    private String[] language;
+    private List<String> language;
     private double imdb_score;
     private String country;
     private long budget;
     private long revenue;
     private String poster;
-    private String video;
     private String type;
     private String description; // New field for show description
 
@@ -46,11 +47,11 @@ public abstract class Show {
         return title;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.release_date = date;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return release_date;
     }
 
@@ -62,19 +63,19 @@ public abstract class Show {
         return duration;
     }
 
-/*    public void setCast(Cast[] cast) {
+    public void setCast(List <Cast>cast) {
         this.cast = cast;
     }
 
-    public Cast[] getCast() {
+    public List getCast() {
         return cast;
     }
-*/
-    public void setGenres(String[] genres) {
+
+    public void setGenres(List<String>genres) {
         this.genres = genres;
     }
 
-    public String[] getGenres() {
+    public List<String> getGenres() {
         return genres;
     }
 
@@ -86,11 +87,11 @@ public abstract class Show {
         return director;
     }
 
-    public void setLanguage(String[] language) {
+    public void setLanguage(List<String> language) {
         this.language = language;
     }
 
-    public String[] getLanguage() {
+    public List<String> getLanguage() {
         return language;
     }
 
@@ -134,14 +135,6 @@ public abstract class Show {
         return poster;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
-    }
-
-    public String getVideo() {
-        return video;
-    }
-
     public void setType(String type) {
         this.type = type;
     }
@@ -157,5 +150,8 @@ public abstract class Show {
     public String getDescription() {
         return description;
     }
+
+
+
 }
 
