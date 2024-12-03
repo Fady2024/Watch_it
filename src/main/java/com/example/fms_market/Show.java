@@ -32,6 +32,15 @@ public abstract class Show {
     private String type;
     private String description; // New field for show description
     private int views;
+         private double weightedRating;
+
+    public double getWeightedRating() {
+        return weightedRating;
+    }
+
+    public void setWeightedRating(double weightedRating) {
+        this.weightedRating = weightedRating;
+    }
 
     public void setId(int id) {
         this.id = id;
