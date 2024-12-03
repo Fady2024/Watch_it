@@ -3,16 +3,7 @@ package com.example.fms_market;
 public class Series extends Show {
     private int series_id;
     private int series_episodes;
-    private double weightedRating;  
-
-
-    public double getWeightedRating() {
-        return weightedRating;
-    }
-
-    public void setWeightedRating(double weightedRating) {
-        this.weightedRating = weightedRating;
-    }
+   
 
     public void setSeries_id(int series_id) {
         this.series_id = series_id;
