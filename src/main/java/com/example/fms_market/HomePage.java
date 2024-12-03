@@ -185,4 +185,45 @@ public class HomePage {
         }
         return recentSeries;
     }
+
+    private StackPane createRatingIcon(Show show,int userId){
+        Label Top_Rated = new Label("☆");
+        boolean isTopRated = isShowTopRated(userId, show.getId());
+        Top_Rated.setOnMouseClicked(event -> toggleTopRated(userId, show.getId(), Top_Rated));
+
+        Top_Rated.setStyle("-fx-font-size: 24px; -fx-text-fill: " + (isTopRated ? "gold" : "gray") + ";");
+
+        // Add the click event to toggle top-rated status
+        Top_Rated.setOnMouseClicked(event -> toggleTopRated(userId, show.getId(), Top_Rated));
+
+        Rectangle background = new Rectangle(30, 30);
+        background.setArcWidth(10);
+        background.setArcHeight(10);
+        background.setFill(Color.color(0, 0, 0, 0.6));
+
+        return new StackPane(background, Top_Rated);
+    }
+    private boolean isShowTopRated(int userId, int showId) {
+        try {
+            List<Integer> topRatedShows = UserJsonHandler.getTopRatedShows(userId);
+            return topRatedShows.contains(showId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void toggleTopRated(int userId, int showId, Label topRatedIcon) {
+        try {
+            if (isShowTopRated(userId, showId)) {
+                UserJsonHandler.removeTopRatedShow(userId, showId);}
+            else {UserJsonHandler.addTopRatedShow(userId, showId);}
+
+            boolean isTopRated = isShowTopRated(userId, showId);
+            topRatedIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: " + (isTopRated ? "gold" : "gray") + ";");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
