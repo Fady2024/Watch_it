@@ -81,12 +81,23 @@ public class AddEditShowPage {
         grid.add(posterLabel, 0, 9);
         grid.add(posterField, 1, 9);
 
+        // Video (file path or URL)
+        Label videoLabel = new Label("Video (URL):");
+        TextField videoField = new TextField();
+        grid.add(videoLabel, 0, 10);
+        grid.add(videoField, 1, 10);
+
         // Description
         Label descriptionLabel = new Label("Description:");
         TextArea descriptionField = new TextArea();
         descriptionField.setPrefRowCount(3);
-        grid.add(descriptionLabel, 0, 10);
-        grid.add(descriptionField, 1, 10);
+        grid.add(descriptionLabel, 0, 11);
+        grid.add(descriptionField, 1, 11);
+
+        Label viewsLabel = new Label("Views:");
+        TextField viewsField = new TextField();
+        grid.add(viewsLabel, 0, 12);
+        grid.add(viewsField, 1, 12);
 
         // Toggle for Movie or Series
         ToggleGroup group = new ToggleGroup();
@@ -95,14 +106,14 @@ public class AddEditShowPage {
         movieButton.setSelected(true);
         RadioButton seriesButton = new RadioButton("Series");
         seriesButton.setToggleGroup(group);
-        grid.add(movieButton, 0, 11);
-        grid.add(seriesButton, 1, 11);
+        grid.add(movieButton, 0, 13);
+        grid.add(seriesButton, 1, 13);
 
         // Series-specific fields
         Label episodeCountLabel = new Label("Number of Episodes:");
         TextField episodeCountField = new TextField();
-        grid.add(episodeCountLabel, 0, 12);
-        grid.add(episodeCountField, 1, 12);
+        grid.add(episodeCountLabel, 0, 14);
+        grid.add(episodeCountField, 1, 14);
 
         episodeCountLabel.setVisible(false);
         episodeCountField.setVisible(false);
@@ -139,7 +150,9 @@ public class AddEditShowPage {
                     movie.setBudget(Long.parseLong(budgetField.getText()));
                     movie.setRevenue(Long.parseLong(revenueField.getText()));
                     movie.setDescription(descriptionField.getText());
+                    movie.setViews(Integer.parseInt(viewsField.getText()));
                     movie.setPoster(posterField.getText()); // Set poster
+                    movie.setVideo(videoField.getText()); // Set video
                     movie.setType("movie"); // Set type
                     show = movie;
                 } else {
@@ -154,7 +167,9 @@ public class AddEditShowPage {
                     series.setBudget(Long.parseLong(budgetField.getText()));
                     series.setRevenue(Long.parseLong(revenueField.getText()));
                     series.setPoster(posterField.getText()); // Set poster
+                    series.setVideo(videoField.getText()); // Set video
                     series.setDescription(descriptionField.getText());
+                    series.setViews(Integer.parseInt(viewsField.getText()));
                     series.setSeriesEp(Integer.parseInt(episodeCountField.getText()));
                     series.setType("series"); // Set type
                     show = series;

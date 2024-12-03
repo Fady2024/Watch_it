@@ -15,27 +15,31 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class HomePage {
 
-    private static final double MOVIE_CARD_WIDTH = 150;
-    private static final double MOVIE_CARD_HEIGHT = 280;
+    private static final double MOVIE_CARD_WIDTH = 200;
+    private static final double MOVIE_CARD_HEIGHT =282.94;
 
     public HomePage(User user, Stage stage) {
         try {
             Banner.setCurrentUser(user);
 
-            // Fetch all shows (movies and series)
-            List<Show> allShows = ShowJsonHandler.readShows();
+            // Fetch Recent Movies
+            List<Movie> allMovies = ShowJsonHandler.readMovies();
+            List<Movie> recentMovies = DisplayRecentMovies(allMovies);
 
             // GridPane to display shows
             GridPane showContainer = new GridPane();
-            showContainer.setPadding(new Insets(20));
-            showContainer.setHgap(20);
-            showContainer.setVgap(20);
-            showContainer.setAlignment(Pos.TOP_CENTER);
-            showContainer.setStyle("-fx-background-color: #2B2B2B;");
+            showContainer.setPadding(new Insets(94));
+            showContainer.setHgap(27);
+            showContainer.setVgap(27);
+            showContainer.setAlignment(Pos.TOP_LEFT);
+            showContainer.setStyle("-fx-background-color: #1c1c1c;");
 
             BorderPane layout = new BorderPane();
             layout.setTop(Banner.getBanner(stage, "Home")); // Use the Banner class here and pass the current page
@@ -45,30 +49,29 @@ public class HomePage {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int stageWidth = (int) screenSize.getWidth();
             int stageHeight = (int) (screenSize.getHeight() / 1.1);
-
             Scene scene = new Scene(layout, stageWidth, stageHeight);
             stage.setScene(scene);
             stage.setTitle("Home");
             stage.show();
 
             // Dynamically adjust layout
-            scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), allShows, user.getId()));
-            adjustLayout(showContainer, stageWidth, allShows, user.getId());
+            scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), recentMovies, user.getId()));
+            adjustLayout(showContainer, stageWidth, recentMovies, user.getId());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void adjustLayout(GridPane showContainer, double width, List<Show> allShows, int userId) {
+    private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies, int userId) {
         int columns = (int) (width / (MOVIE_CARD_WIDTH + 20));
         showContainer.getChildren().clear();
 
         int column = 0;
         int row = 0;
 
-        for (Show show : allShows) {
-            VBox showCard = createShowCard(show, userId);
+        for (Movie movie : recentMovies) {
+            VBox showCard = createShowCard(movie, userId);
             showContainer.add(showCard, column, row);
 
             column++;
@@ -85,9 +88,9 @@ public class HomePage {
 
         ImageView posterView = createPosterView(show.getPoster());
         Label title = new Label(show.getTitle());
-        title.setFont(Font.font("Arial", 14));
+        title.setFont(Font.font("Tahoma", 14));
         title.setTextFill(Color.WHITE);
-        title.setAlignment(Pos.CENTER);
+        title.setAlignment(Pos.CENTER_LEFT);
         title.setWrapText(true);
         title.setMaxWidth(MOVIE_CARD_WIDTH);
 
@@ -146,5 +149,40 @@ public class HomePage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+    }
+
+    public List<Movie> DisplayRecentMovies(List<Movie> movies) {
+        List<Date> dates = new ArrayList<>();
+        List<Movie> recentMovies = new ArrayList<>();
+        for (int i = 0; i < movies.size(); i++) {
+            dates.add(movies.get(i).getDate());
+        }
+        Collections.sort(dates);
+        for (int i = dates.size() - 1; i > dates.size() - 6; i--) {
+            for (int j = 0; j < movies.size(); j++) {
+                if (movies.get(j).getDate() == dates.get(i))
+                    recentMovies.add(movies.get(j));
+
+            }
+        }
+    return recentMovies;
+    }
+    public List<Series> DisplayRecentSeries(List<Series> series) {
+        List<Date> dates = new ArrayList<>();
+        List<Series> recentSeries = new ArrayList<>();
+        for (int i = 0; i < series.size(); i++) {
+            dates.add(series.get(i).getDate());
+        }
+        Collections.sort(dates);
+        for (int i = dates.size() - 1; i > dates.size() - 6; i--) {
+            for (int j = 0; j < series.size(); j++) {
+                if (series.get(j).getDate() == dates.get(i))
+                    recentSeries.add(series.get(j));
+
+            }
+        }
+        return recentSeries;
     }
 }

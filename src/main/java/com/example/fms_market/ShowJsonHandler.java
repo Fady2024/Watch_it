@@ -52,4 +52,24 @@ public class ShowJsonHandler {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Show.class));
     }
 
+    public static List<Movie> readMovies() throws IOException {
+        List<Show> shows = readShows();
+        List<Movie> movies = new ArrayList<>();
+        for (Show show : shows) {
+            if (show instanceof Movie) {
+                movies.add((Movie) show);
+            }
+        }
+        return movies;
+    }
+    public static List<Series> readSeries() throws IOException {
+        List<Show> shows = readShows();
+        List<Series> seriesList = new ArrayList<>();
+        for (Show show : shows) {
+            if (show instanceof Series) {
+                seriesList.add((Series) show);
+            }
+        }
+        return seriesList;
+    }
 }

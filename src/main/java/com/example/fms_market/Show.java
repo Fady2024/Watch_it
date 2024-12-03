@@ -28,8 +28,10 @@ public abstract class Show {
     private long budget;
     private long revenue;
     private String poster;
+    private String video;
     private String type;
     private String description; // New field for show description
+    private int views;
 
     public void setId(int id) {
         this.id = id;
@@ -135,6 +137,14 @@ public abstract class Show {
         return poster;
     }
 
+    public void setVideo(String video) {
+        this.video = video;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
@@ -151,7 +161,8 @@ public abstract class Show {
         return description;
     }
 
+    public void setViews(int views) { this.views = views; }
 
-
+    public int getViews() { return views; }
 }
 

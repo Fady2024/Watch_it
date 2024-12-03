@@ -20,13 +20,13 @@ public class Banner {
     }
 
     public static HBox getBanner(Stage stage, String currentPage) {
-        HBox banner = new HBox(20);
-        banner.setStyle("-fx-background-color: #4B0082; -fx-padding: 20;");
+        HBox banner = new HBox(36);
+        banner.setStyle("-fx-background-color: #451952; -fx-padding: 40;");
         banner.setAlignment(Pos.CENTER_LEFT);
 
         // Title
         Text title = new Text("WATCH IT");
-        title.setFont(Font.font("Arial", 28));
+        title.setFont(Font.font("Tahoma", 40));
         title.setStyle("-fx-fill: white;");
 
         // Home label
@@ -54,6 +54,7 @@ public class Banner {
         TextField searchField = new TextField();
         searchField.setPromptText("Search by keyword");
         searchField.setStyle("-fx-background-color: white; -fx-prompt-text-fill: gray;");
+        searchField.setFont(Font.font("Arial", 15));
 
         // Adding components to banner
         banner.getChildren().addAll(title, homeLabel, favoritesLabel, accountLabel, searchField);
@@ -63,14 +64,13 @@ public class Banner {
 
     private static Text createNavLabel(String text, boolean isCurrentPage, Stage stage, Runnable action) {
         Text label = new Text(text);
-        label.setFont(Font.font("Arial", 18));
-        label.setStyle("-fx-fill: " + (isCurrentPage ? "white" : "gray") + "; -fx-cursor: hand;");
-
+        label.setFont(Font.font("Georgia", 20));
+        label.setStyle("-fx-fill: " + (isCurrentPage ? "white" : "#888888") + "; -fx-cursor: hand;");
         label.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
-            if (!isCurrentPage) label.setStyle("-fx-fill: lightgray; -fx-cursor: hand; -fx-font-weight: bold;");
+            if (!isCurrentPage) label.setStyle("-fx-fill: lightgrey; -fx-cursor: hand; -fx-font-weight: bold;");
         });
         label.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
-            if (!isCurrentPage) label.setStyle("-fx-fill: gray;");
+            if (!isCurrentPage) label.setStyle("-fx-fill: #888888;");
         });
 
         label.setOnMouseClicked(e -> action.run());
