@@ -1,7 +1,9 @@
 package com.example.fms_market;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,57 +15,58 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 public class HomePage {
 
     private static final double MOVIE_CARD_WIDTH = 200;
-    private static final double MOVIE_CARD_HEIGHT =282.94;
+    private static final double MOVIE_CARD_HEIGHT = 282.94;
 
     public HomePage(User user, Stage stage) {
+        Banner.setCurrentUser(user);
+
+        // Fetch Recent Movies
+        List<Movie> allMovies;
         try {
-            Banner.setCurrentUser(user);
-
-            // Fetch Recent Movies
-            List<Movie> allMovies = ShowJsonHandler.readMovies();
-            List<Movie> recentMovies = DisplayRecentMovies(allMovies);
-
-            // GridPane to display shows
-            GridPane showContainer = new GridPane();
-            showContainer.setPadding(new Insets(94));
-            showContainer.setHgap(27);
-            showContainer.setVgap(27);
-            showContainer.setAlignment(Pos.TOP_LEFT);
-            showContainer.setStyle("-fx-background-color: #1c1c1c;");
-
-            BorderPane layout = new BorderPane();
-            layout.setTop(Banner.getBanner(stage, "Home")); // Use the Banner class here and pass the current page
-            layout.setCenter(showContainer);
-
-            // Adjust stage dimensions
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int stageWidth = (int) screenSize.getWidth();
-            int stageHeight = (int) (screenSize.getHeight() / 1.1);
-            Scene scene = new Scene(layout, stageWidth, stageHeight);
-            stage.setScene(scene);
-            stage.setTitle("Home");
-            stage.show();
-
-            // Dynamically adjust layout
-            scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), recentMovies, user.getId()));
-            adjustLayout(showContainer, stageWidth, recentMovies, user.getId());
-
+            allMovies = ShowJsonHandler.readMovies();
         } catch (IOException e) {
             e.printStackTrace();
+            allMovies = new ArrayList<>();
         }
+        List<Movie> recentMovies = DisplayRecentMovies(allMovies);
+
+        // GridPane to display shows
+        GridPane showContainer = new GridPane();
+        showContainer.setPadding(new Insets(94));
+        showContainer.setHgap(27);
+        showContainer.setVgap(27);
+        showContainer.setAlignment(Pos.TOP_LEFT);
+        showContainer.setStyle("-fx-background-color: #1c1c1c;");
+
+        BorderPane layout = new BorderPane();
+        layout.setTop(Banner.getBanner(stage, "Home"));
+        layout.setCenter(showContainer);
+
+        // Adjust stage dimensions
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int stageWidth = (int) screenSize.getWidth();
+        int stageHeight = (int) (screenSize.getHeight() / 1.1);
+        Scene scene = new Scene(layout, stageWidth, stageHeight);
+        stage.setScene(scene);
+        stage.setTitle("Home");
+        stage.show();
+
+        // Dynamically adjust layout
+        scene.widthProperty().addListener((_, _, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), recentMovies, user, stage));
+        adjustLayout(showContainer, stageWidth, recentMovies, user, stage);
+
     }
 
-    private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies, int userId) {
+    private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies, User user, Stage stage) {
         int columns = (int) (width / (MOVIE_CARD_WIDTH + 20));
         showContainer.getChildren().clear();
 
@@ -71,7 +74,7 @@ public class HomePage {
         int row = 0;
 
         for (Movie movie : recentMovies) {
-            VBox showCard = createShowCard(movie, userId);
+            VBox showCard = createShowCard(movie, user, stage);
             showContainer.add(showCard, column, row);
 
             column++;
@@ -82,7 +85,7 @@ public class HomePage {
         }
     }
 
-    private VBox createShowCard(Show show, int userId) {
+    private VBox createShowCard(Show show, User user, Stage stage) {
         VBox showCard = new VBox(5);
         showCard.setAlignment(Pos.TOP_CENTER);
 
@@ -94,8 +97,17 @@ public class HomePage {
         title.setWrapText(true);
         title.setMaxWidth(MOVIE_CARD_WIDTH);
 
-        StackPane posterContainer = new StackPane(posterView, createFavoriteIcon(show, userId));
-        showCard.getChildren().addAll(posterContainer, title);
+        javafx.scene.control.Button watchButton = new Button("Watch It");
+        watchButton.setOnAction(event -> {
+            try {
+                new ShowPage(user, show, stage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        StackPane posterContainer = new StackPane(posterView, createFavoriteIcon(show, user.getId()));
+        showCard.getChildren().addAll(posterContainer, title, watchButton);
 
         return showCard;
     }
@@ -149,44 +161,44 @@ public class HomePage {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public List<Movie> DisplayRecentMovies(List<Movie> movies) {
         List<Date> dates = new ArrayList<>();
-        List<Movie> recentMovies = new ArrayList<>();
-        for (int i = 0; i < movies.size(); i++) {
-            dates.add(movies.get(i).getDate());
+        Set<Movie> recentMovies = new HashSet<>();
+        for (Movie movie : movies) {
+            dates.add(movie.getDate());
         }
         Collections.sort(dates);
-        for (int i = dates.size() - 1; i > dates.size() - 6; i--) {
-            for (int j = 0; j < movies.size(); j++) {
-                if (movies.get(j).getDate() == dates.get(i))
-                    recentMovies.add(movies.get(j));
-
+        for (int i = dates.size() - 1; i >= Math.max(0, dates.size() - 6); i--) {
+            for (Movie movie : movies) {
+                if (movie.getDate().equals(dates.get(i))) {
+                    recentMovies.add(movie);
+                }
             }
         }
-    return recentMovies;
+        return new ArrayList<>(recentMovies);
     }
+
     public List<Series> DisplayRecentSeries(List<Series> series) {
         List<Date> dates = new ArrayList<>();
         List<Series> recentSeries = new ArrayList<>();
-        for (int i = 0; i < series.size(); i++) {
-            dates.add(series.get(i).getDate());
+        for (Series s : series) {
+            dates.add(s.getDate());
         }
         Collections.sort(dates);
-        for (int i = dates.size() - 1; i > dates.size() - 6; i--) {
-            for (int j = 0; j < series.size(); j++) {
-                if (series.get(j).getDate() == dates.get(i))
-                    recentSeries.add(series.get(j));
-
+        for (int i = dates.size() - 1; i >= Math.max(0, dates.size() - 6); i--) {
+            for (Series s : series) {
+                if (s.getDate().equals(dates.get(i))) {
+                    recentSeries.add(s);
+                }
             }
         }
         return recentSeries;
     }
 
-    private StackPane createRatingIcon(Show show,int userId){
+    /*
+    private StackPane createRatingIcon(Show show, int userId) {
         Label Top_Rated = new Label("☆");
         boolean isTopRated = isShowTopRated(userId, show.getId());
         Top_Rated.setOnMouseClicked(event -> toggleTopRated(userId, show.getId(), Top_Rated));
@@ -203,6 +215,7 @@ public class HomePage {
 
         return new StackPane(background, Top_Rated);
     }
+
     private boolean isShowTopRated(int userId, int showId) {
         try {
             List<Integer> topRatedShows = UserJsonHandler.getTopRatedShows(userId);
@@ -216,8 +229,10 @@ public class HomePage {
     private void toggleTopRated(int userId, int showId, Label topRatedIcon) {
         try {
             if (isShowTopRated(userId, showId)) {
-                UserJsonHandler.removeTopRatedShow(userId, showId);}
-            else {UserJsonHandler.addTopRatedShow(userId, showId);}
+                UserJsonHandler.removeTopRatedShow(userId, showId);
+            } else {
+                UserJsonHandler.addTopRatedShow(userId, showId);
+            }
 
             boolean isTopRated = isShowTopRated(userId, showId);
             topRatedIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: " + (isTopRated ? "gold" : "gray") + ";");
@@ -225,5 +240,5 @@ public class HomePage {
             e.printStackTrace();
         }
     }
-
+    */
 }

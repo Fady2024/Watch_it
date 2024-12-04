@@ -1,3 +1,4 @@
+// src/main/java/com/example/fms_market/AddEditShowPage.java
 package com.example.fms_market;
 
 import javafx.scene.Scene;
@@ -6,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class AddEditShowPage {
     private Stage stage;
@@ -99,6 +101,37 @@ public class AddEditShowPage {
         grid.add(viewsLabel, 0, 12);
         grid.add(viewsField, 1, 12);
 
+        // Director Details
+        Label directorFirstNameLabel = new Label("Director First Name:");
+        TextField directorFirstNameField = new TextField();
+        grid.add(directorFirstNameLabel, 0, 13);
+        grid.add(directorFirstNameField, 1, 13);
+
+        Label directorLastNameLabel = new Label("Director Last Name:");
+        TextField directorLastNameField = new TextField();
+        grid.add(directorLastNameLabel, 0, 14);
+        grid.add(directorLastNameField, 1, 14);
+
+        Label directorMoviesLabel = new Label("Director Movies (comma separated):");
+        TextField directorMoviesField = new TextField();
+        grid.add(directorMoviesLabel, 0, 15);
+        grid.add(directorMoviesField, 1, 15);
+
+        Label directorAgeLabel = new Label("Director Age:");
+        TextField directorAgeField = new TextField();
+        grid.add(directorAgeLabel, 0, 16);
+        grid.add(directorAgeField, 1, 16);
+
+        Label directorGenderLabel = new Label("Director Gender:");
+        TextField directorGenderField = new TextField();
+        grid.add(directorGenderLabel, 0, 17);
+        grid.add(directorGenderField, 1, 17);
+
+        Label directorNationalityLabel = new Label("Director Nationality:");
+        TextField directorNationalityField = new TextField();
+        grid.add(directorNationalityLabel, 0, 18);
+        grid.add(directorNationalityField, 1, 18);
+
         // Toggle for Movie or Series
         ToggleGroup group = new ToggleGroup();
         RadioButton movieButton = new RadioButton("Movie");
@@ -106,14 +139,14 @@ public class AddEditShowPage {
         movieButton.setSelected(true);
         RadioButton seriesButton = new RadioButton("Series");
         seriesButton.setToggleGroup(group);
-        grid.add(movieButton, 0, 13);
-        grid.add(seriesButton, 1, 13);
+        grid.add(movieButton, 0, 19);
+        grid.add(seriesButton, 1, 19);
 
         // Series-specific fields
         Label episodeCountLabel = new Label("Number of Episodes:");
         TextField episodeCountField = new TextField();
-        grid.add(episodeCountLabel, 0, 14);
-        grid.add(episodeCountField, 1, 14);
+        grid.add(episodeCountLabel, 0, 20);
+        grid.add(episodeCountField, 1, 20);
 
         episodeCountLabel.setVisible(false);
         episodeCountField.setVisible(false);
@@ -175,8 +208,18 @@ public class AddEditShowPage {
                     show = series;
                 }
 
+                Director director = new Director(
+                        directorFirstNameField.getText(),
+                        directorLastNameField.getText(),
+                        Arrays.asList(directorMoviesField.getText().split(",")),
+                        Integer.parseInt(directorAgeField.getText()),
+                        directorGenderField.getText(),
+                        directorNationalityField.getText()
+                );
+
+                show.setDirector(director);
                 ShowJsonHandler.saveShow(show);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Show saved successfully!", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Show and Director saved successfully!", ButtonType.OK);
                 alert.show();
             } catch (IllegalArgumentException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
@@ -186,10 +229,10 @@ public class AddEditShowPage {
             }
         });
 
-        grid.add(saveButton, 1, 12);
+        grid.add(saveButton, 1, 21);
 
         // Set scene and show stage
-        Scene scene = new Scene(grid, 500, 600);
+        Scene scene = new Scene(grid, 500, 800);
         stage.setTitle("Add/Edit Show");
         stage.setScene(scene);
         stage.show();

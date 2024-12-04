@@ -1,22 +1,19 @@
 package com.example.fms_market;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserJsonHandler {
-    private static final String FILE_PATH = "users.json";
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void saveUser(User user) throws IOException {
+        ObjectNode rootNode = DataManager.getUsersRootNode();
         List<User> users = readUsers();
-        boolean userExists = false;
 
+        boolean userExists = false;
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId() == user.getId()) {
                 users.set(i, user);
@@ -26,14 +23,13 @@ public class UserJsonHandler {
         }
 
         if (!userExists) {
-            int newUserId = users.isEmpty() ? 0 : users.get(users.size() - 1).getId() + 1;
+            int newUserId = users.isEmpty() ? 1 : users.get(users.size() - 1).getId() + 1;
             user.setId(newUserId);
             users.add(user);
         }
 
-        ObjectNode rootNode = objectMapper.createObjectNode();
-        rootNode.set("users", objectMapper.valueToTree(users));
-        objectMapper.writeValue(new File(FILE_PATH), rootNode);
+        rootNode.set("users", DataManager.getObjectMapper().valueToTree(users));
+        DataManager.saveData();
     }
 
     public static boolean emailExists(String email) throws IOException {
@@ -87,7 +83,7 @@ public class UserJsonHandler {
                 List<Integer> favoriteShowIds = user.getFavoriteShowIds();
                 if (favoriteShowIds.contains(showId)) {
                     favoriteShowIds.remove(Integer.valueOf(showId)); // Remove by value
-                    saveUser(user); // Save the updated user
+                    saveUser(user);
                     break;
                 }
             }
@@ -132,20 +128,14 @@ public class UserJsonHandler {
     }
     
     private static List<User> readUsers() throws IOException {
-        File file = new File(FILE_PATH);
-
-        if (!file.exists() || file.length() == 0) {
-            return new ArrayList<>();
-        }
-
-        JsonNode rootNode = objectMapper.readTree(file);
+        ObjectNode rootNode = DataManager.getUsersRootNode();
         JsonNode usersNode = rootNode.path("users");
 
         if (usersNode.isMissingNode() || usersNode.isEmpty()) {
             return new ArrayList<>();
         }
 
-        return objectMapper.readValue(usersNode.toString(),
-                objectMapper.getTypeFactory().constructCollectionType(List.class, User.class));
+        return DataManager.getObjectMapper().readValue(usersNode.toString(),
+                DataManager.getObjectMapper().getTypeFactory().constructCollectionType(List.class, User.class));
     }
 }

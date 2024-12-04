@@ -41,7 +41,7 @@ public class Banner {
             }
         });
         
-         // Top Rated label
+    /*     // Top Rated label
          Text TopRatedLabel = createNavLabel("Top Rated", currentPage.equals("Top Rated"), stage, () -> {
             try {
                 new Top_Rated(currentUser, stage);
@@ -49,7 +49,7 @@ public class Banner {
                 ex.printStackTrace();
             }
         });
-
+*/
         // Account label
         Text accountLabel = createNavLabel("Account", currentPage.equals("Account"), stage, () -> {
             try {
@@ -66,7 +66,7 @@ public class Banner {
         searchField.setFont(Font.font("Arial", 15));
 
         // Adding components to banner
-        banner.getChildren().addAll(title, homeLabel, favoritesLabel, accountLabel, TopRatedLabel,searchField);
+        banner.getChildren().addAll(title, homeLabel, favoritesLabel, accountLabel,searchField);
 
         return banner;
     }

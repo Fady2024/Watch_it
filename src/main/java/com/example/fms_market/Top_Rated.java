@@ -1,3 +1,4 @@
+/*
 package com.example.fms_market;
 
 import javafx.geometry.Insets;
@@ -102,16 +103,6 @@ public class Top_Rated {
             title.setMaxWidth(MOVIE_CARD_WIDTH);
             title.setWrapText(true);
 
-            Rated_Icon.setOnMouseClicked(event -> {
-                try {
-                    UserJsonHandler.removeTopRatedShow(user.getId(), show.getId());
-                    Rated_Icon.setText("☆");
-                    showContainer.getChildren().remove(showCard);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-
             // Show IMDb rating (common for both Movie and Series)
             Label imdbLabel = new Label("IMDb: " + show.getImdb_score());
             imdbLabel.setFont(Font.font("Arial", 12));
@@ -140,6 +131,6 @@ public class Top_Rated {
         }
     }
 
-    public void getTopRatedMovies(List<Movie> movies, int i) {
-    }
+
 }
+*/

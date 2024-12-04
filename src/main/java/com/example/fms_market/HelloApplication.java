@@ -8,8 +8,18 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) {
-        // Show Add/Edit page for Movie or Series
-        new AddEditShowPage(stage); // Add Movie or Series
+        try {
+            // Load data at the beginning
+            DataManager.loadData();
+
+            new LoginPageFX(stage);
+
+            // Save data at the end
+            DataManager.saveData();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

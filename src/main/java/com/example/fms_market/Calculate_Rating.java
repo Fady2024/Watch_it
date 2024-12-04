@@ -1,3 +1,4 @@
+/*
 package com.example.fms_market;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -81,4 +82,4 @@ public class Calculate_Rating {
         int index = nameofshows.indexOf(show.getTitle());
         return index != -1 ? ratings.get(index).size() : 0;
     }
-}
+}*/
