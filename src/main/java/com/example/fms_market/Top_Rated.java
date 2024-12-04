@@ -35,7 +35,7 @@ public class Top_Rated {
         showContainer.setPadding(new Insets(20));
 
         BorderPane layout = new BorderPane();
-        layout.setTop(Banner.getBanner(stage, "Top Rated Shows"));
+        layout.setTop(Banner.getBanner(stage, "Top Rated"));
         layout.setCenter(showContainer);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -44,7 +44,7 @@ public class Top_Rated {
 
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle("Top Rated Shows");
+        stage.setTitle("Top Rated");
         stage.show();
 
         scene.widthProperty().addListener((_, _, newValue) ->
