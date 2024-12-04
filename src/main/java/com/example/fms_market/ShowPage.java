@@ -1,29 +1,30 @@
 package com.example.fms_market;
-
+import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Date;
 
 public class ShowPage {
     public ShowPage(User user, Show show, Stage stage) throws IOException {
+        // Screen dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
 
+        // Layout setup
         BorderPane layout = new BorderPane();
         layout.setTop(Banner.getBanner(stage, "Show Details"));
 
@@ -31,11 +32,6 @@ public class ShowPage {
         content.setPadding(new Insets(20));
         content.setAlignment(Pos.TOP_CENTER);
         content.setStyle("-fx-background-color: #2c2c2c;");
-
-        // Show poster
-        ImageView posterView = new ImageView(new Image(show.getPoster()));
-        posterView.setFitWidth(200);
-        posterView.setFitHeight(300);
 
         // Show title
         Label title = new Label(show.getTitle());
@@ -48,48 +44,110 @@ public class ShowPage {
         description.setTextFill(Color.WHITE);
         description.setWrapText(true);
 
-        // Calculate and display average rating
+        // Average rating label
         Label averageRatingLabel = new Label("Calculating rating...");
         averageRatingLabel.setFont(Font.font("Arial", 16));
         averageRatingLabel.setTextFill(Color.YELLOW);
 
-        // Use Calculate_Rating to get the average rating
+        // Calculate and display the average rating
         Calculate_Rating calculateRating = new Calculate_Rating();
         double averageRating = calculateRating.calculateAverageRating(show);
         averageRatingLabel.setText(String.format("Average Rating: %.2f", averageRating));
 
-        // Rating input
-        Label ratingLabel = new Label("Rate this show (1-5):");
+        // Animated rating bar
+        Label ratingLabel = new Label("Rate this show:");
         ratingLabel.setFont(Font.font("Arial", 16));
         ratingLabel.setTextFill(Color.WHITE);
 
-        TextField ratingInput = new TextField();
-        ratingInput.setMaxWidth(50);
+        HBox ratingBar = createAnimatedRatingBar(user, show, averageRatingLabel);
 
-        Button saveButton = new Button("Save Rating");
-        saveButton.setOnAction(event -> {
+        // Add a submit button to the ShowPage class
+        Button submitButton = new Button("Submit Rating");
+        submitButton.setFont(Font.font("Arial", 16));
+        submitButton.setStyle("-fx-background-color: #451952; -fx-text-fill: white;");
+        submitButton.setOnAction(event -> {
             try {
-                int rating = Integer.parseInt(ratingInput.getText());
-                if (rating < 1 || rating > 5) {
-                    throw new IllegalArgumentException("Rating must be between 1 and 5.");
-                }
                 Date dateOfWatched = new Date();
-                ShowJsonHandler.saveShowRating(user.getId(), show.getId(), dateOfWatched, rating);
+                ShowJsonHandler.saveShowRating(user.getId(), show.getId(), dateOfWatched, selectedRating[0]);
                 double newAverageRating = calculateRating.calculateAverageRating(show);
                 averageRatingLabel.setText(String.format("Average Rating: %.2f", newAverageRating));
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        content.getChildren().addAll(posterView, title, description, averageRatingLabel, ratingLabel, ratingInput, saveButton);
+        // Add elements to the content layout
+        content.getChildren().addAll(title, description, averageRatingLabel, ratingLabel, ratingBar, submitButton);
         layout.setCenter(content);
 
+        // Scene setup
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
         stage.setTitle("Show Details");
         stage.show();
+    }
+
+    private int[] selectedRating = {0}; // Store the selected rating
+
+    private HBox createAnimatedRatingBar(User user, Show show, Label averageRatingLabel) {
+        HBox ratingBar = new HBox(10);
+        ratingBar.setAlignment(Pos.CENTER);
+        ratingBar.setPadding(new Insets(10));
+
+        Calculate_Rating calculateRating = new Calculate_Rating();
+
+        // Create 5 stars
+        for (int i = 1; i <= 5; i++) {
+            Polygon star = createStar(20, Color.GRAY); // Default unselected star
+            int currentRating = i;
+
+            // Hover animation
+            star.setOnMouseEntered(event -> applyScaleAnimation(star, 1.2));
+            star.setOnMouseExited(event -> applyScaleAnimation(star, 1.0));
+
+            // Click event
+            star.setOnMouseClicked(event -> {
+                selectedRating[0] = currentRating; // Update the selected rating
+                updateStarColors(ratingBar, currentRating); // Update stars to reflect the selected rating
+            });
+
+            ratingBar.getChildren().add(star);
+        }
+        return ratingBar;
+    }
+
+    private Polygon createStar(double size, Color color) {
+        Polygon star = new Polygon();
+        double centerX = size, centerY = size;
+        double radius = size;
+
+        // Points for a 5-pointed star
+        for (int i = 0; i < 10; i++) {
+            double angle = Math.PI / 5 * i - Math.PI / 2; // Adjust rotation
+            double r = (i % 2 == 0) ? radius : radius / 2; // Alternate between outer and inner radius
+            double x = centerX + Math.cos(angle) * r;
+            double y = centerY + Math.sin(angle) * r;
+            star.getPoints().addAll(x, y);
+        }
+        star.setFill(color);
+        return star;
+    }
+
+    private void applyScaleAnimation(Polygon star, double scale) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), star);
+        scaleTransition.setToX(scale);
+        scaleTransition.setToY(scale);
+        scaleTransition.play();
+    }
+
+    private void updateStarColors(HBox ratingBar, int selectedRating) {
+        for (int i = 0; i < ratingBar.getChildren().size(); i++) {
+            Polygon star = (Polygon) ratingBar.getChildren().get(i);
+            if (i < selectedRating) {
+                star.setFill(Color.GOLD); // Selected stars
+            } else {
+                star.setFill(Color.GRAY); // Unselected stars
+            }
+        }
     }
 }
