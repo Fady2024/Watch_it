@@ -52,7 +52,7 @@ public class FavoritesPage {
         stage.show();
 
         // Adjust layout dynamically
-        scene.widthProperty().addListener((observable, oldValue, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), favoriteShows, user));
+        scene.widthProperty().addListener((_, _, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), favoriteShows, user));
         adjustLayout(showContainer, stageWidth, favoriteShows, user);
     }
 

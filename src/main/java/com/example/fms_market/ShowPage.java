@@ -20,13 +20,17 @@ import java.util.Date;
 
 public class ShowPage {
     public ShowPage(User user, Show show, Stage stage) throws IOException {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int stageWidth = (int) screenSize.getWidth();
+        int stageHeight = (int) (screenSize.getHeight() / 1.1);
+
         BorderPane layout = new BorderPane();
         layout.setTop(Banner.getBanner(stage, "Show Details"));
 
         VBox content = new VBox(20);
         content.setPadding(new Insets(20));
         content.setAlignment(Pos.TOP_CENTER);
-        content.setStyle("-fx-background-color: #2c2c2c;"); // Set background color
+        content.setStyle("-fx-background-color: #2c2c2c;");
 
         // Show poster
         ImageView posterView = new ImageView(new Image(show.getPoster()));
@@ -43,6 +47,16 @@ public class ShowPage {
         description.setFont(Font.font("Arial", 16));
         description.setTextFill(Color.WHITE);
         description.setWrapText(true);
+
+        // Calculate and display average rating
+        Label averageRatingLabel = new Label("Calculating rating...");
+        averageRatingLabel.setFont(Font.font("Arial", 16));
+        averageRatingLabel.setTextFill(Color.YELLOW);
+
+        // Use Calculate_Rating to get the average rating
+        Calculate_Rating calculateRating = new Calculate_Rating();
+        double averageRating = calculateRating.calculateAverageRating(show);
+        averageRatingLabel.setText(String.format("Average Rating: %.2f", averageRating));
 
         // Rating input
         Label ratingLabel = new Label("Rate this show (1-5):");
@@ -61,6 +75,8 @@ public class ShowPage {
                 }
                 Date dateOfWatched = new Date();
                 ShowJsonHandler.saveShowRating(user.getId(), show.getId(), dateOfWatched, rating);
+                double newAverageRating = calculateRating.calculateAverageRating(show);
+                averageRatingLabel.setText(String.format("Average Rating: %.2f", newAverageRating));
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -68,12 +84,9 @@ public class ShowPage {
             }
         });
 
-        content.getChildren().addAll(posterView, title, description, ratingLabel, ratingInput, saveButton);
+        content.getChildren().addAll(posterView, title, description, averageRatingLabel, ratingLabel, ratingInput, saveButton);
         layout.setCenter(content);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int stageWidth = (int) screenSize.getWidth();
-        int stageHeight = (int) (screenSize.getHeight() / 1.1);
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
         stage.setTitle("Show Details");

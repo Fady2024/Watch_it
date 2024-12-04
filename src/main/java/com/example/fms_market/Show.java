@@ -34,15 +34,6 @@ public abstract class Show {
     private String type;
     private String description;
     private int views;
-         private double weightedRating;
-
-    public double getWeightedRating() {
-        return weightedRating;
-    }
-
-    public void setWeightedRating(double weightedRating) {
-        this.weightedRating = weightedRating;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -188,6 +179,6 @@ public abstract class Show {
     public void setRatings(List<User_Watch_record> ratings) {
         this.ratings = ratings;
     }
+
     public int getViews() { return views; }
 }
-

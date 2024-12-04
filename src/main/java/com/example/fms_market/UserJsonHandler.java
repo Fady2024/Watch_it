@@ -90,43 +90,6 @@ public class UserJsonHandler {
         }
     }
 
-    public static List<Integer> getTopRatedShows(int userId) throws IOException{
-        List<User> users = readUsers();
-        for (User user : users) {
-            if (user.getId() == userId) {
-                return user.getTopRatedShows();
-            }
-        }
-        return new ArrayList<>();
-    }
-    public static void addTopRatedShow(int userId, int showId) throws IOException {
-        List<User> users = readUsers();
-        for (User user : users) {
-            if (user.getId() == userId) {
-                List<Integer> TopRatedids = user.getFavoriteShowIds();
-                if (!TopRatedids.contains(showId)) {
-                    TopRatedids.add(showId);
-                }
-                saveUser(user);
-                break;
-            }
-        }
-    }
-
-    public static void removeTopRatedShow(int userId, int showId) throws IOException {
-        List<User> users = readUsers();
-        for (User user : users) {
-            if (user.getId() == userId) {
-                List<Integer> TopRatedids = user.getFavoriteShowIds();
-                if (TopRatedids.contains(showId)) {
-                    TopRatedids.remove(Integer.valueOf(showId)); // Remove by value
-                    saveUser(user); // Save the updated user
-                    break;
-                }
-            }
-        }
-    }
-    
     private static List<User> readUsers() throws IOException {
         ObjectNode rootNode = DataManager.getUsersRootNode();
         JsonNode usersNode = rootNode.path("users");
