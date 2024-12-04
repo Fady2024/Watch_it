@@ -42,7 +42,7 @@ public class  TopWatchedPage{
             showContainer.setStyle("-fx-background-color: #1c1c1c;");
 
             BorderPane layout = new BorderPane();
-            layout.setTop(Banner.getBanner(stage, "Home")); // Use the Banner class here and pass the current page
+            layout.setTop(Banner.getBanner(stage, "Top Watched")); // Use the Banner class here and pass the current page
             layout.setCenter(showContainer);
 
             // Adjust stage dimensions
@@ -162,7 +162,7 @@ public class  TopWatchedPage{
             views.add(movies.get(i).getViews());
         }
         Collections.sort(views);
-        for (int i = views.size() - 1; i > views.size() - 6; i--) {
+        for (int i = views.size() - 1; i > views.size() - 2; i--) {
             for (int j = 0; j < movies.size(); j++) {
                 if (movies.get(j).getViews() == views.get(i))
                     MostViews.add(movies.get(j));

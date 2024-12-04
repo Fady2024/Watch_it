@@ -170,7 +170,7 @@ public class HomePage {
             dates.add(movie.getDate());
         }
         Collections.sort(dates);
-        for (int i = dates.size() - 1; i >= Math.max(0, dates.size() - 6); i--) {
+        for (int i = dates.size() - 1; i >= Math.max(0, dates.size() - 2); i--) {
             for (Movie movie : movies) {
                 if (movie.getDate().equals(dates.get(i))) {
                     recentMovies.add(movie);

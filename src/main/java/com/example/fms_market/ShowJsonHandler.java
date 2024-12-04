@@ -56,7 +56,7 @@ public class ShowJsonHandler {
         }
 
         ObjectNode rootNode = (ObjectNode) objectMapper.readTree(file);
-        ArrayNode ratingsNode = (ArrayNode) rootNode.withArray("ratings");
+        ArrayNode ratingsNode = rootNode.withArray("ratings");
 
         List<User_Watch_record> ratings = new ArrayList<>();
         ratingsNode.forEach(node -> {
