@@ -26,10 +26,7 @@ public class Top_Rated {
         allShows.addAll(ShowJsonHandler.readMovies());
         allShows.addAll(ShowJsonHandler.readSeries());
 
-        allShows.sort((show1, show2) ->
-                Double.compare(ratingCalculator.calculateAverageRating(show2),
-                        ratingCalculator.calculateAverageRating(show1))
-        );
+        List<Show> topShows = ratingCalculator.getTopRatedShows(allShows, allShows.size());
 
         GridPane showContainer = new GridPane();
         showContainer.setStyle("-fx-background-color: #1c1c1c;");
@@ -51,19 +48,19 @@ public class Top_Rated {
         stage.show();
 
         scene.widthProperty().addListener((_, _, newValue) ->
-                adjustLayout(showContainer, newValue.doubleValue(), allShows, user)
+                adjustLayout(showContainer, newValue.doubleValue(), topShows, user)
         );
-        adjustLayout(showContainer, stageWidth, allShows, user);
+        adjustLayout(showContainer, stageWidth, topShows, user);
     }
 
-    private void adjustLayout(GridPane showContainer, double width, List<Show> allShows, User user) {
+    private void adjustLayout(GridPane showContainer, double width, List<Show> topShows, User user) {
         int columns = (int) (width / (SHOW_CARD_WIDTH + 20));
         showContainer.getChildren().clear();
 
         int column = 0;
         int row = 0;
 
-        for (Show show : allShows) {
+        for (Show show : topShows) {
             VBox showCard = createShowCard(show);
             showContainer.add(showCard, column, row);
 
