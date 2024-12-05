@@ -3,28 +3,17 @@ package com.example.fms_market;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import static com.example.fms_market.ShowCardUtil.SHOW_CARD_WIDTH;
 
 public class HomePage {
-
-    private static final double MOVIE_CARD_WIDTH = 200;
-    private static final double MOVIE_CARD_HEIGHT = 282.94;
 
     public HomePage(User user, Stage stage) {
         Banner.setCurrentUser(user);
@@ -67,14 +56,14 @@ public class HomePage {
     }
 
     private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies, User user, Stage stage) {
-        int columns = (int) (width / (MOVIE_CARD_WIDTH + 20));
+        int columns = (int) (width / (SHOW_CARD_WIDTH + 20));
         showContainer.getChildren().clear();
 
         int column = 0;
         int row = 0;
 
         for (Movie movie : recentMovies) {
-            VBox showCard = createShowCard(movie, user, stage);
+            VBox showCard = ShowCardUtil.createShowCard(movie, user, stage,() -> {});
             showContainer.add(showCard, column, row);
 
             column++;
@@ -82,84 +71,6 @@ public class HomePage {
                 column = 0;
                 row++;
             }
-        }
-    }
-
-    private VBox createShowCard(Show show, User user, Stage stage) {
-        VBox showCard = new VBox(5);
-        showCard.setAlignment(Pos.TOP_CENTER);
-
-        ImageView posterView = createPosterView(show.getPoster());
-        Label title = new Label(show.getTitle());
-        title.setFont(Font.font("Tahoma", 14));
-        title.setTextFill(Color.WHITE);
-        title.setAlignment(Pos.CENTER_LEFT);
-        title.setWrapText(true);
-        title.setMaxWidth(MOVIE_CARD_WIDTH);
-
-        javafx.scene.control.Button watchButton = new Button("Watch It");
-        watchButton.setOnAction(event -> {
-            try {
-                new ShowPage(user, show, stage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        StackPane posterContainer = new StackPane(posterView, createFavoriteIcon(show, user.getId()));
-        showCard.getChildren().addAll(posterContainer, title, watchButton);
-
-        return showCard;
-    }
-
-    private ImageView createPosterView(String posterPath) {
-        Image moviePoster = new Image(posterPath, false);
-        ImageView posterView = new ImageView(moviePoster);
-        posterView.setFitWidth(MOVIE_CARD_WIDTH);
-        posterView.setFitHeight(MOVIE_CARD_HEIGHT);
-
-        Rectangle roundedRectangle = new Rectangle(MOVIE_CARD_WIDTH, MOVIE_CARD_HEIGHT);
-        roundedRectangle.setArcWidth(20);
-        roundedRectangle.setArcHeight(20);
-        posterView.setClip(roundedRectangle);
-
-        return posterView;
-    }
-
-    private StackPane createFavoriteIcon(Show show, int userId) {
-        Label favoriteIcon = new Label("♥");
-        boolean isFavorite = isShowFavorite(userId, show.getId());
-        favoriteIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: " + (isFavorite ? "red" : "gray") + ";");
-        favoriteIcon.setOnMouseClicked(event -> toggleFavorite(userId, show.getId(), favoriteIcon));
-
-        Rectangle background = new Rectangle(30, 30);
-        background.setArcWidth(10);
-        background.setArcHeight(10);
-        background.setFill(Color.color(0, 0, 0, 0.6));
-
-        return new StackPane(background, favoriteIcon);
-    }
-
-    private boolean isShowFavorite(int userId, int showId) {
-        try {
-            List<Integer> favoriteShows = UserJsonHandler.getFavoriteShows(userId);
-            return favoriteShows.contains(showId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private void toggleFavorite(int userId, int showId, Label favoriteIcon) {
-        try {
-            // Toggle favorite status
-            UserJsonHandler.addFavoriteShow(userId, showId);
-
-            // Update the favorite icon color
-            boolean isFavorite = isShowFavorite(userId, showId);
-            favoriteIcon.setStyle("-fx-text-fill: " + (isFavorite ? "red" : "gray") + ";");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

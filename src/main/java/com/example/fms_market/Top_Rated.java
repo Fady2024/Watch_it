@@ -1,24 +1,18 @@
 package com.example.fms_market;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.shape.Rectangle;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.fms_market.ShowCardUtil.createShowCard;
+import static com.example.fms_market.ShowCardUtil.SHOW_CARD_WIDTH;
+
 public class Top_Rated {
-    private static final double SHOW_CARD_WIDTH = 150;
-    private static final double SHOW_CARD_HEIGHT = 280;
 
     public Top_Rated(User user, Stage stage) throws IOException {
         Calculate_Rating ratingCalculator = new Calculate_Rating();
@@ -48,12 +42,12 @@ public class Top_Rated {
         stage.show();
 
         scene.widthProperty().addListener((_, _, newValue) ->
-                adjustLayout(showContainer, newValue.doubleValue(), topShows, user)
+                adjustLayout(showContainer, newValue.doubleValue(), topShows, user, stage)
         );
-        adjustLayout(showContainer, stageWidth, topShows, user);
+        adjustLayout(showContainer, stageWidth, topShows, user, stage);
     }
 
-    private void adjustLayout(GridPane showContainer, double width, List<Show> topShows, User user) {
+    private void adjustLayout(GridPane showContainer, double width, List<Show> topShows, User user, Stage stage) {
         int columns = (int) (width / (SHOW_CARD_WIDTH + 20));
         showContainer.getChildren().clear();
 
@@ -61,7 +55,7 @@ public class Top_Rated {
         int row = 0;
 
         for (Show show : topShows) {
-            VBox showCard = createShowCard(show);
+            VBox showCard = createShowCard(show, user, stage, () -> {});
             showContainer.add(showCard, column, row);
 
             column++;
@@ -70,39 +64,5 @@ public class Top_Rated {
                 row++;
             }
         }
-    }
-
-    private VBox createShowCard(Show show) {
-        VBox showCard = new VBox(5);
-        showCard.setAlignment(Pos.TOP_CENTER);
-
-        Image showPoster = new Image(show.getPoster(), false);
-        Rectangle roundedRectangle = new Rectangle(SHOW_CARD_WIDTH, SHOW_CARD_HEIGHT);
-        roundedRectangle.setArcWidth(20);
-        roundedRectangle.setArcHeight(20);
-
-        ImageView posterView = new ImageView(showPoster);
-        posterView.setFitWidth(SHOW_CARD_WIDTH);
-        posterView.setFitHeight(SHOW_CARD_HEIGHT);
-        posterView.setClip(roundedRectangle);
-
-        Label title = new Label(show.getTitle());
-        title.setFont(Font.font("Arial", 14));
-        title.setTextFill(Color.WHITE);
-        title.setAlignment(Pos.CENTER);
-        title.setMaxWidth(SHOW_CARD_WIDTH);
-        title.setWrapText(true);
-
-        Label imdbLabel = new Label("IMDb: " + show.getImdb_score());
-        imdbLabel.setFont(Font.font("Arial", 12));
-        imdbLabel.setTextFill(Color.LIGHTGRAY);
-
-        Label ratingLabel = new Label("Rating: " + new Calculate_Rating().calculateAverageRating(show));
-        ratingLabel.setFont(Font.font("Arial", 12));
-        ratingLabel.setTextFill(Color.LIGHTGRAY);
-
-        showCard.getChildren().addAll(posterView, title, imdbLabel, ratingLabel);
-
-        return showCard;
     }
 }
