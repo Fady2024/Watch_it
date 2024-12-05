@@ -1,8 +1,13 @@
 package com.example.fms_market;
 
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.shape.Rectangle;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -11,9 +16,15 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 import static com.example.fms_market.ShowCardUtil.SHOW_CARD_WIDTH;
 
 public class HomePage {
+
+    private double startX;
 
     public HomePage(User user, Stage stage) {
         Banner.setCurrentUser(user);
@@ -30,7 +41,7 @@ public class HomePage {
 
         // GridPane to display shows
         GridPane showContainer = new GridPane();
-        showContainer.setPadding(new Insets(94));
+        showContainer.setPadding(new Insets(20));
         showContainer.setHgap(27);
         showContainer.setVgap(27);
         showContainer.setAlignment(Pos.TOP_LEFT);
@@ -54,16 +65,50 @@ public class HomePage {
         adjustLayout(showContainer, stageWidth, recentMovies, user, stage);
 
     }
-
     private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies, User user, Stage stage) {
         int columns = (int) (width / (SHOW_CARD_WIDTH + 20));
         showContainer.getChildren().clear();
 
+        Label mostPopularLabel = new Label("Most Popular Show");
+        mostPopularLabel.setStyle("-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;");
+        showContainer.add(mostPopularLabel, 0, 0, columns, 1);
+
+        VBox recentMoviesBox = new VBox(10);
+        recentMoviesBox.setPadding(new Insets(10));
+        recentMoviesBox.setStyle("-fx-background-color: #444444; -fx-border-radius: 20; -fx-background-radius: 20; -fx-border-color: white; -fx-border-width: 2px;");
+        recentMoviesBox.setPrefWidth(width - 60);
+        recentMoviesBox.setPrefHeight(200);
+
+        Label titleLabel = new Label();
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white; -fx-font-weight: bold;");
+        Label descriptionLabel = new Label();
+        descriptionLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+
+        Button watchButton = new Button("WATCH");
+        watchButton.setStyle("-fx-background-color: linear-gradient(to right, #4b0082, #8a2be2); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-border-radius: 20;");
+        watchButton.setGraphic(new Label("▶"));
+        watchButton.setContentDisplay(ContentDisplay.LEFT);
+
+        Button infoButton = new Button("Info");
+        infoButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: black; -fx-border-width: 1px; -fx-background-radius: 20; -fx-border-radius: 20;");
+        infoButton.setGraphic(new Label("ℹ"));
+        infoButton.setContentDisplay(ContentDisplay.LEFT);
+
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(10);
+        buttonBox.getChildren().addAll(watchButton, infoButton);
+        buttonBox.setAlignment(Pos.BOTTOM_LEFT);
+
+        VBox.setMargin(buttonBox, new Insets(40, 0, 0, 0));
+
+        recentMoviesBox.getChildren().addAll(titleLabel, descriptionLabel, buttonBox);
+        showContainer.add(recentMoviesBox, 0, 1, columns, 1);
+
         int column = 0;
-        int row = 0;
+        int row = 2;
 
         for (Movie movie : recentMovies) {
-            VBox showCard = ShowCardUtil.createShowCard(movie, user, stage,() -> {});
+            VBox showCard = ShowCardUtil.createShowCard(movie, user, stage, () -> {});
             showContainer.add(showCard, column, row);
 
             column++;
@@ -72,6 +117,44 @@ public class HomePage {
                 row++;
             }
         }
+
+        final int[] currentIndex = {0};
+        updateMovieInfo(titleLabel, descriptionLabel, recentMovies, currentIndex[0]); // Initialize with the first movie
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            updateMovieInfo(titleLabel, descriptionLabel, recentMovies, currentIndex[0]);
+            currentIndex[0] = (currentIndex[0] + 1) % recentMovies.size();
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
+        recentMoviesBox.setOnMousePressed(event -> {
+            timeline.pause();
+            startX = event.getSceneX();
+        });
+
+        recentMoviesBox.setOnMouseReleased(event -> {
+            double deltaX = event.getSceneX() - startX;
+
+            if (deltaX > 0) {
+                currentIndex[0] = (currentIndex[0] - 1 + recentMovies.size()) % recentMovies.size();
+            } else if (deltaX < 0) {
+                currentIndex[0] = (currentIndex[0] + 1) % recentMovies.size();
+            }
+
+            updateMovieInfo(titleLabel, descriptionLabel, recentMovies, currentIndex[0]);
+            timeline.play();
+        });
+
+        showContainer.setOnMouseReleased(event -> {
+            timeline.play();
+        });
+    }
+
+    private void updateMovieInfo(Label titleLabel, Label descriptionLabel, List<Movie> recentMovies, int currentIndex) {
+        Movie currentMovie = recentMovies.get(currentIndex);
+        titleLabel.setText(currentMovie.getTitle());
+        descriptionLabel.setText(currentMovie.getDescription());
     }
 
     public List<Movie> DisplayRecentMovies(List<Movie> movies) {
@@ -107,49 +190,4 @@ public class HomePage {
         }
         return recentSeries;
     }
-
-    /*
-    private StackPane createRatingIcon(Show show, int userId) {
-        Label Top_Rated = new Label("☆");
-        boolean isTopRated = isShowTopRated(userId, show.getId());
-        Top_Rated.setOnMouseClicked(event -> toggleTopRated(userId, show.getId(), Top_Rated));
-
-        Top_Rated.setStyle("-fx-font-size: 24px; -fx-text-fill: " + (isTopRated ? "gold" : "gray") + ";");
-
-        // Add the click event to toggle top-rated status
-        Top_Rated.setOnMouseClicked(event -> toggleTopRated(userId, show.getId(), Top_Rated));
-
-        Rectangle background = new Rectangle(30, 30);
-        background.setArcWidth(10);
-        background.setArcHeight(10);
-        background.setFill(Color.color(0, 0, 0, 0.6));
-
-        return new StackPane(background, Top_Rated);
-    }
-
-    private boolean isShowTopRated(int userId, int showId) {
-        try {
-            List<Integer> topRatedShows = UserJsonHandler.getTopRatedShows(userId);
-            return topRatedShows.contains(showId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private void toggleTopRated(int userId, int showId, Label topRatedIcon) {
-        try {
-            if (isShowTopRated(userId, showId)) {
-                UserJsonHandler.removeTopRatedShow(userId, showId);
-            } else {
-                UserJsonHandler.addTopRatedShow(userId, showId);
-            }
-
-            boolean isTopRated = isShowTopRated(userId, showId);
-            topRatedIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: " + (isTopRated ? "gold" : "gray") + ";");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 }
