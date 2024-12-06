@@ -19,8 +19,8 @@ import java.util.List;
 
 public class ShowCardUtil {
 
-    public static final double SHOW_CARD_WIDTH = 150;
-    private static final double SHOW_CARD_HEIGHT = 280;
+    public static final double SHOW_CARD_WIDTH = 200;
+    private static final double SHOW_CARD_HEIGHT = 282.94;
 
     public static VBox createShowCard(Show show, User user, Stage stage, Runnable refreshCallback) {
         VBox showCard = new VBox(5);
