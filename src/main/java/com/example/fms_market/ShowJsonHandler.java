@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -105,5 +106,37 @@ public class ShowJsonHandler {
             }
         }
         return seriesList;
+    }
+    public static  void deleteShow(int id)
+    {
+        // File path
+        File jsonFile = new File("data.json");
+
+        // Jackson ObjectMapper
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            JsonNode root = mapper.readTree(jsonFile);
+
+            ArrayNode shows = (ArrayNode) root.path("shows");
+
+            for (int i = 0; i < shows.size(); i++) {
+                JsonNode show = shows.get(i);
+                if (show.get("id").asInt() == id) {
+                    shows.remove(i); // Remove the row
+                    ObjectNode row = (ObjectNode) shows.get(i);
+                    // Set the new "id"
+                    row.put("id", i+1);
+                    break;
+                }
+            }
+
+            // Write the updated JSON back to the file
+            mapper.writerWithDefaultPrettyPrinter().writeValue(jsonFile, root);
+
+            System.out.println("Row deleted and JSON file updated.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
