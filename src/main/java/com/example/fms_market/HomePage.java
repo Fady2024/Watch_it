@@ -1,13 +1,12 @@
 package com.example.fms_market;
 
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.shape.Rectangle;
 import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -31,7 +30,6 @@ public class HomePage {
     public HomePage(User user, Stage stage) {
         Banner.setCurrentUser(user);
 
-        // Fetch Recent Movies
         List<Movie> allMovies;
         try {
             allMovies = ShowJsonHandler.readMovies();
@@ -41,7 +39,6 @@ public class HomePage {
         }
         List<Movie> recentMovies = DisplayRecentMovies(allMovies);
 
-        // GridPane to display shows
         GridPane showContainer = new GridPane();
         showContainer.setPadding(new Insets(20));
         showContainer.setHgap(27);
@@ -49,11 +46,14 @@ public class HomePage {
         showContainer.setAlignment(Pos.TOP_LEFT);
         showContainer.setStyle("-fx-background-color: #1c1c1c;");
 
+        ScrollPane scrollPane = new ScrollPane(showContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: #1c1c1c;");
+
         BorderPane layout = new BorderPane();
         layout.setTop(Banner.getBanner(stage, "Home"));
-        layout.setCenter(showContainer);
+        layout.setCenter(scrollPane);
 
-        // Adjust stage dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
@@ -62,7 +62,6 @@ public class HomePage {
         stage.setTitle("Home");
         stage.show();
 
-        // Dynamically adjust layout
         scene.widthProperty().addListener((_, _, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), recentMovies, user, stage));
         adjustLayout(showContainer, stageWidth, recentMovies, user, stage);
 
@@ -107,16 +106,14 @@ public class HomePage {
         roundedRectangle1.setArcHeight(40);
         Info.setClip(roundedRectangle1);
 
-        HBox buttonContainer = new HBox(10); // Spacing of 10 pixels between the buttons
-        buttonContainer.setAlignment(Pos.CENTER_LEFT); // Align buttons to the left
-        buttonContainer.getChildren().addAll(Watch, Info); // Add buttons to the HBox
+        HBox buttonContainer = new HBox(10);
+        buttonContainer.setAlignment(Pos.CENTER_LEFT);
+        buttonContainer.getChildren().addAll(Watch, Info);
 
-        // Add the HBox to the GridPane in the same column
         Text RecentMovies = new Text("Recent Movies");
         RecentMovies.setFont(Font.font("Tahoma", 20));
         RecentMovies.setStyle("-fx-fill: white;");
 
-        // Add the HBox to the GridPane in the same column
         Text RecentSeries = new Text("Recent Series");
         RecentSeries.setFont(Font.font("Tahoma", 20));
         RecentSeries.setStyle("-fx-fill: white;");
@@ -126,18 +123,18 @@ public class HomePage {
         recentMoviesBox.getChildren().addAll(mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
         showContainer.add(recentMoviesBox, column, row);
 
-        showContainer.setHgap(27); // Horizontal gap between cells
-        showContainer.setVgap(20); // Vertical gap between cells
+        showContainer.setHgap(27);
+        showContainer.setVgap(20);
         showContainer.add(RecentMovies, column, row + 3);
         showContainer.add(RecentSeries, column, row + 6);
 
-        HBox showCardContainer = new HBox(30); // Spacing of 10 pixels between the buttons
+        HBox showCardContainer = new HBox(30);
         for (Movie movie : recentMovies) {
             VBox showCard = ShowCardUtil.createShowCard(movie, user, stage, () -> {});
             showCardContainer.getChildren().add(showCard); // Add buttons to the HBox
             showCardContainer.setAlignment(Pos.CENTER_LEFT); // Align buttons to the left
-            showContainer.setHgap(27); // Horizontal gap between cells
-            showContainer.setVgap(20); // Vertical gap between cells
+            showContainer.setHgap(27);
+            showContainer.setVgap(20);
             //column++;
             if (column == columns) {
                 column = 0;
