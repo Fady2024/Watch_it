@@ -77,7 +77,7 @@ public class HomePage {
 
         VBox recentMoviesBox = new VBox(10);
         recentMoviesBox.setPadding(new Insets(10));
-        recentMoviesBox.setStyle("-fx-background-color: #444444; -fx-border-radius: 20; -fx-background-radius: 20; -fx-border-color: white; -fx-border-width: 2px;");
+        recentMoviesBox.setStyle("-fx-background-color:  #1c1c1c;");
         recentMoviesBox.setPrefWidth(width - 60);
         recentMoviesBox.setPrefHeight(200);
 
@@ -122,14 +122,14 @@ public class HomePage {
         RecentSeries.setStyle("-fx-fill: white;");
         int column = 0;
         int row = 0;
-        showContainer.add(mostWatchedShow,column,row);
-        showContainer.add(mostWatchedShowTitle,column,row+1);
-        showContainer.add(mostWatchedShowDesc,column,row+2);
-        showContainer.add(buttonContainer, column, row + 4);
+
+        recentMoviesBox.getChildren().addAll(mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
+        showContainer.add(recentMoviesBox, column, row);
+
         showContainer.setHgap(27); // Horizontal gap between cells
         showContainer.setVgap(20); // Vertical gap between cells
-        showContainer.add(RecentMovies, column, row + 7);
-        showContainer.add(RecentSeries, column, row + 10);
+        showContainer.add(RecentMovies, column, row + 3);
+        showContainer.add(RecentSeries, column, row + 6);
 
         HBox showCardContainer = new HBox(30); // Spacing of 10 pixels between the buttons
         for (Movie movie : recentMovies) {
@@ -144,7 +144,7 @@ public class HomePage {
                 row++;
             }
         }
-        showContainer.add(showCardContainer, column, row + 9);
+        showContainer.add(showCardContainer, column, row + 5);
         final int[] currentIndex = {0};
         updateMovieInfo(mostWatchedShowTitle, mostWatchedShowDesc, recentMovies, currentIndex[0]); // Initialize with the first movie
 
