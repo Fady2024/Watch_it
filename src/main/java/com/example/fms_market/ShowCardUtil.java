@@ -207,6 +207,6 @@ public class ShowCardUtil {
             refreshCallback.run();
         } catch (IOException e) {
             e.printStackTrace();
- }
-}
+        }
+    }
 }
