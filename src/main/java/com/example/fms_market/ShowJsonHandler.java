@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class ShowJsonHandler {
             shows.add(show);
         }
 
-        rootNode.set("shows", DataManager.getObjectMapper().valueToTree(shows));
+        rootNode.set("shows", objectMapper.valueToTree(shows));
         DataManager.saveData();
     }
 
@@ -44,8 +43,8 @@ public class ShowJsonHandler {
         ObjectNode rootNode = DataManager.getShowsRootNode();
         ArrayNode ratingsNode = rootNode.withArray("ratings");
 
-        User_Watch_record record = new User_Watch_record(userId, showId, dateOfWatched, Integer.valueOf(rating));
-        ratingsNode.add(DataManager.getObjectMapper().valueToTree(record));
+        User_Watch_record record = new User_Watch_record(userId, showId, dateOfWatched, rating);
+        ratingsNode.add(objectMapper.valueToTree(record));
         DataManager.saveData();
     }
 
@@ -91,9 +90,9 @@ public class ShowJsonHandler {
             return new ArrayList<>();
         }
 
-        return DataManager.getObjectMapper().readValue(
+        return objectMapper.readValue(
                 showsNode.toString(),
-                DataManager.getObjectMapper().getTypeFactory().constructCollectionType(List.class, Show.class)
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Show.class)
         );
     }
 
@@ -107,36 +106,36 @@ public class ShowJsonHandler {
         }
         return seriesList;
     }
-    public static  void deleteShow(int id)
-    {
-        // File path
-        File jsonFile = new File("data.json");
 
-        // Jackson ObjectMapper
-        ObjectMapper mapper = new ObjectMapper();
+    public static void deleteShow(int id) throws IOException {
+        ObjectNode rootNode = DataManager.getShowsRootNode();
+        ArrayNode shows = (ArrayNode) rootNode.path("shows");
+        ArrayNode ratings = (ArrayNode) rootNode.path("ratings");
 
-        try {
-            JsonNode root = mapper.readTree(jsonFile);
-
-            ArrayNode shows = (ArrayNode) root.path("shows");
-
-            for (int i = 0; i < shows.size(); i++) {
-                JsonNode show = shows.get(i);
-                if (show.get("id").asInt() == id) {
-                    shows.remove(i); // Remove the row
-                    ObjectNode row = (ObjectNode) shows.get(i);
-                    // Set the new "id"
-                    row.put("id", i+1);
-                    break;
-                }
+        for (int i = 0; i < shows.size(); i++) {
+            JsonNode show = shows.get(i);
+            if (show.get("id").asInt() == id) {
+                shows.remove(i);
+                break;
             }
-
-            // Write the updated JSON back to the file
-            mapper.writerWithDefaultPrettyPrinter().writeValue(jsonFile, root);
-
-            System.out.println("Row deleted and JSON file updated.");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        for (int i = 0; i < shows.size(); i++) {
+            JsonNode show = shows.get(i);
+            ((ObjectNode) show).put("id", i + 1);
+        }
+
+        for (int i = 0; i < ratings.size(); i++) {
+            JsonNode rating = ratings.get(i);
+            if (rating.get("show_id").asInt() == id) {
+                ratings.remove(i);
+                i--;
+            }
+        }
+
+        rootNode.set("shows", shows);
+        rootNode.set("ratings", ratings);
+        DataManager.saveData();
+        UserJsonHandler.removeFavoriteShowFromAllUsers(id);
     }
 }

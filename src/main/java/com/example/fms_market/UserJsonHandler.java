@@ -1,8 +1,6 @@
 package com.example.fms_market;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +84,17 @@ public class UserJsonHandler {
                     saveUser(user);
                     break;
                 }
+            }
+        }
+    }
+
+    public static void removeFavoriteShowFromAllUsers(int showId) throws IOException {
+        List<User> users = readUsers();
+        for (User user : users) {
+            List<Integer> favoriteShowIds = user.getFavoriteShowIds();
+            if (favoriteShowIds.contains(showId)) {
+                favoriteShowIds.remove(Integer.valueOf(showId)); // Remove by value
+                saveUser(user);
             }
         }
     }
