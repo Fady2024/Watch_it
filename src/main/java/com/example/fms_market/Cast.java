@@ -15,7 +15,7 @@ import java.util.List;
         private List<String> movies;
         private String gender;
         private int age;
-        private  List<Cast> casts;
+
         @JsonCreator
         public Cast(
                 @JsonProperty("first_name") String first_name,
@@ -23,8 +23,7 @@ import java.util.List;
                 @JsonProperty("nationality") String nationality,
                 @JsonProperty("movies") List<String> movies,
                 @JsonProperty("age") int age,
-                @JsonProperty("gender") String gender,
-                @JsonProperty("casts")List <Cast> casts
+                @JsonProperty("gender") String gender
         )
         {
             this.first_name = first_name;
@@ -33,7 +32,7 @@ import java.util.List;
             this.age = age;
             this.gender = gender;
             this.movies = movies;
-            this.casts = new ArrayList<Cast>();
+
         }
 
         public String getFirst_name() {
@@ -57,14 +56,8 @@ import java.util.List;
         public String getNationality() {
             return nationality;
         }
-        public void addCast(Cast cast) {
-            casts.add(cast);
-        }
-public List<Cast> getCasts() {
-            return casts;
-}
 
-public List<Cast>SearchCast(String keyword)
+public static List<Cast>SearchCast(List<Cast>casts,String keyword)
 {
     if (keyword == null || keyword.trim().isEmpty()) {
         throw new IllegalArgumentException("Search keyword cannot be null or empty.");
