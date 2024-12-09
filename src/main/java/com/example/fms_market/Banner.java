@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Banner {
     private static User currentUser;
@@ -28,7 +29,7 @@ public class Banner {
 
         // Title
         Text title = new Text("WATCH IT");
-        title.setFont(Font.font("Tahoma", 40));
+        title.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(),40));
         title.setStyle("-fx-fill: white;");
 
         // Home label
@@ -77,7 +78,7 @@ public class Banner {
 
     private static Text createNavLabel(String text, boolean isCurrentPage, Stage stage, Runnable action) {
         Text label = new Text(text);
-        label.setFont(Font.font("Georgia", 20));
+        label.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
         label.setStyle("-fx-fill: " + (isCurrentPage ? "white" : "#888888") + "; -fx-cursor: hand;");
         label.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
             if (!isCurrentPage) label.setStyle("-fx-fill: lightgrey; -fx-cursor: hand; -fx-font-weight: bold;");
