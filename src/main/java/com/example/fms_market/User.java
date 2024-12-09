@@ -10,11 +10,11 @@ import java.util.List;
 public class User {
     private int id; // Changed from static to instance variable
     private String email;
-    private final String password;
+    private String password;
     private final String role;
     private String phone;
     private String age;
-    private final String user_photo_path;
+    private String user_photo_path;
     private List<Integer> favoriteShowIds; // List of favorite show IDs
 
     @JsonCreator
@@ -67,6 +67,10 @@ public class User {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getRole() {
         return role;
     }
@@ -81,6 +85,10 @@ public class User {
 
     public String getUser_photo_path() {
         return user_photo_path;
+    }
+
+    public void setUser_photo_path( String user_photo_path){
+        this.user_photo_path=user_photo_path;
     }
 
     public List<Integer> getFavoriteShowIds() {

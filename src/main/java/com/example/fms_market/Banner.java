@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 public class Banner {
     private static User currentUser;
+    private static Sidebar.SidebarListener sidebarListener;
 
     public static void setCurrentUser(User user) {
         currentUser = user;
@@ -32,22 +34,13 @@ public class Banner {
         // Home label
         Text homeLabel = createNavLabel("Home", currentPage.equals("Home"), stage, () -> new HomePage(currentUser, stage));
 
-        // Favorites label
-        Text favoritesLabel = createNavLabel("Favorites", currentPage.equals("Favorites"), stage, () -> {
-            try {
-                new FavoritesPage(currentUser,stage);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
         // Top Watched label
-        Text TopWatchedLabel = createNavLabel("Top Watched", currentPage.equals("Top Watched"), stage, () -> {
+        Text topWatchedLabel = createNavLabel("Top Watched", currentPage.equals("Top Watched"), stage, () -> {
             new TopWatchedPage(currentUser, stage);
         });
 
-        
-    // Top Rated label
-         Text TopRatedLabel = createNavLabel("Top Rated", currentPage.equals("Top Rated"), stage, () -> {
+        // Top Rated label
+        Text topRatedLabel = createNavLabel("Top Rated", currentPage.equals("Top Rated"), stage, () -> {
             try {
                 new Top_Rated(currentUser, stage);
             } catch (IOException ex) {
@@ -57,11 +50,17 @@ public class Banner {
 
         // Account label
         Text accountLabel = createNavLabel("Account", currentPage.equals("Account"), stage, () -> {
-            try {
-                new AccountPage(currentUser, stage);
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            new AccountPage1(currentUser, stage, Sidebar.SidebarState.USER_DETAILS);
+        });
+
+        // User icon with emoji
+        Label userIcon = new Label("👤");
+        userIcon.setStyle("-fx-font-size: 30px;"); // Adjust the size as needed
+        userIcon.setOnMouseClicked(e -> {
+            if (sidebarListener != null) {
+                sidebarListener.onUserDetailsSelected();
             }
+            new AccountPage1(currentUser, stage, Sidebar.SidebarState.USER_DETAILS);
         });
 
         // Search field
@@ -71,7 +70,7 @@ public class Banner {
         searchField.setFont(Font.font("Arial", 15));
 
         // Adding components to banner
-        banner.getChildren().addAll(title, homeLabel, favoritesLabel, accountLabel,TopWatchedLabel,TopRatedLabel,searchField);
+        banner.getChildren().addAll(title, homeLabel, topWatchedLabel, topRatedLabel, accountLabel, searchField, userIcon);
 
         return banner;
     }

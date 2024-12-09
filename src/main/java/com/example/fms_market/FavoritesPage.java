@@ -1,4 +1,3 @@
-// src/main/java/com/example/fms_market/FavoritesPage.java
 package com.example.fms_market;
 
 import javafx.geometry.Insets;
@@ -23,19 +22,22 @@ public class FavoritesPage {
     private Stage stage;
     private List<Show> favoriteShows;
 
-    public FavoritesPage(User user, Stage stage) throws IOException {
+    public FavoritesPage(User user, Stage stage, Sidebar.SidebarState initialState) throws IOException {
         this.user = user;
         this.stage = stage;
 
+        Sidebar sidebar = new Sidebar(initialState);
+
         showContainer = new GridPane();
-        showContainer.setStyle("-fx-background-color: #2B2B2B;");
+        showContainer.setStyle("-fx-background-color: #1c1c1c;");
         showContainer.setPadding(new Insets(20));
         showContainer.setHgap(20);
         showContainer.setVgap(20);
 
         layout = new BorderPane();
-        layout.setTop(Banner.getBanner(stage, "Favorites"));
+        layout.setLeft(sidebar);
         layout.setCenter(showContainer);
+        layout.setStyle("-fx-background-color: #1c1c1c;");
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
@@ -46,9 +48,32 @@ public class FavoritesPage {
         stage.setTitle("Favorites");
         stage.show();
 
+        sidebar.setSidebarListener(new Sidebar.SidebarListener() {
+            @Override
+            public void onUserDetailsSelected() {
+                new AccountPage1(user, stage, Sidebar.SidebarState.USER_DETAILS);
+            }
+
+            @Override
+            public void onFavouritesSelected() {
+            }
+
+            @Override
+            public void onWatchedSelected() {
+                System.out.println("Watched menu item selected.");
+            }
+
+            @Override
+            public void onSubscriptionSelected() {
+                System.out.println("Subscription menu item selected.");
+            }
+        });
+
+
         scene.widthProperty().addListener((_, _, newValue) -> adjustLayout(newValue.doubleValue()));
         loadFavorites();
     }
+
 
     private void loadFavorites() throws IOException {
         List<Integer> favoriteShowIds = UserJsonHandler.getFavoriteShows(user.getId());
