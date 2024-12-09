@@ -12,7 +12,7 @@ public class HelloApplication extends Application {
             // Load data at the beginning
             DataManager.loadData();
 
-            new LoginPageFX(stage);
+            new HomePage(new User("few","feewf","Fwefw","efwfwe","fwefwe","fwefew"),stage);
 
             // Save data at the end
             DataManager.saveData();

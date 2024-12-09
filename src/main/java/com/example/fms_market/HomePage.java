@@ -71,7 +71,7 @@ public class HomePage {
         showContainer.getChildren().clear();
 
         Text mostWatchedShow = new Text("Most Watched Show");
-        mostWatchedShow.setFont(Font.font("Tahoma", 20));
+        mostWatchedShow.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
         mostWatchedShow.setStyle("-fx-fill: white;");
 
         VBox recentMoviesBox = new VBox(10);
@@ -85,7 +85,7 @@ public class HomePage {
         mostWatchedShowTitle.setStyle("-fx-fill: white;");
 
         Text mostWatchedShowDesc = new Text();
-        mostWatchedShowDesc.setFont(Font.font("Tahoma", 18));
+        mostWatchedShowDesc.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),18));
         mostWatchedShowDesc.setStyle("-fx-fill: #b1b1b1;");
         mostWatchedShowDesc.setWrappingWidth(((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth())-600); // Adjust width as needed
         Button Watch = new Button("WATCH");
@@ -111,11 +111,11 @@ public class HomePage {
         buttonContainer.getChildren().addAll(Watch, Info);
 
         Text RecentMovies = new Text("Recent Movies");
-        RecentMovies.setFont(Font.font("Tahoma", 20));
+        RecentMovies.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
         RecentMovies.setStyle("-fx-fill: white;");
 
         Text RecentSeries = new Text("Recent Series");
-        RecentSeries.setFont(Font.font("Tahoma", 20));
+        RecentSeries.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
         RecentSeries.setStyle("-fx-fill: white;");
         int column = 0;
         int row = 0;
