@@ -18,9 +18,11 @@
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>2.14.1</version>
     </dependency>
-
-
-
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.11.0</version> <!-- Use latest stable version -->
+    </dependency>
     <dependency>
 
       <groupId>org.apache.poi</groupId>
