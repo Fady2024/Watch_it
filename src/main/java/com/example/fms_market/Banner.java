@@ -70,8 +70,12 @@ public class Banner {
         searchField.setStyle("-fx-background-color: white; -fx-prompt-text-fill: gray;");
         searchField.setFont(Font.font("Arial", 15));
 
+        Text revenue_admin = createNavLabel("Panel", currentPage.equals("Panel"), stage, () -> {
+            new Revenue_page(stage,currentUser);
+        });
         // Adding components to banner
-        banner.getChildren().addAll(title, homeLabel, topWatchedLabel, topRatedLabel, accountLabel, searchField, userIcon);
+        if(currentUser.getRole().equals("admin")){banner.getChildren().addAll(title, homeLabel, topWatchedLabel, topRatedLabel, accountLabel, revenue_admin,searchField, userIcon);}
+        else{banner.getChildren().addAll(title, homeLabel, accountLabel,searchField);}
 
         return banner;
     }
@@ -88,6 +92,7 @@ public class Banner {
         });
 
         label.setOnMouseClicked(e -> action.run());
+
 
         return label;
     }

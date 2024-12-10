@@ -100,7 +100,7 @@ public class SignUpPage {
         // Sign-up button
          signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white;");
-        signUpButton.setOnAction(_ -> handleSignUp(primaryStage));
+        signUpButton.setOnAction(_ -> new subscription_page(primaryStage));
 
         // Login label
         loginLabel=createLoginText(primaryStage);

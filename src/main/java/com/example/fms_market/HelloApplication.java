@@ -6,23 +6,26 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+
     @Override
-    public void start(Stage stage) {
-        try {
-            // Load data at the beginning
-            DataManager.loadData();
+    public void start(Stage stage) throws IOException {
+     DataManager.loadData();
+       new WelcomePage(stage);
+        DataManager.saveData();
 
-            new HomePage(new User("few","feewf","Fwefw","efwfwe","fwefwe","fwefew"),stage);
-
-            // Save data at the end
-            DataManager.saveData();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void main(String[] args) {
         launch();
+    }
+
+    @Override
+    public void init() throws Exception {
+        SubscriptionManager.readSubscriptions();
+    }
+
+    @Override
+    public void stop() {
+        SubscriptionManager.writeSubscriptions();
     }
 }
