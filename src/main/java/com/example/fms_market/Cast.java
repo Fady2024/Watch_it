@@ -12,7 +12,7 @@ import java.util.List;
         private String first_name;
         private String last_name;
         private String nationality;
-        private List<String> movies;
+        private List<String> shows;
         private String gender;
         private int age;
 
@@ -31,33 +31,46 @@ import java.util.List;
             this.nationality = nationality;
             this.age = age;
             this.gender = gender;
-            this.movies = movies;
+            this.shows = shows;
 
         }
+        public Cast(){};
 
         public String getFirst_name() {
             return first_name ;
         }
+
+        public void setFirst_name(String first_name) {this.first_name = first_name;}
+
         public String getLast_name() {
             return last_name ;
         }
-        public int getAge() {
-            return age;
-        }
+
+        public void setLast_name(String last_name) {this.last_name = last_name;}
+
+        public int getAge() {return age;}
+
+        public void setAge(int age) {this.age = age;}
 
         public String getGender() {
             return gender;
         }
 
+        public void setGender(String gender) {this.gender = gender;}
+
         public List<String> getMovies() {
-            return movies;
+            return shows;
         }
+
+        public void setMovies(List<String> shows) {this.shows = shows;}
 
         public String getNationality() {
             return nationality;
         }
 
-public static List<Cast>SearchCast(List<Cast>casts,String keyword)
+        public void setNationality(String nationality) {this.nationality = nationality;}
+
+        public static List<Cast>SearchCast(List<Cast>casts, String keyword)
 {
     if (keyword == null || keyword.trim().isEmpty()) {
         throw new IllegalArgumentException("Search keyword cannot be null or empty.");

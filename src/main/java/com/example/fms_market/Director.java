@@ -9,12 +9,12 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class Director {
-    private final String first_name;
-    private final String last_name;
-    private final List<String> movies;
-    private final String nationality;
-    private final String gender;
-    private final int age;
+    private String first_name;
+    private String last_name;
+    private List<String> shows;
+    private String nationality;
+    private String gender;
+    private int age;
 
 
     @JsonCreator
@@ -28,38 +28,52 @@ public class Director {
              {
         this.first_name = first_name;
         this.last_name = last_name;
-        this.movies = movies;
+        this.shows = shows;
         this.age = age;
         this.gender = gender;
         this.nationality = nationality;
 
     }
 
+    public Director(){};
+
     @JsonProperty("first_name")
     public String getFirstName() {
         return first_name;
     }
+
+    public void setFirstName(String first_name) {this.first_name=first_name;}
 
     @JsonProperty("last_name")
     public String getLastName() {
         return last_name;
     }
 
+    public void setLastName(String last_name) {this.last_name=last_name;}
+
     public List<String> getMovies() {
-        return movies;
+        return shows;
     }
+
+    public void setShows(List<String> shows) {this.shows=shows;}
 
     public int getAge() {
         return age;
     }
 
+    public void setAge(int age) {this.age = age;}
+
     public String getGender() {
         return gender;
     }
 
+    public void setGender(String gender) {this.gender = gender;}
+
     public String getNationality() {
         return nationality;
     }
+
+    public void setNationality(String nationality) {this.nationality = nationality;}
 
     public static List<String> searchDirectorByName(String keyword, List<Director> directors) throws Exception {
         List<String> results = new ArrayList<>();

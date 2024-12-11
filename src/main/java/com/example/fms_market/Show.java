@@ -20,7 +20,7 @@ public abstract class Show {
     private String title;
     private Date release_date;
     private int duration;
-    private List<Cast> cast;
+    private List<String> cast;
     private List<String> genres;
     private Director director;
     private List<String> language;
@@ -67,11 +67,11 @@ public abstract class Show {
         return duration;
     }
 
-    public void setCast(List <Cast>cast) {
+    public void setCast(List <String>cast) {
         this.cast = cast;
     }
 
-    public List getCast() {
+    public List<String> getCast() {
         return cast;
     }
 
