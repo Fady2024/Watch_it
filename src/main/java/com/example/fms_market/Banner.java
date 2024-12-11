@@ -2,6 +2,7 @@
 
 package com.example.fms_market;
 
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -12,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class Banner {
@@ -47,9 +49,6 @@ public class Banner {
             }
         });
 
-        // Account label
-        Text accountLabel = createNavLabel("Account", currentPage.equals("Account"), () -> new AccountPage1(currentUser, stage, Sidebar.SidebarState.USER_DETAILS));
-
         // User icon with emoji
         Label userIcon = new Label("👤");
         userIcon.setStyle("-fx-font-size: 30px;"); // Adjust the size as needed
@@ -57,7 +56,7 @@ public class Banner {
             if (sidebarListener != null) {
                 sidebarListener.onUserDetailsSelected();
             }
-            new AccountPage1(currentUser, stage, Sidebar.SidebarState.USER_DETAILS);
+            new AccountPage(currentUser, stage, Sidebar.SidebarState.USER_DETAILS);
         });
 
         // Search field
@@ -67,11 +66,18 @@ public class Banner {
         searchField.setFont(Font.font("Arial", 15));
 
         Text revenue_admin = createNavLabel("Panel", currentPage.equals("Panel"), () -> new Revenue_page(stage,currentUser));
-        // Adding components to banner
-        if(currentUser.getRole().equals("admin")){banner.getChildren().addAll(title, homeLabel, topWatchedLabel, topRatedLabel, accountLabel, revenue_admin,searchField, userIcon);}
-        else{banner.getChildren().addAll(title, homeLabel, accountLabel,searchField);}
+        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel, topRatedLabel, searchField, userIcon));
+
+        if (currentUser.getRole().equals("admin")) {
+            commonComponents.add(revenue_admin); // Admin-specific component
+        }
+        banner.getChildren().addAll(commonComponents);
 
         return banner;
+    }
+
+    public static void setSidebarListener(Sidebar.SidebarListener listener) {
+        sidebarListener = listener;
     }
 
     private static Text createNavLabel(String text, boolean isCurrentPage, Runnable action) {
@@ -91,7 +97,4 @@ public class Banner {
         return label;
     }
 
-    public static void setSidebarListener(Sidebar.SidebarListener sidebarListener) {
-        Banner.sidebarListener = sidebarListener;
-    }
 }

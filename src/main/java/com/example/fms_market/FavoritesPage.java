@@ -52,7 +52,7 @@ public class FavoritesPage {
         sidebar.setSidebarListener(new Sidebar.SidebarListener() {
             @Override
             public void onUserDetailsSelected() {
-                new AccountPage1(user, stage, Sidebar.SidebarState.USER_DETAILS);
+                new AccountPage(user, stage, Sidebar.SidebarState.USER_DETAILS);
             }
 
             @Override

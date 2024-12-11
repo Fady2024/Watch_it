@@ -1,222 +1,264 @@
 package com.example.fms_market;
 
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import javafx.stage.StageStyle;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class AccountPage {
-
-    private static final String WELCOME_FONT = "-fx-font-size: 24px; -fx-font-weight: bold; -fx-font-family: 'Arial';";
-    private static final String NAME_FONT = "-fx-font-size: 20px; -fx-font-family: 'Arial';";
-    private static final String BUTTON_FONT = "-fx-font-size: 16px; -fx-font-weight: bold; -fx-font-family: 'Arial';";
-
-    private final Stage stage;
-    private final Pane contentPane;
-    private final Label welcomeLabel;
-    private final Label nameLabel;
-    private final Button logOutButton;
-    private final ImageView userImageView;
-
-    // Editable fields for user details
-    private final TextField emailField;
-    private final TextField phoneField;
-    private final TextField ageField;
-    private final Button saveButton;
-
     private final User currentUser;
+    private final BorderPane layout;
+    private final Stage stage;
 
-    public AccountPage(User user, Stage primaryStage) throws IOException {
+    private String initialEmail;
+    private String initialPhone;
+    private String initialAge;
+
+    public AccountPage(User user, Stage stage, Sidebar.SidebarState initialState) {
         this.currentUser = user;
-        this.stage = primaryStage;
-        primaryStage.setTitle("Home Page");
+        this.stage = stage;
 
-        // Create UI components
-        welcomeLabel = createWelcomeLabel(user.getRole());
-        nameLabel = createNameLabel(user.getEmail());
-        logOutButton = createLogOutButton();
-        userImageView = createUserImageView(user.getUser_photo_path());
+        Sidebar sidebar = new Sidebar(initialState, stage, currentUser);
+        layout = new BorderPane();
+        layout.setLeft(sidebar);
+        layout.setStyle("-fx-background-color: #1c1c1c;");
 
-        // Editable user information fields
-        emailField = createTextField(user.getEmail());
-        phoneField = createTextField(user.getPhone());
-        ageField = createTextField(user.getAge());
-        saveButton = createSaveButton();
-
-        // Set up the content pane
-        TopPanel dayNightSwitch = new TopPanel();
-        dayNightSwitch.addActionListener(this::updateColors);
-        contentPane = new Pane();
-        setupContentPane(dayNightSwitch);
-
-        // Set the initial window size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
-        Scene scene = new Scene(contentPane, stageWidth, stageHeight);
+        Scene scene = new Scene(layout, stageWidth, stageHeight);
+        stage.setScene(scene);
+        stage.setTitle("FMS Market with Sidebar");
+        stage.show();
 
-        // Listeners for window resizing
-        scene.widthProperty().addListener((_, _, newWidth) -> updateLayout(newWidth.doubleValue(), scene.getHeight()));
-        scene.heightProperty().addListener((_, _, newHeight) -> updateLayout(scene.getWidth(), newHeight.doubleValue()));
+        sidebar.setSidebarListener(new Sidebar.SidebarListener() {
+            @Override
+            public void onUserDetailsSelected() {
+                displayUserDetails();
+            }
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+            @Override
+            public void onFavouritesSelected() {
+                navigateToFavoritesPage();
+            }
+
+            @Override
+            public void onWatchedSelected() {
+                // Placeholder for watched selection action
+                System.out.println("Watched menu item selected.");
+            }
+
+            @Override
+            public void onSubscriptionSelected() {
+                // Placeholder for subscription selection action
+                System.out.println("Subscription menu item selected.");
+            }
+        });
+
+        // Display user details directly
+        displayUserDetails();
     }
 
-    private void setupContentPane(TopPanel dayNightSwitch) {
-        contentPane.getChildren().addAll(
-                dayNightSwitch.getCanvas(),
-                welcomeLabel,
-                nameLabel,
-                userImageView,
-                logOutButton,
-                emailField,
-                phoneField,
-                ageField,
-                saveButton
-        );
+    private void displayUserDetails() {
+        VBox mainBox = new VBox(10);
+        mainBox.setStyle("-fx-padding: 20; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
-        // Initial layout (before resize)
-        updateLayout(contentPane.getWidth(), contentPane.getHeight());
+        Label userDetailsLabel = new Label("User Details");
+        userDetailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding-bottom: 30px;");
 
-        dayNightSwitch.getCanvas().setLayoutX(10);
-        dayNightSwitch.getCanvas().setLayoutY(10);
+        VBox userDetailsBox = new VBox(10);
+        userDetailsBox.setStyle("-fx-padding: 20; -fx-background-color: #1c1c1c; -fx-alignment: center;");
+
+        Label photoLabel = new Label("User Photo:");
+        photoLabel.setStyle("-fx-text-fill: white;");
+        ImageView userPhoto = new ImageView(new Image(STR."file:\{currentUser.getUser_photo_path()}"));
+        userPhoto.setFitHeight(100);
+        userPhoto.setFitWidth(100);
+        Circle clip = new Circle(50, 50, 50);
+        userPhoto.setClip(clip);
+
+        // Store initial photo path
+        AtomicReference<String> initialPhotoPath = new AtomicReference<>(currentUser.getUser_photo_path());
+        AtomicReference<File> selectedFileRef = new AtomicReference<>();
+
+        userPhoto.setOnMouseClicked(_ -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                userPhoto.setImage(new Image(STR."file:\{selectedFile.getAbsolutePath()}"));
+                selectedFileRef.set(selectedFile);
+            }
+        });
+
+        Label emailLabel = new Label("Email:");
+        emailLabel.setStyle("-fx-text-fill: white;");
+        TextField emailField = new TextField(currentUser.getEmail());
+        emailField.setMaxWidth(300);
+        emailField.setStyle("-fx-alignment: center;");
+
+        Label phoneLabel = new Label("Phone:");
+        phoneLabel.setStyle("-fx-text-fill: white;");
+        TextField phoneField = new TextField(currentUser.getPhone());
+        phoneField.setMaxWidth(300);
+        phoneField.setStyle("-fx-alignment: center;");
+
+        Label ageLabel = new Label("Age:");
+        ageLabel.setStyle("-fx-text-fill: white;");
+        TextField ageField = new TextField(currentUser.getAge());
+        ageField.setMaxWidth(300);
+        ageField.setStyle("-fx-alignment: center;");
+
+        // Store initial values
+        initialEmail = currentUser.getEmail();
+        initialPhone = currentUser.getPhone();
+        initialAge = currentUser.getAge();
+
+        Label changePasswordLabel = new Label("Change Password");
+        changePasswordLabel.setStyle("-fx-text-fill: #8969ba; -fx-cursor: hand;");
+        changePasswordLabel.setOnMouseClicked(_ -> showChangePasswordPopup());
+
+        Button applyButton = new Button("Apply");
+        applyButton.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10;");
+        applyButton.setOnAction(_ -> {
+            currentUser.setEmail(emailField.getText().toLowerCase());
+            currentUser.setPhone(phoneField.getText());
+            currentUser.setAge(ageField.getText());
+            try {
+                if (selectedFileRef.get() != null) {
+                    String newPhotoPath = copyPhotoToResources(selectedFileRef.get());
+                    currentUser.setUser_photo_path(newPhotoPath);
+                }
+                UserJsonHandler.saveUser(currentUser);
+                showAlert("Success", "User details updated successfully.");
+                // Update initial values
+                initialEmail = currentUser.getEmail();
+                initialPhone = currentUser.getPhone();
+                initialAge = currentUser.getAge();
+                initialPhotoPath.set(currentUser.getUser_photo_path());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 10;");
+        cancelButton.setOnAction(_ -> {
+            // Restore initial values
+            emailField.setText(initialEmail);
+            phoneField.setText(initialPhone);
+            ageField.setText(initialAge);
+            userPhoto.setImage(new Image(STR."file:\{initialPhotoPath}"));
+            currentUser.setUser_photo_path(initialPhotoPath.get());
+            selectedFileRef.set(null);
+        });
+
+        HBox buttonBox = new HBox(10, cancelButton, applyButton);
+        buttonBox.setStyle("-fx-alignment: center;");
+        userDetailsBox.getChildren().addAll(photoLabel, userPhoto, emailLabel, emailField, phoneLabel, phoneField, ageLabel, ageField, changePasswordLabel, buttonBox);
+
+        mainBox.getChildren().addAll(userDetailsLabel, userDetailsBox);
+        layout.setCenter(mainBox);
     }
 
-    private Label createWelcomeLabel(String role) {
-        String welcomeText = "Welcome " + (role.equals("admin") ? "Admin" : "Customer");
-        Label welcomeLabel = new Label(welcomeText);
-        welcomeLabel.setStyle(WELCOME_FONT);
-        return welcomeLabel;
+    private String copyPhotoToResources(File selectedFile) throws IOException {
+        Path resourcesDir = Path.of("src/main/resources/UserImages");
+        if (!Files.exists(resourcesDir)) {
+            Files.createDirectories(resourcesDir);
+        }
+
+        String fileName = selectedFile.getName();
+        Path destinationPath = resourcesDir.resolve(fileName);
+        int count = 1;
+
+        while (Files.exists(destinationPath)) {
+            String newFileName = fileName.replaceFirst("(\\.[^.]+)$", STR."_\{count}$1");
+            destinationPath = resourcesDir.resolve(newFileName);
+            count++;
+        }
+
+        Files.copy(selectedFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        return destinationPath.toString();
     }
 
-    private Label createNameLabel(String username) {
-        Label nameLabel = new Label(username);
-        nameLabel.setStyle(NAME_FONT);
-        return nameLabel;
+    private void showChangePasswordPopup() {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(stage);
+        popupStage.initStyle(StageStyle.UNDECORATED);
+
+        VBox popupVBox = new VBox(10);
+
+        Label oldPasswordLabel = new Label("Old Password:");
+        oldPasswordLabel.setStyle("-fx-text-fill: white;");
+        PasswordField oldPasswordField = new PasswordField();
+
+        Label newPasswordLabel = new Label("New Password:");
+        newPasswordLabel.setStyle("-fx-text-fill: white;");
+        PasswordField newPasswordField = new PasswordField();
+
+        HBox buttonBox = new HBox(10);
+        Button cancelButton = new Button("Cancel");
+        Button confirmButton = new Button("Confirm");
+
+        cancelButton.setOnAction(_ -> popupStage.close());
+        confirmButton.setOnAction(_ -> {
+            String oldPassword = oldPasswordField.getText();
+            String newPassword = newPasswordField.getText();
+            if (currentUser.getPassword().equals(oldPassword)) {
+                currentUser.setPassword(newPassword);
+                try {
+                    UserJsonHandler.saveUser(currentUser);
+                    showAlert("Success", "Password changed successfully.");
+                    popupStage.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                showAlert("Error", "Old password is incorrect.");
+            }
+        });
+
+        buttonBox.getChildren().addAll(cancelButton, confirmButton);
+        popupVBox.getChildren().addAll(oldPasswordLabel, oldPasswordField, newPasswordLabel, newPasswordField, buttonBox);
+        popupVBox.setStyle("-fx-padding: 20; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
+
+        Scene popupScene = new Scene(popupVBox, 300, 200);
+        popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
+        popupStage.setScene(popupScene);
+        popupStage.setTitle("Change Password");
+        popupStage.show();
     }
 
-    private Button createLogOutButton() {
-        Button logOutButton = new Button("Log Out");
-        logOutButton.setStyle(BUTTON_FONT);
-        logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;");
-        logOutButton.setOnAction(_ -> new WelcomePage(stage));
-
-        // Hover effects
-        logOutButton.setOnMouseEntered(_ -> logOutButton.setStyle("-fx-background-color: #ff4500; -fx-text-fill: white; -fx-background-radius: 10px;"));
-        logOutButton.setOnMouseExited(_ -> logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;"));
-
-        return logOutButton;
-    }
-
-    private ImageView createUserImageView(String userPhotoPath) {
-        File imageFile = new File(userPhotoPath);
-        Image image = new Image(imageFile.toURI().toString());
-        ImageView imageView = new ImageView(image);
-
-        // Set the image view size
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(150);
-        imageView.setPreserveRatio(false); // Allow the image to fill the entire space, possibly stretching
-
-        // Create a circle to clip the image view
-        Circle clip = new Circle(75, 75, 75);
-        imageView.setClip(clip);
-
-        // Add a border around the image
-        imageView.setStyle("-fx-border-color: #ffffff; -fx-border-width: 5; -fx-border-radius: 75px;");
-
-        return imageView;
-    }
-
-    private TextField createTextField(String text) {
-        TextField textField = new TextField(text);
-        textField.setStyle("-fx-font-size: 16px; -fx-font-family: 'Arial'; -fx-background-color: #f0f0f0;");
-        return textField;
-    }
-
-    private Button createSaveButton() {
-        Button saveButton = new Button("Save");
-        saveButton.setStyle(BUTTON_FONT);
-        saveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10px;");
-        saveButton.setOnAction(_ -> saveUserDetails());
-        return saveButton;
-    }
-
-    private void saveUserDetails() {
-        // Update the user object with the new details
-        currentUser.setEmail(emailField.getText());
-        currentUser.setPhone(phoneField.getText());
-        currentUser.setAge(ageField.getText());
-
-        // Save the updated user details to the JSON file
+    private void navigateToFavoritesPage() {
         try {
-            UserJsonHandler.saveUser(currentUser);
-            System.out.println("Updated user details saved.");
+            new FavoritesPage(currentUser, stage, Sidebar.SidebarState.FAVOURITES);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to save updated user details.");
         }
     }
 
-    private void updateLayout(double width, double height) {
-        // Center the elements based on the new window size
-        double centerX = width / 2.0;
-        double centerY = height / 2.0;
-
-        welcomeLabel.setLayoutX(centerX - 95);
-        welcomeLabel.setLayoutY(centerY - 250);
-
-        userImageView.setLayoutX(centerX - 75);  // Adjust to center
-        userImageView.setLayoutY(centerY - 180);
-
-        nameLabel.setLayoutX(centerX - 80);  // Adjust to center
-        nameLabel.setLayoutY(centerY);
-
-        emailField.setLayoutX(centerX - 100);
-        emailField.setLayoutY(centerY + 30);
-
-        phoneField.setLayoutX(centerX - 100);
-        phoneField.setLayoutY(centerY + 80);
-
-        ageField.setLayoutX(centerX - 100);
-        ageField.setLayoutY(centerY + 130);
-
-        saveButton.setLayoutX(centerX + 120);
-        saveButton.setLayoutY(centerY + 180);
-
-        logOutButton.setLayoutX(centerX + 300);
-        logOutButton.setLayoutY(centerY + 250);
-    }
-
-    private void updateColors() {
-        // Check if day or night mode is enabled
-        if (TopPanel.isDayValue()) {
-            contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #f5f7fa, #c3cfe2);");
-            welcomeLabel.setTextFill(Color.BLACK);
-            nameLabel.setTextFill(Color.BLACK);
-            emailField.setStyle("-fx-background-color: #f0f0f0;");
-            phoneField.setStyle("-fx-background-color: #f0f0f0;");
-            ageField.setStyle("-fx-background-color: #f0f0f0;");
-            logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;");
-        } else {
-            contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #232526, #414345);");
-            welcomeLabel.setTextFill(Color.WHITE);
-            nameLabel.setTextFill(Color.WHITE);
-            emailField.setStyle("-fx-background-color: #333;");
-            phoneField.setStyle("-fx-background-color: #333;");
-            ageField.setStyle("-fx-background-color: #333;");
-            logOutButton.setStyle("-fx-background-color: #ff6347; -fx-text-fill: white; -fx-background-radius: 10px;");
-        }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
