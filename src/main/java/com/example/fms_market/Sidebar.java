@@ -10,15 +10,20 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Sidebar extends VBox {
+    private final Stage stage;
+    private final User currentUser;
 
     public enum SidebarState {
+        HOME("🏠", "Home"),
         USER_DETAILS("👤", "User Details"),
         FAVOURITES("🌟", "Favourites"),
         WATCHED("🎥", "Watched"),
-        SUBSCRIPTION("📅", "Subscription");
+        SUBSCRIPTION("📅", "Subscription"),
+        LOGOUT("🚪", "Logout");
 
         private final String icon;
         private final String text;
@@ -37,33 +42,46 @@ public class Sidebar extends VBox {
         }
     }
 
-    private SidebarState selectedState = SidebarState.USER_DETAILS; // Default selected state
+    private SidebarState selectedState;
     private final VBox menuContainer;
     private final Button toggleButton;
     private SidebarListener listener;
-    private boolean isExpanded = true;
+    private boolean isExpanded = false;
 
-    public Sidebar(SidebarState initialState) {
+
+    public Sidebar(SidebarState initialState, Stage stage, User currentUser) {
         this.selectedState = initialState;
-        this.setStyle("-fx-background-color: #404040;");
-        this.setPrefWidth(200);
+        this.stage = stage;
+        this.currentUser = currentUser;
+        this.setStyle("-fx-background-color: #404040; -fx-border-radius: 10; -fx-background-radius: 10;");
+        this.setPrefWidth(80);
         this.setAlignment(Pos.TOP_CENTER);
+
+        // Set initial margin for minimized state
+        BorderPane.setMargin(this, new Insets(15, 0, 15, 0));
 
         // Menu container
         menuContainer = new VBox(15);
         menuContainer.setAlignment(Pos.TOP_CENTER);
         menuContainer.setStyle("-fx-padding: 10;");
 
-        // Add menu items
+        // Add home button
+        addHomeButton();
+
         for (SidebarState state : SidebarState.values()) {
-            addMenuItem(state);
+            if (state != SidebarState.LOGOUT && state != SidebarState.HOME) {
+                addMenuItem(state);
+            }
         }
 
+        // Add logout button
+        addLogoutButton();
+
         // Toggle button
-        toggleButton = new Button("⏪");
+        toggleButton = new Button("⏩"); // Set initial button text to indicate expansion
         toggleButton.setFont(Font.font(16));
         toggleButton.setStyle("-fx-background-color: #555; -fx-text-fill: white; -fx-cursor: hand;");
-        toggleButton.setOnAction(event -> toggleSidebar());
+        toggleButton.setOnAction(_ -> toggleSidebar());
         toggleButton.setAlignment(Pos.BOTTOM_CENTER);
 
         // Add menu container and toggle button to the sidebar
@@ -85,15 +103,15 @@ public class Sidebar extends VBox {
         textLabel.setManaged(isExpanded);
 
         HBox menuItem = new HBox(10, iconLabel, textLabel);
-        menuItem.setAlignment(Pos.CENTER_LEFT);
-        menuItem.setStyle("-fx-padding: 5;");
+        menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
+        menuItem.setStyle(isExpanded ? "-fx-padding: 0;" : "-fx-padding: 5;");
 
         // Apply selected style if this item is the selected state
         if (state == selectedState) {
             applySelectedStyle(iconLabel, textLabel);
         }
 
-        menuItem.setOnMouseClicked(event -> {
+        menuItem.setOnMouseClicked(_ -> {
             // Set the selected state on click
             selectedState = state;
             updateMenuStyles();
@@ -101,6 +119,11 @@ public class Sidebar extends VBox {
 
             if (isExpanded) {
                 toggleSidebar();
+            }
+
+            // Handle navigation for the new HOME state
+            if (state == SidebarState.HOME) {
+                navigateToHomePage();
             }
         });
 
@@ -110,37 +133,45 @@ public class Sidebar extends VBox {
     private void toggleSidebar() {
         // Toggle between expanded and minimized states
         isExpanded = !isExpanded;
-
         // Timeline to smoothly animate the transition between states
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(300), e -> {
+                new KeyFrame(Duration.millis(300), _ -> {
                     double targetWidth = isExpanded ? 200 : 80;
                     this.setPrefWidth(targetWidth);
                     toggleButton.setText(isExpanded ? "⏪" : "⏩");
 
                     // Handle visibility of text labels and alignment for the menu items
                     menuContainer.getChildren().forEach(node -> {
-                        if (node instanceof HBox menuItem) {
+                        if (node instanceof VBox vbox) {
+                            vbox.getChildren().forEach(child -> {
+                                if (child instanceof HBox menuItem) {
+                                    Label textLabel = (Label) menuItem.getChildren().get(1);
+                                    textLabel.setVisible(isExpanded);
+                                    textLabel.setManaged(isExpanded);
+
+                                    menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
+                                    menuItem.setStyle(isExpanded ? "-fx-padding: 18;" : "-fx-padding: 5;");
+                                }
+                            });
+                        } else if (node instanceof HBox menuItem) {
                             Label textLabel = (Label) menuItem.getChildren().get(1);
                             textLabel.setVisible(isExpanded);
                             textLabel.setManaged(isExpanded);
 
                             menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
-                            menuItem.setStyle(isExpanded ? "-fx-padding: 0;" : "-fx-padding: 5;");
+                            menuItem.setStyle(isExpanded ? "-fx-padding: 18;" : "-fx-padding: 5;");
                         }
                     });
 
+                    // Ensure the LOGOUT button maintains its style
+                    HBox logoutButton = (HBox) menuContainer.getChildren().getLast();
+                    logoutButton.setStyle("-fx-padding: 5; -fx-background-color: red; -fx-background-radius: 5;");
+
                     // Apply curve effect
-                    if (isExpanded) {
-                        this.setStyle("-fx-background-color: #333;");
-                    } else {
-                        this.setStyle("-fx-background-color: #333; -fx-border-radius: 10; -fx-background-radius: 10;");
-                    }
+                    this.setStyle("-fx-background-color: #333; -fx-border-radius: 10; -fx-background-radius: 10;");
 
                     // Set margin based on the expanded state
                     BorderPane.setMargin(this, isExpanded ? Insets.EMPTY : new Insets(15, 0, 15, 0));
-
-                    this.setStyle(isExpanded ? "-fx-background-color: #333;" : "-fx-background-color: #333; -fx-border-radius: 10; -fx-background-radius: 10;");
                 })
         );
 
@@ -188,6 +219,67 @@ public class Sidebar extends VBox {
 
     public void setSidebarListener(SidebarListener listener) {
         this.listener = listener;
+    }
+
+    private void addLogoutButton() {
+        Label iconLabel = new Label(SidebarState.LOGOUT.getIcon());
+        iconLabel.setFont(Font.font(18));
+        iconLabel.setStyle("-fx-text-fill: white;");
+
+        Label textLabel = new Label(SidebarState.LOGOUT.getText());
+        textLabel.setFont(Font.font(14));
+        textLabel.setStyle("-fx-text-fill: white;");
+        textLabel.setVisible(isExpanded);
+        textLabel.setManaged(isExpanded);
+
+        HBox menuItem = new HBox(5, iconLabel, textLabel);
+        menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
+        menuItem.setStyle("-fx-padding: 3;");
+
+        menuItem.setOnMouseClicked(_ -> navigateToWelcomePage());
+
+        VBox logoutVBox = new VBox();
+        logoutVBox.setStyle("-fx-background-color: red; -fx-padding: 2; -fx-border-radius: 10; -fx-background-radius: 10;");
+        logoutVBox.getChildren().add(menuItem);
+
+        menuContainer.getChildren().add(logoutVBox);
+    }
+
+    private void addHomeButton() {
+        Label iconLabel = new Label(SidebarState.HOME.getIcon());
+        iconLabel.setFont(Font.font(18));
+        iconLabel.setStyle("-fx-text-fill: white;");
+
+        Label textLabel = new Label(SidebarState.HOME.getText());
+        textLabel.setFont(Font.font(14));
+        textLabel.setStyle("-fx-text-fill: white;");
+        textLabel.setVisible(isExpanded);
+        textLabel.setManaged(isExpanded);
+
+        HBox menuItem = new HBox(5, iconLabel, textLabel);
+        menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
+        menuItem.setStyle("-fx-padding: 3;");
+
+        menuItem.setOnMouseClicked(_ -> navigateToHomePage());
+
+        VBox homeVBox = new VBox();
+        homeVBox.setStyle("-fx-background-color: #51209d; -fx-padding: 2; -fx-border-radius: 10; -fx-background-radius: 10;");
+        homeVBox.getChildren().add(menuItem);
+
+        menuContainer.getChildren().add(homeVBox);
+    }
+
+    private void navigateToWelcomePage() {
+        new WelcomePage(stage);
+    }
+
+    private void navigateToHomePage() {
+        User currentUser = getCurrentUser();
+        new HomePage(currentUser, stage);
+    }
+
+    private User getCurrentUser() {
+        return currentUser;
     }
 
     public interface SidebarListener {

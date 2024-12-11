@@ -12,21 +12,22 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.fms_market.Banner.currentUser;
 import static com.example.fms_market.ShowCardUtil.SHOW_CARD_WIDTH;
 
 public class FavoritesPage {
 
-    private GridPane showContainer;
-    private BorderPane layout;
-    private User user;
-    private Stage stage;
+    private final GridPane showContainer;
+    private final BorderPane layout;
+    private final User user;
+    private final Stage stage;
     private List<Show> favoriteShows;
 
     public FavoritesPage(User user, Stage stage, Sidebar.SidebarState initialState) throws IOException {
         this.user = user;
         this.stage = stage;
 
-        Sidebar sidebar = new Sidebar(initialState);
+        Sidebar sidebar = new Sidebar(initialState, stage, currentUser);
 
         showContainer = new GridPane();
         showContainer.setStyle("-fx-background-color: #1c1c1c;");

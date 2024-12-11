@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class AccountPage1 {
     private final User currentUser;
@@ -35,7 +34,7 @@ public class AccountPage1 {
         this.currentUser = user;
         this.stage = stage;
 
-        Sidebar sidebar = new Sidebar(initialState);
+        Sidebar sidebar = new Sidebar(initialState, stage, currentUser);
         layout = new BorderPane();
         layout.setLeft(sidebar);
         layout.setStyle("-fx-background-color: #1c1c1c;");
@@ -88,7 +87,7 @@ public class AccountPage1 {
 
         Label photoLabel = new Label("User Photo:");
         photoLabel.setStyle("-fx-text-fill: white;");
-        ImageView userPhoto = new ImageView(new Image("file:" + currentUser.getUser_photo_path()));
+        ImageView userPhoto = new ImageView(new Image(STR."file:\{currentUser.getUser_photo_path()}"));
         userPhoto.setFitHeight(100);
         userPhoto.setFitWidth(100);
         Circle clip = new Circle(50, 50, 50);
@@ -98,12 +97,12 @@ public class AccountPage1 {
         AtomicReference<String> initialPhotoPath = new AtomicReference<>(currentUser.getUser_photo_path());
         AtomicReference<File> selectedFileRef = new AtomicReference<>();
 
-        userPhoto.setOnMouseClicked(event -> {
+        userPhoto.setOnMouseClicked(_ -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
-                userPhoto.setImage(new Image("file:" + selectedFile.getAbsolutePath()));
+                userPhoto.setImage(new Image(STR."file:\{selectedFile.getAbsolutePath()}"));
                 selectedFileRef.set(selectedFile);
             }
         });
@@ -133,11 +132,11 @@ public class AccountPage1 {
 
         Label changePasswordLabel = new Label("Change Password");
         changePasswordLabel.setStyle("-fx-text-fill: #8969ba; -fx-cursor: hand;");
-        changePasswordLabel.setOnMouseClicked(event -> showChangePasswordPopup());
+        changePasswordLabel.setOnMouseClicked(_ -> showChangePasswordPopup());
 
         Button applyButton = new Button("Apply");
         applyButton.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10;");
-        applyButton.setOnAction(e -> {
+        applyButton.setOnAction(_ -> {
             currentUser.setEmail(emailField.getText().toLowerCase());
             currentUser.setPhone(phoneField.getText());
             currentUser.setAge(ageField.getText());
@@ -160,12 +159,12 @@ public class AccountPage1 {
 
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 10;");
-        cancelButton.setOnAction(e -> {
+        cancelButton.setOnAction(_ -> {
             // Restore initial values
             emailField.setText(initialEmail);
             phoneField.setText(initialPhone);
             ageField.setText(initialAge);
-            userPhoto.setImage(new Image("file:" + initialPhotoPath));
+            userPhoto.setImage(new Image(STR."file:\{initialPhotoPath}"));
             currentUser.setUser_photo_path(initialPhotoPath.get());
             selectedFileRef.set(null);
         });
@@ -189,7 +188,7 @@ public class AccountPage1 {
         int count = 1;
 
         while (Files.exists(destinationPath)) {
-            String newFileName = fileName.replaceFirst("(\\.[^.]+)$", "_" + count + "$1");
+            String newFileName = fileName.replaceFirst("(\\.[^.]+)$", STR."_\{count}$1");
             destinationPath = resourcesDir.resolve(newFileName);
             count++;
         }
@@ -218,8 +217,8 @@ public class AccountPage1 {
         Button cancelButton = new Button("Cancel");
         Button confirmButton = new Button("Confirm");
 
-        cancelButton.setOnAction(e -> popupStage.close());
-        confirmButton.setOnAction(e -> {
+        cancelButton.setOnAction(_ -> popupStage.close());
+        confirmButton.setOnAction(_ -> {
             String oldPassword = oldPasswordField.getText();
             String newPassword = newPasswordField.getText();
             if (currentUser.getPassword().equals(oldPassword)) {
