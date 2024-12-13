@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +12,6 @@ import java.util.List;
 
 public class ShowJsonHandler {
 
-    private static final String SHOWS_FILE_PATH = "data.json";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void saveShow(Show show) throws IOException {
@@ -30,7 +28,7 @@ public class ShowJsonHandler {
         }
 
         if (!showExists) {
-            int newShowId = shows.isEmpty() ? 1 : shows.get(shows.size() - 1).getId() + 1;
+            int newShowId = shows.isEmpty() ? 1 : shows.getLast().getId() + 1;
             show.setId(newShowId);
             shows.add(show);
         }
@@ -43,31 +41,59 @@ public class ShowJsonHandler {
         ObjectNode rootNode = DataManager.getShowsRootNode();
         ArrayNode ratingsNode = rootNode.withArray("ratings");
 
-        User_Watch_record record = new User_Watch_record(userId, showId, dateOfWatched, rating);
-        ratingsNode.add(objectMapper.valueToTree(record));
+        for (JsonNode node : ratingsNode) {
+            User_Watch_record record = objectMapper.treeToValue(node, User_Watch_record.class);
+            if (record.getUser_id() == userId && record.getShow_id() == showId) {
+                ((ObjectNode) node).put("rating", rating);
+                ((ObjectNode) node).put("dateOfWatched", dateOfWatched.getTime());
+                DataManager.saveData();
+                return;
+            }
+        }
+
+        // If no existing rating is found, add a new one
+        User_Watch_record newRecord = new User_Watch_record(userId, showId, dateOfWatched, rating);
+        ratingsNode.add(objectMapper.valueToTree(newRecord));
         DataManager.saveData();
     }
 
-    public static List<User_Watch_record> getRatings() throws IOException {
-        File file = new File(SHOWS_FILE_PATH);
+    public static boolean checkIfRatingExists(int userId, int showId) throws IOException {
+        ObjectNode rootNode = DataManager.getShowsRootNode();
+        ArrayNode ratingsNode = rootNode.withArray("ratings");
 
-        if (!file.exists() || file.length() == 0) {
-            return new ArrayList<>();
+        for (JsonNode node : ratingsNode) {
+            int nodeUserId = node.get("user_id").asInt();
+            int nodeShowId = node.get("show_id").asInt();
+            if (nodeUserId == userId && nodeShowId == showId) {
+                return true;
+            }
         }
+        return false;
+    }
+    public static void updateShowRating(int userId, int showId, Date dateOfWatched, int rating) throws IOException {
+        ObjectNode rootNode = DataManager.getShowsRootNode();
+        ArrayNode ratingsNode = rootNode.withArray("ratings");
 
-        ObjectNode rootNode = (ObjectNode) objectMapper.readTree(file);
+        for (JsonNode node : ratingsNode) {
+            User_Watch_record record = objectMapper.treeToValue(node, User_Watch_record.class);
+            if (record.getUser_id() == userId && record.getUser_id() == showId) {
+                ((ObjectNode) node).put("rating", rating);
+                ((ObjectNode) node).put("dateOfWatched", dateOfWatched.getTime());
+                DataManager.saveData();
+                return;
+            }
+        }
+    }
+
+    public static List<User_Watch_record> getRatings() throws IOException {
+        ObjectNode rootNode = DataManager.getShowsRootNode();
         ArrayNode ratingsNode = rootNode.withArray("ratings");
 
         List<User_Watch_record> ratings = new ArrayList<>();
-        ratingsNode.forEach(node -> {
-            try {
-                User_Watch_record record = objectMapper.treeToValue(node, User_Watch_record.class);
-                ratings.add(record);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
+        for (JsonNode node : ratingsNode) {
+            User_Watch_record record = objectMapper.treeToValue(node, User_Watch_record.class);
+            ratings.add(record);
+        }
         return ratings;
     }
 

@@ -1,15 +1,16 @@
 package com.example.fms_market;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User_Watch_record {
     private int user_id;
     private int show_id;
     private Date date_of_watched;
     private Integer rating;
-
 
     @JsonCreator
     public User_Watch_record(
@@ -33,10 +34,5 @@ public class User_Watch_record {
     public void setDate_of_watched(Date date_of_watched) { this.date_of_watched = date_of_watched; }
 
     public Integer getRating() { return rating; }
-    public void setRating(Integer rating) {
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("The rate must be in the range 1 to 5.");
-        }
-        this.rating = rating;
-    }
+
 }

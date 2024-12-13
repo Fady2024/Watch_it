@@ -14,8 +14,6 @@ public class HelloApplication extends Application {
 
         // Initialize the UI
         new LoginPageFX(stage);
-        new AddShow(new User("few", "feewf", "Fwefw", "efwfwe", "fwefwe", "fwefew"), stage);
-
         // Save data at the end
         DataManager.saveData();
     }

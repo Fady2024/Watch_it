@@ -4,7 +4,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,25 +32,31 @@ public class ShowCardUtil {
 
         ImageView posterView = createPosterView(show.getPoster());
         Label title = new Label(show.getTitle());
-        title.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(),14));
+        title.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
         title.setTextFill(Color.WHITE);
         title.setAlignment(Pos.CENTER);
         title.setWrapText(true);
         title.setMaxWidth(SHOW_CARD_WIDTH);
 
-        Button watchButton = new Button("Watch It");
-        watchButton.setOnAction(event -> {
-            try {
-                new ShowPage(user, show, stage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
 
-        StackPane posterContainer = new StackPane(posterView, createRatedIcon(show), createFavoriteIcon(show, user.getId(), refreshCallback));
+        Rectangle rectangle = new Rectangle(SHOW_CARD_WIDTH, SHOW_CARD_HEIGHT - 30);
+        rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setArcWidth(20);
+        rectangle.setArcHeight(20);
+        StackPane posterContainer = new StackPane( posterView, createRatedIcon(show), createFavoriteIcon(show, user.getId(), refreshCallback),rectangle);
         posterContainer.setAlignment(Pos.TOP_LEFT);
+        StackPane.setAlignment(rectangle, Pos.BOTTOM_CENTER);
         StackPane.setAlignment(createRatedIcon(show), Pos.TOP_RIGHT);
-        showCard.getChildren().addAll(posterContainer, title, watchButton);
+        showCard.getChildren().addAll(posterContainer, title);
+
+        posterContainer.setOnMouseEntered(_ -> posterContainer.setStyle("-fx-background-color: #333333; -fx-border-color: #6A1B9A; -fx-border-width: 3; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        posterContainer.setOnMouseExited(_ -> posterContainer.setStyle(""));
+
+        rectangle.setOnMouseReleased(_ -> {
+            showCard.setStyle("");
+            new MoviePageFX(user, show, stage);
+        });
 
         return showCard;
     }
@@ -79,25 +84,27 @@ public class ShowCardUtil {
         }
 
         int current = (int) Math.round((averageRating / 10) * 20);
-        StackPane starCanvas = createStarCanvas(averageRating, current, STAR_SIZE, STAR_SIZE, RADIUS);
+        StackPane starCanvas = createStarCanvas(current);
         starCanvas.setAlignment(Pos.TOP_RIGHT);
         starCanvas.setTranslateX(30);
         Label ratingLabel = new Label(formattedRating);
         ratingLabel.setFont(Font.font("Arial", 14));
         ratingLabel.setTextFill(Color.BLACK);
         ratingLabel.setAlignment(Pos.TOP_RIGHT);
-        ratingLabel.setTranslateY(-30);
+        ratingLabel.setTranslateY(-32);
         ratingLabel.setTranslateX(formattedRating.matches("\\d+") ? -15 : -10);
 
         VBox allrate = new VBox(0);
-        allrate.setTranslateY(-30);
+        allrate.setTranslateY(-32);
+        allrate.setTranslateX(-3);
         allrate.setAlignment(Pos.TOP_RIGHT);
         allrate.setPadding(new Insets(0, 0, 0, 0));
         allrate.setSpacing(0);
         allrate.getChildren().addAll(starCanvas, ratingLabel);
         Rectangle background = new Rectangle(45, 60);
-        background.setArcWidth(10);
-        background.setArcHeight(10);
+        background.setArcWidth(20);
+        background.setArcHeight(20);
+        background.setTranslateX(-2);
         background.setFill(Color.color(1, 1, 1, 0.4));
 
         StackPane finalrate = new StackPane(background, allrate);
@@ -107,7 +114,7 @@ public class ShowCardUtil {
         return finalrate;
     }
 
-    private static StackPane createStarCanvas(double averageRating, int currentValue, double centerX, double centerY, double radius) {
+    private static StackPane createStarCanvas(int currentValue) {
         double canvasSize = STAR_SIZE;
         double scale = 0.4;
 
@@ -124,14 +131,14 @@ public class ShowCardUtil {
             double startAngle = i * anglePerSection;
             gc.setFill(i < currentValue ? Color.web("#DAA520") : Color.web("494848"));
             gc.fillArc(
-                    canvasSize / 2 - radius, canvasSize / 2 - radius,
-                    radius * 2, radius * 2,
+                    canvasSize / 2 - ShowCardUtil.RADIUS, canvasSize / 2 - ShowCardUtil.RADIUS,
+                    ShowCardUtil.RADIUS * 2, ShowCardUtil.RADIUS * 2,
                     startAngle, anglePerSection, ArcType.ROUND
             );
         }
 
         //inner circle
-        double innerRadius = radius * 0.9;
+        double innerRadius = ShowCardUtil.RADIUS * 0.9;
         gc.setFill(Color.web("#D4D4D4"));
         gc.fillOval(
                 canvasSize / 2 - innerRadius, canvasSize / 2 - innerRadius,
@@ -166,11 +173,12 @@ public class ShowCardUtil {
     public static StackPane createFavoriteIcon(Show show, int userId, Runnable refreshCallback) {
         Label favoriteIcon = new Label("♥");
         boolean isFavorite = isShowFavorite(userId, show.getId());
-        favoriteIcon.setStyle("-fx-font-size: 30px; -fx-text-fill: " + (isFavorite ? "red" : "white") + "; -fx-font-weight: bold;");
-        favoriteIcon.setPadding(new Insets(5));
+        favoriteIcon.setStyle(String.format("-fx-font-size: 30px; -fx-text-fill: %s; -fx-font-weight: bold;", isFavorite ? "red" : "white"));        favoriteIcon.setPadding(new Insets(5));
         favoriteIcon.setTranslateY(-10);
-        favoriteIcon.setOnMouseClicked(event -> toggleFavorite(userId, show.getId(), favoriteIcon, refreshCallback));
-
+        favoriteIcon.setOnMouseClicked(event -> {
+            toggleFavorite(userId, show.getId(), favoriteIcon, refreshCallback);
+            event.consume();
+        });
 
         Rectangle heartBackground = new Rectangle(30, 30);
         heartBackground.setArcWidth(15);
@@ -184,7 +192,7 @@ public class ShowCardUtil {
         return heartContainer;
     }
 
-    private static boolean isShowFavorite(int userId, int showId) {
+    public static boolean isShowFavorite(int userId, int showId) {
         try {
             List<Integer> favoriteShows = UserJsonHandler.getFavoriteShows(userId);
             return favoriteShows.contains(showId);
@@ -202,9 +210,7 @@ public class ShowCardUtil {
                 UserJsonHandler.addFavoriteShow(userId, showId);
             }
             boolean isFavorite = isShowFavorite(userId, showId);
-            favoriteIcon.setStyle("-fx-font-size: 30px; -fx-text-fill: " + (isFavorite ? "red" : "white") + ";");
-            System.out.println("Favorite status updated: " + isFavorite);
-            refreshCallback.run();
+            favoriteIcon.setStyle(String.format("-fx-font-size: 30px; -fx-text-fill: %s;", isFavorite ? "red" : "white"));            refreshCallback.run();
         } catch (IOException e) {
             e.printStackTrace();
         }
