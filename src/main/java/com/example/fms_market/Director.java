@@ -51,9 +51,7 @@ public class Director {
 
     public void setLastName(String last_name) {this.last_name=last_name;}
 
-    public List<String> getMovies() {
-        return shows;
-    }
+    public List<String> getShows() {return shows == null ? new ArrayList<>() : shows;}
 
     public void setShows(List<String> shows) {this.shows=shows;}
 
@@ -86,7 +84,7 @@ public class Director {
         // Search through directors
         for (Director director : directors) {
             if (director.getFirstName().toLowerCase().contains(keyword.toLowerCase())|| director.getLastName().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add("Director: " + director.getFirstName() +" "+ director.getLastName() + " | Age:" +director.getAge() + " | List of movies:"+director.getMovies());
+                results.add("Director: " + director.getFirstName() +" "+ director.getLastName() + " | Age:" +director.getAge() + " | List of movies:"+director.getShows());
             }
 
         }

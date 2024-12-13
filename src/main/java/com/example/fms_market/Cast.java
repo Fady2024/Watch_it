@@ -58,11 +58,11 @@ import java.util.List;
 
         public void setGender(String gender) {this.gender = gender;}
 
-        public List<String> getMovies() {
-            return shows;
+        public List<String> getShows() {
+            return shows == null ? new ArrayList<>() : shows;
         }
 
-        public void setMovies(List<String> shows) {this.shows = shows;}
+        public void setShows(List<String> shows) {this.shows = shows;}
 
         public String getNationality() {
             return nationality;
