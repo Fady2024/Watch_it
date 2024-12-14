@@ -10,6 +10,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import javafx.scene.chart.XYChart;
 
 public class Subscription {
 
@@ -30,7 +31,8 @@ public class Subscription {
 
 
 private static int freq_month[][]=new int[12][3];
-
+private static int arr_revenue[]= new int[12];
+private static String max_month;
 
 
     private static int current_year=2024;
@@ -159,10 +161,33 @@ int index_plan;
 
 
 
+    public static int[] getArr_revenue() {
+        for (int i=0;i<12;i++){
+
+            arr_revenue[i]=freq_month[i][0]*Subscription.price_basic+
+                    freq_month[i][1]*Subscription.price_standard+
+                    freq_month[i][2]*Subscription.price_permium;
 
 
+        }
+        return arr_revenue;
+    }
 
+    public static String getMax_revenue() {
+int max_revenue=-1;
+        String[] months = {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        for (int i=0;i<12;i++){
 
+            arr_revenue[i]=freq_month[i][0]*Subscription.price_basic+
+                    freq_month[i][1]*Subscription.price_standard+
+                    freq_month[i][2]*Subscription.price_permium;
+            if( arr_revenue[i]>max_revenue){max_revenue=arr_revenue[i];
+            max_month=months[i];}
 
-
+        }
+        return max_month;
+    }
 }

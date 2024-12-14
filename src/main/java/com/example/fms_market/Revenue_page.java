@@ -24,7 +24,7 @@ import javafx.scene.chart.BarChart;
 import javafx.application.Platform;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
-import javafx.scene.text.FontWeight;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,15 +48,6 @@ public class Revenue_page  {
         GridPane showContainer =createShowContainer();
         BorderPane layout = new BorderPane();
         layout.setTop(Banner.getBanner(stage, "revenue"));
-
-
-
-
-
-
-
-
-
 
 
 
@@ -180,8 +171,8 @@ public class Revenue_page  {
         hbox.setTranslateX(-stageWidth*0.20);
         hbox.setTranslateY(-stageHeight*0.40);
         hbox.setOnScroll(event -> {
-            handleScroll(event, hbox, months); // معالجة التمرير
-            update_index(basic, Standard, Permium, currentMonth, months, root, stageWidth, stageHeight); // تحديث العرض
+            handleScroll(event, hbox, months);
+            update_index(basic, Standard, Permium, currentMonth, months, root, stageWidth, stageHeight);
         });
         hbox.setOnMouseClicked(event -> {
             if (event.getX() > hbox.getWidth() / 2) {
@@ -203,14 +194,28 @@ public class Revenue_page  {
 
         StackPane chartContainer = new StackPane();
         createSimpleLineChart(chartContainer, stageWidth, stageHeight,currentMonth,months);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ImageView image_box_max = new ImageView("file:src/main/resources/image/box_max.png");
+        image_box_max.setScaleX(0.15);
+        image_box_max.setScaleY(0.15);
+
+        image_box_max.setTranslateY(stageHeight*0.1);
+        image_box_max.setTranslateX(stageWidth*0.05);
+        Text max_month=createStyledText(Subscription.getMax_revenue(),"35px","white");
+        max_month.setTranslateY(stageHeight*0.04);
+        max_month.setTranslateX(stageWidth*0.04);
+        StackPane stack_max_month = new StackPane();
+stack_max_month.getChildren().addAll(image_box_max,max_month);
+        stack_max_month.setMinSize(300, 200);
+        stack_max_month.setMaxSize(500, 400);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         VBox vbox = new VBox(10);
-        vbox.getChildren().addAll(title,stackPane,root,hbox,chartContainer);
+        vbox.getChildren().addAll(title,stackPane,root,hbox,stack_max_month,chartContainer);
         StackPane stackPane2 = new StackPane();
         stackPane2.setMinWidth(stageWidth * 0.8);
-        stackPane2.setMinHeight(stageHeight * 2);
+        stackPane2.setMinHeight(stageHeight * 2.4);
         stackPane2.getChildren().addAll( showContainer,vbox);
         scrollPane.setContent(stackPane2);
         layout.setCenter(scrollPane);
@@ -258,30 +263,30 @@ private String getColorForValue(int index) {
         Text last = (Text) hbox.getChildren().get(2);
 
         int middleIndex = getMonthIndex(middle.getText(), months);
-        int prevIndex = (middleIndex - 1 + months.length) % months.length;
-        int nextIndex = (middleIndex + 1) % months.length;
+        int prevIndex = getMonthIndex(first.getText(), months);
+        int nextIndex = getMonthIndex(last.getText(), months);
 
-        first.setText(months[prevIndex]);
+        first.setText(months[middleIndex]);
         middle.setText(months[nextIndex]);
-        last.setText(months[(nextIndex + 1) % months.length]);
+        if(nextIndex==11){nextIndex=-1;}
+        last.setText(months[(nextIndex + 1) ]);
 
         updateMonthColors(hbox);
         return nextIndex;
     }
 
-    // تحريك الشهور إلى اليسار
     private int shiftMonthsLeft(HBox hbox, String[] months) {
         Text first = (Text) hbox.getChildren().get(0);
         Text middle = (Text) hbox.getChildren().get(1);
         Text last = (Text) hbox.getChildren().get(2);
 
         int middleIndex = getMonthIndex(middle.getText(), months);
-        int prevIndex = (middleIndex - 1 + months.length) % months.length;
-        int nextIndex = (middleIndex + 1) % months.length;
+        int prevIndex = getMonthIndex(first.getText(), months);
+        int nextIndex = getMonthIndex(last.getText(), months);
 
         first.setText(months[(prevIndex - 1 + months.length) % months.length]);
         middle.setText(months[prevIndex]);
-        last.setText(months[nextIndex]);
+        last.setText(months[middleIndex]);
 
         updateMonthColors(hbox);
         return nextIndex;
@@ -305,7 +310,7 @@ private String getColorForValue(int index) {
     private void updateMonthColors(HBox hbox) {
         for (int i = 0; i < hbox.getChildren().size(); i++) {
             Text text = (Text) hbox.getChildren().get(i);
-            if (i == 1) { // الشهر في المنتصف
+            if (i == 1) {
                 text.setFont(Font.font(40));
                 text.setFill(Color.BLACK);
 
@@ -383,7 +388,7 @@ private String getColorForValue(int index) {
 
 
 
-    private void createSimpleLineChart(StackPane chartContainer, double stageWidth, double stageHeight, Text currentMonth, String[] months) {
+    private void  createSimpleLineChart(StackPane chartContainer, double stageWidth, double stageHeight, Text currentMonth, String[] months) {
         int current_index = getMonthIndex(currentMonth.getText(), months);
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Subscription Type");
@@ -393,17 +398,11 @@ private String getColorForValue(int index) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Subscriptions");
 
-        int arr_revenue[]= new int[12];
-        int max_revenue=-1;
+
         for (int i=0;i<12;i++){
 
-            arr_revenue[i]=Subscription.getFreq_month()[i][0]*Subscription.price_basic+
-                    Subscription.getFreq_month()[i][1]*Subscription.price_standard+
-                    Subscription.getFreq_month()[i][2]*Subscription.price_permium;
-            if( arr_revenue[i]>max_revenue){max_revenue=arr_revenue[i];}
 
-            System.out.println( arr_revenue[i]+" ");
-            series.getData().add(new XYChart.Data<>(months[i],arr_revenue[i] ));
+            series.getData().add(new XYChart.Data<>(months[i],Subscription.getArr_revenue()[i]));
 
         }
 
@@ -416,14 +415,14 @@ private String getColorForValue(int index) {
 
         lineChart.setPrefWidth(stageWidth * 0.7);
         lineChart.setPrefHeight(stageHeight * 0.5);
-        lineChart.setTranslateY(stageHeight * 0.35);
+        lineChart.setTranslateY(stageHeight * 0.05);
         lineChart.setTranslateX(stageWidth * 0.14);
 
         Rectangle rectangle = new Rectangle();
 
         rectangle.setWidth(stageWidth*0.4);
         rectangle.setHeight(stageHeight*0.6);
-        rectangle.setTranslateY(stageHeight*0.3);
+        //rectangle.setTranslateY(stageHeight*0.45);
         rectangle.setTranslateX(stageWidth*0.15);
         rectangle.setFill(Color.web("#F4F4F4"));
         chartContainer.setPrefSize(stageWidth * 0.8, stageHeight * 0.6);
