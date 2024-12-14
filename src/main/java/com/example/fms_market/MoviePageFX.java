@@ -25,15 +25,21 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MoviePageFX {
 
     private int stageWidth;
     private int stageHeight;
-
+    private final Stage stage;
+    private final User user;
+    private final Show show;
     public MoviePageFX(User user, Show show, Stage stage) {
         setScreenDimensions();
-
+        this.stage = stage;
+        this.user = user;
+        this.show = show;
         // Root Layout
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #252525;");
@@ -195,9 +201,7 @@ public class MoviePageFX {
                         "-fx-background-radius: 20;" +
                         "-fx-font-size: 35px;"
         );
-        playButton.setOnAction(event -> {
-            VideoPlayerFX videoPlayerFX = new VideoPlayerFX(show.getVideo(), stage);
-        });
+        playButton.setOnAction(_ -> new VideoPlayerFX(show.getVideo(), stage));
         Button addButton = new Button("♥ Add");
         boolean isFavorite = ShowCardUtil.isShowFavorite(user.getId(), show.getId());
 
@@ -229,7 +233,19 @@ public class MoviePageFX {
         addButton.setTranslateY(2);
         buttons.getChildren().addAll(playButton, addButton);
         buttons.setTranslateY(-45);
-        details.getChildren().addAll(detailsRow, budgetGenresRow, revenueRow);
+        try {
+            VBox castTable = createCastTable(show.getTitle());
+            VBox directorTable = createDirectorTable(show.getTitle());
+
+            VBox castTableContainer = new VBox(castTable);
+            VBox directorTableContainer = new VBox(directorTable);
+
+            HBox tablesHBox = new HBox(10);  // 10 is the spacing between the tables
+            tablesHBox.getChildren().addAll(directorTableContainer,castTableContainer);
+            details.getChildren().addAll(detailsRow, budgetGenresRow, revenueRow, tablesHBox);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         HBox ratingBar = createAnimatedRatingBar();
         HBox averageRatingBar = createRatingBar(averageRating);
@@ -281,7 +297,7 @@ public class MoviePageFX {
         updateRateLabel.setTranslateX(25);
         updateRateLabel.setTranslateY(-40);
 
-        VBox posterAndRating = new VBox(10, poster, typeAndRatingRow, averageRatingBar, ratingBarWithButton, firstRateLabel, updateRateLabel,buttons);
+        VBox posterAndRating = new VBox(10, poster, typeAndRatingRow, averageRatingBar, ratingBarWithButton, firstRateLabel, updateRateLabel, buttons);
         titleDescriptionDetails.getChildren().addAll(title, description, details);
         centerSection.getChildren().addAll(posterAndRating, titleDescriptionDetails);
         centerSection.setPadding(new Insets(50, 30, 0, 50)); // top, right, bottom, left
@@ -399,7 +415,7 @@ public class MoviePageFX {
         return ratingBar;
     }
 
-    private VBox createInfoTable(String titleText, String contentText) {
+    private VBox createInfoTable(String titleText, List<String> contentText) {
         VBox box = new VBox(10);
         box.setAlignment(Pos.TOP_CENTER);
         box.setStyle("-fx-background-color: white; -fx-border-radius: 12; -fx-background-radius: 12;");
@@ -411,16 +427,45 @@ public class MoviePageFX {
         title.setMaxWidth(Double.MAX_VALUE);
         title.setAlignment(Pos.CENTER);
 
-        Separator separator = new Separator();
-        separator.setStyle("-fx-background-color: #6A1B9A;");
+        VBox contentBox = new VBox(5);
+        contentBox.setPadding(new Insets(10));
+        for (int i = 0; i < contentText.size(); i++) {
+            Label contentLabel = new Label(contentText.get(i));
+            contentLabel.setFont(Font.font("Arial", 14));
+            contentLabel.setTextFill(Color.web("#6A1B9A"));
+            contentLabel.setOnMouseClicked(_ -> navigateToDetailsPage(contentLabel.getText(), stage));
+            contentBox.getChildren().add(contentLabel);
+            if (i < contentText.size() - 1) {
+                Separator separator = new Separator();
+                separator.setStyle("-fx-background-color: #6A1B9A;");
+                contentBox.getChildren().add(separator);
+            }
+        }
 
-        Label content = new Label(contentText);
-        content.setStyle("-fx-padding: 10;");
-        content.setFont(Font.font("Arial", 14));
-        content.setTextFill(Color.web("#6A1B9A"));
-        VBox.setMargin(content, new Insets(10, 0, 0, 0));
-
-        box.getChildren().addAll(title, separator, content);
+        box.getChildren().addAll(title, contentBox);
         return box;
     }
+
+    private void navigateToDetailsPage(String name, Stage stage) {
+        new DetailsPageFX(user,name, stage,show);
+    }
+
+    private VBox createCastTable(String showName) throws IOException {
+        List<Cast> castList = CastJsonHandler.readCast();
+        List<String> castNames = castList.stream()
+                .filter(cast -> cast.getShows().contains(showName))
+                .map(cast -> STR."\{cast.getFirst_name()} \{cast.getLast_name()}")
+                .collect(Collectors.toList());
+        return createInfoTable("Cast", castNames);
+    }
+
+    private VBox createDirectorTable(String showName) throws IOException {
+        List<Director> directorList = DirectorJsonHandler.readDirectors();
+        List<String> directorNames = directorList.stream()
+                .filter(director -> director.getShows().contains(showName))
+                .map(director -> STR."\{director.getFirstName()} \{director.getLastName()}")
+                .collect(Collectors.toList());
+        return createInfoTable("Director", directorNames);
+    }
+
 }

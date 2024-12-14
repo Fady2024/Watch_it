@@ -108,6 +108,11 @@ public class ShowJsonHandler {
         return movies;
     }
 
+    public static Show getShowByTitle(String title) throws IOException {
+        List<Show> shows = readShows();
+        return shows.stream().filter(show -> show.getTitle().equals(title)).findFirst().orElse(null);
+    }
+
     public static List<Show> readShows() throws IOException {
         ObjectNode rootNode = DataManager.getShowsRootNode();
         JsonNode showsNode = rootNode.path("shows");

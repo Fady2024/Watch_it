@@ -2,7 +2,6 @@ package com.example.fms_market;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 @JsonTypeInfo(
@@ -29,7 +28,6 @@ public abstract class Show {
     private long budget;
     private long revenue;
     private String poster;
-    private List<User_Watch_record> ratings = new ArrayList<>();
     private String video;
     private String type;
     private String description;
@@ -67,13 +65,9 @@ public abstract class Show {
         return duration;
     }
 
-    public void setCast(List <String>cast) {
-        this.cast = cast;
-    }
+    public void setCast(List <String>cast) {this.cast = cast;}
 
-    public List<String> getCast() {
-        return cast;
-    }
+    public List<String> getCast() {return cast;}
 
     public void setGenres(List<String>genres) {
         this.genres = genres;
@@ -83,13 +77,9 @@ public abstract class Show {
         return genres;
     }
 
-    public void setDirector(Director director) {
-        this.director = director;
-    }
+    public void setDirector(Director director) {this.director = director;}
 
-    public Director getDirector() {
-        return director;
-    }
+    public Director getDirector() {return director;}
 
     public void setLanguage(List<String> language) {
         this.language = language;
@@ -164,21 +154,6 @@ public abstract class Show {
     }
 
     public void setViews(int views) { this.views = views; }
-
-    public void addRating(User_Watch_record rating) {
-        if (rating.getRating() < 1 || rating.getRating() > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5.");
-        }
-        ratings.add(rating);
-    }
-
-    public List<User_Watch_record> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<User_Watch_record> ratings) {
-        this.ratings = ratings;
-    }
 
     public int getViews() { return views; }
 }
