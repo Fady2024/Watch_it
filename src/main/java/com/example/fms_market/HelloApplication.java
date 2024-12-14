@@ -7,7 +7,7 @@ import java.io.IOException;
 public class HelloApplication extends Application {
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         SubscriptionManager.readSubscriptions();
     }
 
