@@ -69,10 +69,7 @@ public class AccountPage {
                 // Placeholder for subscription selection action
                 System.out.println("Subscription menu item selected.");
             }
-            public void onAboutUsSelected(){
-                navigateToAboutUs();
-
-            }
+            public void onAboutUsSelected(){navigateToAboutUs();}
         });
 
         // Display user details directly
@@ -81,13 +78,13 @@ public class AccountPage {
 
     private void displayUserDetails() {
         VBox mainBox = new VBox(10);
-        mainBox.setStyle("-fx-padding: 20; -fx-background-color: #1c1c1c; -fx-alignment: center;");
+        mainBox.setStyle("-fx-padding: 20px; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
         Label userDetailsLabel =LanguageManager.TcreateLanguageitle("Benutzerdetails","User Details","24","white");
         userDetailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding-bottom: 30px;");
 
         VBox userDetailsBox = new VBox(10);
-        userDetailsBox.setStyle("-fx-padding: 20; -fx-background-color: #1c1c1c; -fx-alignment: center;");
+        userDetailsBox.setStyle("-fx-padding: 20px; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
         Label photoLabel = LanguageManager.TcreateLanguageitle("Benutzerfoto:","User Photo:","16","white");
       //  photoLabel.setStyle("-fx-text-fill: white;");
@@ -242,7 +239,7 @@ public class AccountPage {
 
         buttonBox.getChildren().addAll(cancelButton, confirmButton);
         popupVBox.getChildren().addAll(oldPasswordLabel, oldPasswordField, newPasswordLabel, newPasswordField, buttonBox);
-        popupVBox.setStyle("-fx-padding: 20; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
+        popupVBox.setStyle("-fx-padding: 20px; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         Scene popupScene = new Scene(popupVBox, 300, 200);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));

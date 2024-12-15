@@ -176,7 +176,7 @@ class AddShow {
         addDescField.setPrefWidth(300);
         addDescField.setPrefHeight(158);
         addDescField.setStyle("-fx-background-radius: 20; -fx-border-radius: 20;" +
-                " -fx-border-width: 1;-fx-padding: 5; -fx-prompt-text-fill: gray; -fx-font-size: 14px;" );
+                " -fx-border-width: 1;-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;" );
         addDescField.setPromptText("Description");
         grid.add(addDescLabel,2,13);
         grid.add(addDescField,2,14);
@@ -466,7 +466,7 @@ class AddShow {
         Button cancelButton = new Button("Cancel");
         cancelButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         cancelButton.setStyle("-fx-text-fill: black; -fx-background-radius: 20; -fx-border-radius: 20;" +
-                "-fx-border-width: 1;-fx-padding: 5; -fx-background-color: #ffffff;");
+                "-fx-border-width: 1;-fx-padding: 5px; -fx-background-color: #ffffff;");
         cancelButton.setPrefWidth(150);
         cancelButton.setPrefHeight(59);
         cancelButton.setOnMouseClicked(e -> new HomePage(currentUser,stage));
@@ -476,7 +476,7 @@ class AddShow {
         Button saveButton = new Button("Save");
         saveButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         saveButton.setStyle("-fx-text-fill: black; -fx-background-radius: 20; -fx-border-radius: 20;" +
-                "-fx-border-width: 1;-fx-padding: 5; -fx-background-color: #8D5BDC;");
+                "-fx-border-width: 1;-fx-padding: 5px; -fx-background-color: #8D5BDC;");
         saveButton.setPrefWidth(150);
         saveButton.setPrefHeight(59);
         buttonsGrid.add(saveButton,2,0);
@@ -658,7 +658,7 @@ class AddShow {
         field.setPrefWidth(300);
         field.setPrefHeight(64);
         field.setStyle("-fx-background-radius: 20; -fx-border-radius: 20;-fx-border-width: 1;" +
-                "-fx-padding: 5; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
+                "-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
         return field;
     }
 
@@ -713,7 +713,7 @@ class AddShow {
         buttonBox.getChildren().addAll(cancelButton, confirmButton);
         popupVBox.getChildren().addAll(firstnameLabel, firstnameField, lastnameLabel,lastnameField, showsLabel,
                 showsField,ageLabel,ageField,genderLabel,genderField,nationalityLabel, buttonBox);
-        popupVBox.setStyle("-fx-padding: 20; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
+        popupVBox.setStyle("-fx-padding: 20px; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         Scene popupScene = new Scene(popupVBox, 600, 400);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
@@ -773,7 +773,7 @@ class AddShow {
         buttonBox.getChildren().addAll(cancelButton, confirmButton);
         popupVBox.getChildren().addAll(firstnameLabel, firstnameField, lastnameLabel,lastnameField, showsLabel,
                 showsField,ageLabel,ageField,genderLabel,genderField,nationalityLabel, buttonBox);
-        popupVBox.setStyle("-fx-padding: 20; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
+        popupVBox.setStyle("-fx-padding: 20px; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         Scene popupScene = new Scene(popupVBox, 600, 400);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
@@ -805,7 +805,7 @@ class AddShow {
         field.setPrefWidth(300);
         field.setPrefHeight(64);
         field.setStyle("-fx-background-radius: 20; -fx-border-radius: 20;-fx-border-width: 1;" +
-                "-fx-padding: 5; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
+                "-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
         return field;
     }
 
@@ -816,7 +816,7 @@ class AddShow {
         button.setPrefHeight(50);
         button.setPrefWidth(80);
         button.setStyle("-fx-text-fill: black; -fx-background-radius: 20; -fx-border-radius: 20;" +
-                "-fx-border-width: 1;-fx-padding: 5; -fx-background-color: white;");
+                "-fx-border-width: 1;-fx-padding: 5px; -fx-background-color: white;");
         return button;
     }
 

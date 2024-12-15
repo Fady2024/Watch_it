@@ -14,8 +14,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
-
 public class Sidebar extends VBox {
     private final Stage stage;
     private final User currentUser;
@@ -70,13 +68,13 @@ public class Sidebar extends VBox {
         // Menu container
         menuContainer = new VBox(15);
         menuContainer.setAlignment(Pos.TOP_CENTER);
-        menuContainer.setStyle("-fx-padding: 10;");
+        menuContainer.setStyle("-fx-padding: 10px;");
 
         // Add home button
         addHomeButton();
 
         for (SidebarState state : SidebarState.values()) {
-            if (state != SidebarState.LOGOUT && state != SidebarState.HOME) {
+            if (state != SidebarState.LOGOUT && state != SidebarState.ABOUT_US &&state != SidebarState.HOME) {
                 addMenuItem(state);
             }
         }
@@ -112,7 +110,7 @@ public class Sidebar extends VBox {
 
         HBox menuItem = new HBox(10, iconLabel, textLabel);
         menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
-        menuItem.setStyle(isExpanded ? "-fx-padding: 0;" : "-fx-padding: 5;");
+        menuItem.setStyle(isExpanded ? "-fx-padding: 0px;" : "-fx-padding: 5px;");
 
         // Apply selected style if this item is the selected state
         if (state == selectedState) {
@@ -133,13 +131,6 @@ public class Sidebar extends VBox {
             if (state == SidebarState.HOME) {
                 navigateToHomePage();
             }
-            /*if (state == SidebarState.ABOUT_US) {
-                try {
-                    navigateToAboutUs();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }*/
 
         });
 
@@ -166,7 +157,7 @@ public class Sidebar extends VBox {
                                     textLabel.setManaged(isExpanded);
 
                                     menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
-                                    menuItem.setStyle(isExpanded ? "-fx-padding: 18;" : "-fx-padding: 5;");
+                                    menuItem.setStyle(isExpanded ? "-fx-padding: 18px;" : "-fx-padding: 5px;");
                                 }
                             });
                         } else if (node instanceof HBox menuItem) {
@@ -175,13 +166,13 @@ public class Sidebar extends VBox {
                             textLabel.setManaged(isExpanded);
 
                             menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
-                            menuItem.setStyle(isExpanded ? "-fx-padding: 18;" : "-fx-padding: 5;");
+                            menuItem.setStyle(isExpanded ? "-fx-padding: 18px;" : "-fx-padding: 5px;");
                         }
                     });
 
                     // Ensure the LOGOUT button maintains its style
                     HBox logoutButton = (HBox) menuContainer.getChildren().getLast();
-                    logoutButton.setStyle("-fx-padding: 5; -fx-background-color: red; -fx-background-radius: 5;");
+                    logoutButton.setStyle("-fx-padding: 5px; -fx-background-color: red; -fx-background-radius: 5;");
 
                     // Apply curve effect
                     this.setStyle("-fx-background-color: #333; -fx-border-radius: 10; -fx-background-radius: 10;");
@@ -250,12 +241,12 @@ public class Sidebar extends VBox {
 
         HBox menuItem = new HBox(5, iconLabel, textLabel);
         menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
-        menuItem.setStyle("-fx-padding: 3;");
+        menuItem.setStyle("-fx-padding: 3px;");
 
         menuItem.setOnMouseClicked(_ -> navigateToWelcomePage());
 
         VBox logoutVBox = new VBox();
-        logoutVBox.setStyle("-fx-background-color: red; -fx-padding: 2; -fx-border-radius: 10; -fx-background-radius: 10;");
+        logoutVBox.setStyle("-fx-background-color: red; -fx-padding: 2px; -fx-border-radius: 10; -fx-background-radius: 10;");
         logoutVBox.getChildren().add(menuItem);
 
         menuContainer.getChildren().add(logoutVBox);
@@ -274,12 +265,12 @@ public class Sidebar extends VBox {
 
         HBox menuItem = new HBox(5, iconLabel, textLabel);
         menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
-        menuItem.setStyle("-fx-padding: 3;");
+        menuItem.setStyle("-fx-padding: 3px;");
 
         menuItem.setOnMouseClicked(_ -> navigateToHomePage());
 
         VBox homeVBox = new VBox();
-        homeVBox.setStyle("-fx-background-color: #51209d; -fx-padding: 2; -fx-border-radius: 10; -fx-background-radius: 10;");
+        homeVBox.setStyle("-fx-background-color: #51209d; -fx-padding: 2px; -fx-border-radius: 10; -fx-background-radius: 10;");
         homeVBox.getChildren().add(menuItem);
 
         menuContainer.getChildren().add(homeVBox);
