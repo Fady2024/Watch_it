@@ -228,19 +228,19 @@ public class Developer_page {
         transition.play();
     }
 
-    private List<Team_members> getTeamMembers() {
+     private List<Team_members> getTeamMembers() {
         List<Team_members> team = new ArrayList<>();
-        team.add(new Team_members("Salma Fawzy", List.of("Class: User Watch record", "Display top-rated shows", "Developer page", "UI design", "GUI"),
+        team.add(new Team_members("Salma Fawzy", List.of("- Class: User Watch record/ Team Members", "- Display top-rated shows", "- Developer page", "- GUI"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/salma (2).jpg")).toString())));
-        team.add(new Team_members("Mahmoud Ahmed", List.of("Class: Movie, GUI", "JSON files, UI design", "Display recent shows", "Display top watched shows", "Add & remove shows"),
+        team.add(new Team_members("Mahmoud Ahmed", List.of("- Class: Movie, - GUI", "- JSON files,- UI design", "- Display recent shows", "- Display top watched shows", "- Add & remove shows"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Mahoud..jpg")).toString())));
-        team.add(new Team_members("Sandra Hany", List.of("Class: Series, GUI", "Search & filter (shows/director/actor)", "Categorized movie search results", "Edit shows (show, cast, director)", "Restriction on subscriptions"),
+        team.add(new Team_members("Sandra Hany", List.of("- Class: Series, GUI", "- Search & filter (shows/director/actor)", "- Categorized movie search results", "- Edit shows (show, cast, director)", "- Restriction on subscriptions"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Sandra.jpg")).toString())));
-        team.add(new Team_members("Sara Emad", List.of("Class: Subscription, GUI", "Subscribed plans", "Admin find highest revenue month"),
+        team.add(new Team_members("Sara Emad", List.of("- Class: Subscription, GUI", "- Subscribed plans", "- Admin find highest revenue month"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Sara.jpg")).toString())));
-        team.add(new Team_members("Fady Gerges", List.of("Class: User, GUI", "Banner", "Add to favorite", "JSON files, Add Rate", "Display watched shows", "Add shows to watch & Favorite list"),
+        team.add(new Team_members("Fady Gerges", List.of("- Class: User, GUI", "- Banner", "- Add to favorite", "- JSON files, Add Rate", "- Display watched shows", "- Add shows to watch & Favorite list"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Fady.jpg")).toString())));
-        team.add(new Team_members("Marwan Waleed", List.of("Class: Cast, Director", "GUI", "Login in", "Sign up", "Best Actor"),
+        team.add(new Team_members("Marwan Waleed", List.of("- Class: Cast/ Director", "- GUI", "- Login in", "- Sign up", "- Best Actor"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Marwan.jpg")).toString())));
 
         return team;
