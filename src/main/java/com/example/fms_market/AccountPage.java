@@ -1,5 +1,7 @@
 package com.example.fms_market;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -170,12 +172,22 @@ public class AccountPage {
             currentUser.setUser_photo_path(initialPhotoPath.get());
             selectedFileRef.set(null);
         });
-
+        ComboBox<String> languageComboBox = new ComboBox<>();
+        languageComboBox.getItems().addAll("English", "German");
+        languageComboBox.setValue(LanguageManager.getLanguageBasedString("German","English"));
+        languageComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                LanguageManager.getInstance().toggleLanguage();
+            }
+        });
+        languageComboBox.setTranslateY(-620);
+        languageComboBox.setTranslateX(640);
         HBox buttonBox = new HBox(10, cancelButton, applyButton);
         buttonBox.setStyle("-fx-alignment: center;");
         userDetailsBox.getChildren().addAll(photoLabel, userPhoto, emailLabel, emailField, phoneLabel, phoneField, ageLabel, ageField, changePasswordLabel, buttonBox);
 
-        mainBox.getChildren().addAll(userDetailsLabel, userDetailsBox);
+        mainBox.getChildren().addAll(userDetailsLabel, userDetailsBox,languageComboBox);
         layout.setCenter(mainBox);
     }
 
