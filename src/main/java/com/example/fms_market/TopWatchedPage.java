@@ -30,9 +30,14 @@ public class TopWatchedPage {
             List<Movie> topWatchedMovies = displayTopWatchedMovies(allMovies);
             List<Show> topWatchedSeries = displayTopWatchedSeries(allSeries);
 
-            mainContainer.getChildren().add(Categories("Movies", topWatchedMovies, user, stage));
-            mainContainer.getChildren().add(Categories("Series", topWatchedSeries, user, stage));
 
+            if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+                mainContainer.getChildren().add(Categories("Filme", topWatchedMovies, user, stage));
+                mainContainer.getChildren().add(Categories("Serie", topWatchedSeries, user, stage));
+            } else {
+                mainContainer.getChildren().add(Categories("Movies", topWatchedMovies, user, stage));
+                mainContainer.getChildren().add(Categories("Series", topWatchedSeries, user, stage));
+            }
             ScrollPane scrollPane = new ScrollPane(mainContainer);
             scrollPane.setFitToWidth(true);
             scrollPane.setStyle("-fx-background-color: #1c1c1c; -fx-border-color: transparent;");

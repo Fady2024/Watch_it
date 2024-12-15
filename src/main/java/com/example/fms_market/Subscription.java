@@ -173,21 +173,24 @@ int index_plan;
         return arr_revenue;
     }
 
-    public static String getMax_revenue() {
+    public static int getMax_revenue() {
 int max_revenue=-1;
         String[] months = {
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         };
+        int INDEX=0;
         for (int i=0;i<12;i++){
 
             arr_revenue[i]=freq_month[i][0]*Subscription.price_basic+
                     freq_month[i][1]*Subscription.price_standard+
                     freq_month[i][2]*Subscription.price_permium;
             if( arr_revenue[i]>max_revenue){max_revenue=arr_revenue[i];
-            max_month=months[i];}
+            max_month=months[i];
+                INDEX=i;
+            }
 
         }
-        return max_month;
+        return INDEX;
     }
 }

@@ -29,9 +29,13 @@ public class Top_Rated {
 
         List<Show> topMovies = ratingCalculator.getTopRatedShows(movies, movies.size());
         List<Show> topSeries = ratingCalculator.getTopRatedShows(series, series.size());
-
-        mainContainer.getChildren().add(Categories("Movies", topMovies, user, stage));
-        mainContainer.getChildren().add(Categories("Series", topSeries, user, stage));
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+            mainContainer.getChildren().add(Categories("Filme", topMovies, user, stage));
+            mainContainer.getChildren().add(Categories("Serie", topSeries, user, stage));
+        } else {
+            mainContainer.getChildren().add(Categories("Movies", topMovies, user, stage));
+            mainContainer.getChildren().add(Categories("Series", topSeries, user, stage));
+        }
 
         ScrollPane scrollPane = new ScrollPane(mainContainer);
         scrollPane.setFitToWidth(true);

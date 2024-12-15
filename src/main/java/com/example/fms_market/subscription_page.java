@@ -51,7 +51,8 @@ public class subscription_page {
             innerRectangle.setArcWidth(20);
             innerRectangle.setArcHeight(20);
 
-            Button button1 = new Button("Subscribe");
+
+            Button button1 = LanguageManager.createLanguageButton("Abonnieren","Subscribe","20","black");
 
 
             button1.setPrefWidth(stageWidth * 0.1);
@@ -80,7 +81,11 @@ String plan_name;
                 imageView.setFitHeight(400);
             } else {
                 image_path = "file:src/main/resources/image/premium plan.png";
-                plan_name="Premium";
+                if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+                    plan_name="Prämie";
+                } else {
+                    plan_name="Premium";                }
+
                 Image image3 = new Image(image_path);
                 imageView = new ImageView(image3);
 
@@ -188,7 +193,12 @@ String plan_name;
         return text;
     }
     private Button createBackButton(Stage stage) {
-        Button backButton = new Button("← Back");
+        Button backButton = new Button();
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+            backButton.setText("← Zurück");
+        } else {
+            backButton.setText("← Back");
+        }
         backButton.setStyle(
                 "-fx-background-color: transparent; " +
                         "-fx-font-size: 16px; " +
