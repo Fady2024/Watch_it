@@ -1,47 +1,7 @@
 {
-  "subscriptions" : [ {
-    "plans" : "Standard",
-    "user_id" : "userid",
-    "price" : 15,
-    "start_date" : "2024-12-09"
-  }, {
-    "plans" : "Standard",
-    "user_id" : "userid",
-    "price" : 15,
-    "start_date" : "2024-12-09"
-  }, {
-    "plans" : "Standard",
-    "user_id" : "userid",
-    "price" : 15,
-    "start_date" : "2024-12-09"
-  }, {
-    "plans" : "Standard",
-    "user_id" : "userid",
-    "price" : 15,
-    "start_date" : "2024-12-09"
-  }, {
-    "plans" : "Standard",
-    "user_id" : "userid",
-    "price" : 15,
-    "start_date" : "2024-12-09"
-  }, {
-    "plans" : "Standard",
-    "user_id" : "userid",
-    "price" : 15,
-    "start_date" : "2024-12-09"
-  }, {
-    "plans" : "Standard",
-    "user_id" : "userid",
-    "price" : 15,
-    "start_date" : "2024-12-09"
-  }, {
-    "plans" : "Premium",
-    "user_id" : "userid",
-    "price" : 30,
-    "start_date" : "2024-12-09"
-  } ],
+  "freq_month" : [ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ] ],
   "static_data" : {
     "current_year" : 2024
   },
-  "freq_month" : [ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 300 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 30, 0, 30 ], [ 0, 0, 0 ], [ 0, 20, 100 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 8, 74, 1 ] ]
+  "subscriptions" : [ ]
 }

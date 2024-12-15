@@ -68,6 +68,7 @@ public class FavoritesPage {
             public void onSubscriptionSelected() {
                 System.out.println("Subscription menu item selected.");
             }
+            public void onAboutUsSelected(){navigateToAboutUs();}
         });
 
 
@@ -126,4 +127,13 @@ public class FavoritesPage {
             e.printStackTrace();
         }
     }
+
+    private void navigateToAboutUs() {
+        try {
+            new Developer_page(currentUser,stage, Sidebar.SidebarState.ABOUT_US);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
