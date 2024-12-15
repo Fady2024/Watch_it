@@ -287,8 +287,7 @@ private String getColorForValue(int index) {
 
         first.setText(months[middleIndex]);
         middle.setText(months[nextIndex]);
-        if(nextIndex==11){nextIndex=-1;}
-        last.setText(months[(nextIndex + 1) ]);
+        last.setText(months[(nextIndex + 1) % months.length]);
 
         updateMonthColors(hbox);
         return nextIndex;
