@@ -34,7 +34,7 @@ public class payment_page {
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
 
         HBox hbox = new HBox(0);
-        hbox.setStyle("-fx-padding: 20; -fx-background-color: #1C1C1C;");
+        hbox.setStyle("-fx-padding: 20px; -fx-background-color: #1C1C1C;");
         hbox.setAlignment(Pos.CENTER);
         Rectangle innerRectangle = new Rectangle();
         innerRectangle.setFill(Color.web("#404040"));

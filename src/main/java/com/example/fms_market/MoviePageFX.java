@@ -196,7 +196,7 @@ public class MoviePageFX {
         playButton.setStyle(
                 "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271);" +
                         "-fx-text-fill: black;" +
-                        "-fx-padding: 0 5;" +
+                        "-fx-padding: 0px 5px;" +
                         "-fx-border-radius: 20;" +
                         "-fx-background-radius: 20;" +
                         "-fx-font-size: 35px;"
@@ -205,7 +205,7 @@ public class MoviePageFX {
         Button addButton = new Button("♥ Add");
         boolean isFavorite = ShowCardUtil.isShowFavorite(user.getId(), show.getId());
 
-        addButton.setStyle(String.format("-fx-background-color: %s; -fx-text-fill: %s; -fx-padding: 10 20; -fx-background-radius: 20; -fx-font-size: 16px; -fx-font-weight: bold;",
+        addButton.setStyle(String.format("-fx-background-color: %s; -fx-text-fill: %s; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 16px; -fx-font-weight: bold;",
                 isFavorite ? "#ffcccc" : "#ffffff",
                 isFavorite ? "red" : "black"));
         addButton.setOnAction(_ -> {
@@ -214,13 +214,13 @@ public class MoviePageFX {
                     // Remove favorite
                     UserJsonHandler.removeFavoriteShow(user.getId(), show.getId());
                     addButton.setStyle("-fx-background-color: #ffffff; -fx-text-fill: black; " +
-                            "-fx-padding: 10 20; -fx-background-radius: 20; " +
+                            "-fx-padding: 10px 20px; -fx-background-radius: 20; " +
                             "-fx-font-size: 16px; -fx-font-weight: bold;");
                 } else {
                     // Add to favorite
                     UserJsonHandler.addFavoriteShow(user.getId(), show.getId());
                     addButton.setStyle("-fx-background-color: #ffcccc; -fx-text-fill: red; " +
-                            "-fx-padding: 10 20; -fx-background-radius: 20; " +
+                            "-fx-padding: 10px 20px; -fx-background-radius: 20; " +
                             "-fx-font-size: 16px; -fx-font-weight: bold;");
                 }
             } catch (IOException e) {
@@ -251,7 +251,7 @@ public class MoviePageFX {
         HBox averageRatingBar = createRatingBar(averageRating);
 
         Button saveRatingButton = new Button("✓");
-        saveRatingButton.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 3; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 16px;");
+        saveRatingButton.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 3px; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 16px;");
 
         // Pop-up text labels
         Label firstRateLabel = new Label("Rating added!");
@@ -384,7 +384,7 @@ public class MoviePageFX {
     private Button createGenreButton(String genre) {
         Button button = new Button(genre);
         button.setFont(Font.font("Arial", 12));
-        button.setStyle("-fx-background-color: #ffffff; -fx-text-fill: black; -fx-padding: 5 10; -fx-border-radius: 15; -fx-background-radius: 15;");
+        button.setStyle("-fx-background-color: #ffffff; -fx-text-fill: black; -fx-padding: 5px 10px; -fx-border-radius: 15; -fx-background-radius: 15;");
         return button;
     }
 

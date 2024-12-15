@@ -27,7 +27,7 @@ public class Banner {
 
     public static HBox getBanner(Stage stage, String currentPage) {
         HBox banner = new HBox(36);
-        banner.setStyle("-fx-background-color: #451952; -fx-padding: 40;");
+        banner.setStyle("-fx-background-color: #451952; -fx-padding: 40px;");
         banner.setAlignment(Pos.CENTER_LEFT);
 
         // Title
