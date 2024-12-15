@@ -79,10 +79,14 @@ public class Developer_page {
         projectName.setTextFill(Color.WHITE);
         headerBox.getChildren().add(projectName);
 
-        String fullDescription = "Watch It is a comprehensive movie platform designed to enhance your cinematic experience. " +
-                "Discover new favorites through personalized recommendations tailored to your unique tastes. " +
-                "Create a personal profile to track your watched movies, rate your favorites, and build a custom watchlist. " +
-                "With a user-friendly interface and intuitive navigation, Watch It makes it easy to find, watch, and enjoy the movies you love.";
+        String fullDescription =LanguageManager.getLanguageBasedString("„Watch It ist eine umfassende Filmplattform, die Ihr Kinoerlebnis verbessern soll.“ +\n" +
+                "„Entdecken Sie neue Favoriten durch personalisierte Empfehlungen, die auf Ihren individuellen Geschmack zugeschnitten sind.“ +\n" +
+                "„Erstellen Sie ein persönliches Profil, um Ihre angesehenen Filme zu verfolgen, Ihre Favoriten zu bewerten und eine benutzerdefinierte Beobachtungsliste zu erstellen.“ +\n" +
+                "„Mit einer benutzerfreundlichen Oberfläche und intuitiver Navigation macht es Watch It einfach, die Filme zu finden, anzusehen und zu genießen, die Sie lieben."
+        ,"Watch It is a comprehensive movie platform designed to enhance your cinematic experience. " +
+                        "Discover new favorites through personalized recommendations tailored to your unique tastes. " +
+                        "Create a personal profile to track your watched movies, rate your favorites, and build a custom watchlist. " +
+                        "With a user-friendly interface and intuitive navigation, Watch It makes it easy to find, watch, and enjoy the movies you love.") ;
 
         Label descriptionLabel = new Label(fullDescription);
         descriptionLabel.setFont(Font.font(18));
@@ -93,7 +97,7 @@ public class Developer_page {
         descriptionContainer.setAlignment(Pos.TOP_LEFT);
         descriptionContainer.setPadding(new Insets(10, 300, -20, 50));
 
-        Label title = new Label("Project Team");
+        Label title = new Label(LanguageManager.getLanguageBasedString("Projektteam","Project Team"));
         title.setFont(Font.font(28));
         title.setTextFill(Color.WHITE);
         title.setPadding(new Insets(20, 0, 10, 0));
@@ -129,7 +133,7 @@ public class Developer_page {
         layout.setStyle("-fx-background-color: #1c1c1c;");
 
         Scene scene = new Scene(layout, stageWidth, stageHeight);
-        stage.setTitle("Developer Page");
+        stage.setTitle(LanguageManager.getLanguageBasedString("Entwicklerseite","Developer Page"));
         stage.setScene(scene);
         stage.show();
     }

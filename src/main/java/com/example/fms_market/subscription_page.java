@@ -82,7 +82,7 @@ String plan_name;
             } else {
                 image_path = "file:src/main/resources/image/premium plan.png";
 
-                    plan_name=LanguageManager.getLanguageBasedString("Premium","Prämie");
+                    plan_name="Premium";
 
                 Image image3 = new Image(image_path);
                 imageView = new ImageView(image3);

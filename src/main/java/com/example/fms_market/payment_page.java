@@ -129,10 +129,14 @@ public class payment_page {
 
 
         if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-            VBox.setMargin(Expiredate, new Insets(-stageHeight*0.2, stageWidth*0.13, stageHeight*0.09, -stageWidth*0.01));
-            VBox.setMargin(numberField_date, new Insets(-stageHeight*0.095, stageWidth*0.13, stageHeight*0.09, 0));
-            VBox.setMargin(cardnumber, new Insets(stageHeight*0.02, stageWidth*0.13, stageHeight*0.02, 0));
-            VBox.setMargin(numberField_card, new Insets(-stageHeight*0.025, stageWidth*0.13, stageHeight*0.2, 0));
+            VBox.setMargin(Expiredate, new Insets(-stageHeight*0.2, stageWidth*0.15, stageHeight*0.09, -stageWidth*0.01));
+//            VBox.setMargin(numberField_date, new Insets(-stageHeight*0.095, stageWidth*0.13, stageHeight*0.09, 0));
+            VBox.setMargin(cardnumber, new Insets(stageHeight*0.02, stageWidth*0.11, stageHeight*0.02, 0));
+//            VBox.setMargin(numberField_card, new Insets(-stageHeight*0.025, stageWidth*0.13, stageHeight*0.2, 0));
+            VBox.setMargin(numberField_card, new Insets(-stageHeight*0.025, stageWidth*0.1, stageHeight*0.2, 0));
+            VBox.setMargin(numberField_date, new Insets(-stageHeight*0.095, stageWidth*0.1, stageHeight*0.09, 0));
+
+
         } else {
             VBox.setMargin(Expiredate, new Insets(-stageHeight*0.2, stageWidth*0.1, stageHeight*0.09, -stageWidth*0.01));
             VBox.setMargin(numberField_date, new Insets(-stageHeight*0.095, stageWidth*0.1, stageHeight*0.09, 0));
@@ -148,8 +152,8 @@ public class payment_page {
 
         VBox.setMargin(cvc, new Insets(-stageHeight*0.09, stageWidth*0.1, stageHeight*0.09, stageWidth*0.01));
         VBox.setMargin(numberField_cvc, new Insets(-stageHeight*0.1, stageWidth*0.1, stageHeight*0.09, 0));
-        Button backButton = createStyledButton("Back");
-        Button proceedButton = createStyledButton("Proceed");
+        Button backButton = createStyledButton(LanguageManager.getLanguageBasedString("Zurück","Back"));
+        Button proceedButton = createStyledButton(LanguageManager.getLanguageBasedString("Fortfahren","Proceed"));
         proceedButton.setStyle("-fx-font-size: 12px; -fx-background-color: #8E5BDC; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 30px; -fx-border-color: transparent;");
         if(numberField_cvc.getText().length()<3||numberField_card.getText().length()<16){valid=false;}
         backButton.setOnAction(e -> {
@@ -157,13 +161,10 @@ public class payment_page {
         });
 
         proceedButton.setOnAction(e -> {
-if(valid)
-{Subscription add_new =new Subscription("userid",plane_name);
+Subscription add_new =new Subscription("userid",plane_name);
 
-SubscriptionManager.addSubscriptions(add_new);}
-else{
-    System.out.println("error message");
-}
+SubscriptionManager.addSubscriptions(add_new);
+
 
 
         });
@@ -180,12 +181,13 @@ else{
 
         StackPane stackPane = new StackPane();
 
-        StackPane stackPane3=new StackPane();
-        stackPane3.getChildren().addAll(numberField_card);
 
         vbox.getChildren().addAll(title, text, cardnumber, numberField_card, Expiredate, numberField_date, cvc, numberField_cvc,buttonBox);
         vbox.setTranslateX(-300);
-
+       numberField_card.setPrefWidth(400);
+       numberField_date.setPrefWidth(400);
+       numberField_cvc.setPrefWidth(400);
+        vbox.setFillWidth(false);
 
         stackPane.getChildren().add(vbox);
 
@@ -200,8 +202,6 @@ imageView.setTranslateX(stageWidth*0.2);
 
 
         hbox.getChildren().addAll(stackPane,stackPane2);
-        addMouseHoverEffect(backButton);
-        addMouseHoverEffect(proceedButton);
 
         Scene scene = new Scene(hbox, stageWidth, stageHeight);
 
@@ -226,14 +226,6 @@ imageView.setTranslateX(stageWidth*0.2);
         text.setStyle("-fx-font-size: " + fontSize + "; -fx-fill: " + color + ";");
         return text;
     }
-    public static void addMouseHoverEffect(Button button) {
-        button.setOnMouseEntered(event -> {
-            button.setStyle("-fx-font-size: 12px; -fx-background-color: #8E5BDC; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 30px; -fx-border-color: transparent;");
-        });
 
-        button.setOnMouseExited(event -> {
-            button.setStyle("-fx-font-size: 12px; -fx-background-color: white; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 30px; -fx-border-color: transparent;");
-        });
-    }
 
 }
