@@ -21,13 +21,14 @@ public class Sidebar extends VBox {
     private final User currentUser;
 
     public enum SidebarState {
-        HOME("🏠", "Home"),
-        USER_DETAILS("👤", "User Details"),
-        FAVOURITES("🌟", "Favourites"),
-        WATCHED("🎥", "Watched"),
-        SUBSCRIPTION("📅", "Subscription"),
-        ABOUT_US("ℹ️", "About Us"),
-        LOGOUT("🚪", "Logout");
+
+        HOME("🏠", LanguageManager.getLanguageBasedString("Heim","Home")),
+        USER_DETAILS("👤", LanguageManager.getLanguageBasedString("Benutzerdetails","User Details")),
+        FAVOURITES("🌟", LanguageManager.getLanguageBasedString("Favoritinnen","Favourites")),
+        WATCHED("🎥", LanguageManager.getLanguageBasedString("Beobachtet","Watched")),
+        SUBSCRIPTION("📅", LanguageManager.getLanguageBasedString("Abonnement","Subscription")),
+        ABOUT_US("ℹ️", LanguageManager.getLanguageBasedString("Über uns","About Us")),
+        LOGOUT("🚪", LanguageManager.getLanguageBasedString("Ausloggen","Logout"));
 
 
 

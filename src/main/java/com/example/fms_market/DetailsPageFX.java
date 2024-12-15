@@ -93,7 +93,7 @@ public class DetailsPageFX {
 
     private void displayDirectorDetails(VBox contentBox, Director director, Stage stage) {
         if (director != null) {
-            Button backButton = new Button("Back");
+            Button backButton = new Button(LanguageManager.getLanguageBasedString("Zurück","Back"));
             backButton.setOnAction(_ -> new MoviePageFX(user, show, stage));
             HBox backButtonBox = new HBox(backButton);
             backButtonBox.setPadding(new Insets(10));

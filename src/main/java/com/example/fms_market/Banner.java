@@ -2,8 +2,11 @@
 
 package com.example.fms_market;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -36,13 +39,13 @@ public class Banner {
         title.setStyle("-fx-fill: white;");
 
         // Home label
-        Text homeLabel = createNavLabel("Home", currentPage.equals("Home"), () -> new HomePage(currentUser, stage));
+        Text homeLabel = createNavLabel(LanguageManager.getLanguageBasedString("Heim","Home"), currentPage.equals(LanguageManager.getLanguageBasedString("Heim","Home")), () -> new HomePage(currentUser, stage));
 
         // Top Watched label
-        Text topWatchedLabel = createNavLabel("Top Watched", currentPage.equals("Top Watched"), () -> new TopWatchedPage(currentUser, stage));
+        Text topWatchedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Meistgesehen","Top Watched"), currentPage.equals(LanguageManager.getLanguageBasedString("Meistgesehen","Top Watched")), () -> new TopWatchedPage(currentUser, stage));
 
         // Top Rated label
-        Text topRatedLabel = createNavLabel("Top Rated", currentPage.equals("Top Rated"), () -> {
+        Text topRatedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Top-Bewertungen","Top Rated"), currentPage.equals(LanguageManager.getLanguageBasedString("Top-Bewertungen","Top Rated")), () -> {
             try {
                 new Top_Rated(currentUser, stage);
             } catch (IOException ex) {
@@ -62,15 +65,29 @@ public class Banner {
 
         // Search field
         TextField searchField = new TextField();
-        searchField.setPromptText("Search by keyword");
+        searchField.setPromptText(LanguageManager.getLanguageBasedString("Suche nach Stichwort","Search by keyword"));
         searchField.setStyle("-fx-background-color: white; -fx-prompt-text-fill: gray;");
         searchField.setFont(Font.font("Arial", 15));
-        Button changeLanguageButton = new Button("Change Language");
-        changeLanguageButton.setOnAction(e -> LanguageManager.getInstance().toggleLanguage());
 
 
-        Text revenue_admin = createNavLabel("Panel", currentPage.equals("Panel"), () -> new Revenue_page(stage,currentUser));
-        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel, changeLanguageButton,topRatedLabel, searchField, userIcon));
+//        ComboBox<String> languageComboBox = new ComboBox<>();
+//        languageComboBox.getItems().addAll("English", "German"); // قائمة اللغات
+//        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+//            languageComboBox.setValue("German");
+//        } else {
+//            languageComboBox.setValue("English");
+//        }
+//        languageComboBox.valueProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+//                LanguageManager.getInstance().toggleLanguage();
+//            }
+//        });
+     //   LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
+        Text revenue_admin = createNavLabel(        LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
+                , currentPage.equals(        LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
+                ), () -> new Revenue_page(stage,currentUser));
+        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel,topRatedLabel, searchField, userIcon));
 
         if (currentUser.getRole().equals("admin")) {
             commonComponents.add(revenue_admin); // Admin-specific component

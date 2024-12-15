@@ -1,4 +1,6 @@
 package com.example.fms_market;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,7 +30,17 @@ public class LoginPageFX {
     private final TopPanel dayNightSwitch;
 
     public LoginPageFX(Stage stage) {
-
+        ComboBox<String> languageComboBox = new ComboBox<>();
+        languageComboBox.getItems().addAll("English", "German");
+        languageComboBox.setValue(LanguageManager.getLanguageBasedString("German","English"));
+        languageComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                LanguageManager.getInstance().toggleLanguage();
+            }
+        });
+        languageComboBox.setTranslateY(20);
+        languageComboBox.setTranslateX(200);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
@@ -87,7 +99,7 @@ public class LoginPageFX {
 
 
         // Content pane
-        contentPane = new Pane();
+        contentPane = new Pane(languageComboBox);
         setupContentPane(dayNightSwitch);
 
         // Initial layout (before resize)

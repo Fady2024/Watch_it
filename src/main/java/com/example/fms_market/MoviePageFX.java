@@ -45,7 +45,7 @@ public class MoviePageFX {
         root.setStyle("-fx-background-color: #252525;");
 
         // Add Banner to the top
-        HBox banner = Banner.getBanner(stage, "MoviePage");
+        HBox banner = Banner.getBanner(stage, LanguageManager.getLanguageBasedString("Filmseite","MoviePage"));
         root.setTop(banner);
 
         // Create a new VBox for title, description, and details
@@ -154,8 +154,7 @@ public class MoviePageFX {
 
         HBox revenueRow = new HBox(10);
         revenueRow.setPadding(new Insets(10, 0, 0, 0));
-
-        Label revenue = new Label(String.format("Revenue: %s$", show.getRevenue()));
+        Label revenue = new Label(String.format(LanguageManager.getLanguageBasedString("Einnahmen: %s$","Revenue: %s$"), show.getRevenue()));
         revenue.setFont(Font.font("Arial", 14));
         revenue.setTextFill(Color.WHITE);
 
@@ -202,7 +201,8 @@ public class MoviePageFX {
                         "-fx-font-size: 35px;"
         );
         playButton.setOnAction(_ -> new VideoPlayerFX(show.getVideo(), stage));
-        Button addButton = new Button("♥ Add");
+
+        Button addButton = new Button(LanguageManager.getLanguageBasedString("Hinzufügen","♥ Add"));
         boolean isFavorite = ShowCardUtil.isShowFavorite(user.getId(), show.getId());
 
         addButton.setStyle(String.format("-fx-background-color: %s; -fx-text-fill: %s; -fx-padding: 10 20; -fx-background-radius: 20; -fx-font-size: 16px; -fx-font-weight: bold;",
@@ -254,12 +254,13 @@ public class MoviePageFX {
         saveRatingButton.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 3; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 16px;");
 
         // Pop-up text labels
-        Label firstRateLabel = new Label("Rating added!");
+
+        Label firstRateLabel = new Label(LanguageManager.getLanguageBasedString("Bewertung hinzugefügt!","Rating added!"));
         firstRateLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         firstRateLabel.setTextFill(Color.GREEN);
         firstRateLabel.setVisible(false);
 
-        Label updateRateLabel = new Label("Rating updated!");
+        Label updateRateLabel = new Label(LanguageManager.getLanguageBasedString("Bewertung aktualisiert!","Rating updated!"));
         updateRateLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         updateRateLabel.setTextFill(Color.ORANGE);
         updateRateLabel.setVisible(false);
@@ -303,7 +304,9 @@ public class MoviePageFX {
         centerSection.setPadding(new Insets(50, 30, 0, 50)); // top, right, bottom, left
         root.setCenter(centerSection);
         Scene scene = new Scene(root, stageWidth, stageHeight);
-        stage.setTitle("Movie Page");
+
+
+        stage.setTitle(LanguageManager.getLanguageBasedString("Filmseite","Movie Page"));
         stage.setScene(scene);
         stage.show();
     }
@@ -456,7 +459,8 @@ public class MoviePageFX {
                 .filter(cast -> cast.getShows().contains(showName))
                 .map(cast -> STR."\{cast.getFirst_name()} \{cast.getLast_name()}")
                 .collect(Collectors.toList());
-        return createInfoTable("Cast", castNames);
+        return createInfoTable(LanguageManager.getLanguageBasedString("Gießen","Cast")
+                , castNames);
     }
 
     private VBox createDirectorTable(String showName) throws IOException {
@@ -465,7 +469,9 @@ public class MoviePageFX {
                 .filter(director -> director.getShows().contains(showName))
                 .map(director -> STR."\{director.getFirstName()} \{director.getLastName()}")
                 .collect(Collectors.toList());
-        return createInfoTable("Director", directorNames);
+
+        return createInfoTable(LanguageManager.getLanguageBasedString("Direktorin","Director")
+                , directorNames);
     }
 
 }

@@ -83,14 +83,14 @@ public class AccountPage {
         VBox mainBox = new VBox(10);
         mainBox.setStyle("-fx-padding: 20; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
-        Label userDetailsLabel = new Label("User Details");
+        Label userDetailsLabel =LanguageManager.TcreateLanguageitle("Benutzerdetails","User Details","24","white");
         userDetailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding-bottom: 30px;");
 
         VBox userDetailsBox = new VBox(10);
         userDetailsBox.setStyle("-fx-padding: 20; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
-        Label photoLabel = new Label("User Photo:");
-        photoLabel.setStyle("-fx-text-fill: white;");
+        Label photoLabel = LanguageManager.TcreateLanguageitle("Benutzerfoto:","User Photo:","16","white");
+      //  photoLabel.setStyle("-fx-text-fill: white;");
         ImageView userPhoto = new ImageView(new Image(STR."file:\{currentUser.getUser_photo_path()}"));
         userPhoto.setFitHeight(100);
         userPhoto.setFitWidth(100);
@@ -117,15 +117,15 @@ public class AccountPage {
         emailField.setMaxWidth(300);
         emailField.setStyle("-fx-alignment: center;");
 
-        Label phoneLabel = new Label("Phone:");
-        phoneLabel.setStyle("-fx-text-fill: white;");
+        Label phoneLabel = LanguageManager.TcreateLanguageitle("Telefon:","Phone:","16","white");
+      //  phoneLabel.setStyle("-fx-text-fill: white;");
         TextField phoneField = new TextField(currentUser.getPhone());
         phoneField.setMaxWidth(300);
         phoneField.setStyle("-fx-alignment: center;");
 
 
-        Label ageLabel = new Label("Age:");
-        ageLabel.setStyle("-fx-text-fill: white;");
+        Label ageLabel = LanguageManager.TcreateLanguageitle("Alter:","Age:","16","white");
+       // ageLabel.setStyle("-fx-text-fill: white;");
         TextField ageField = new TextField(currentUser.getAge());
         ageField.setMaxWidth(300);
         ageField.setStyle("-fx-alignment: center;");
@@ -135,11 +135,11 @@ public class AccountPage {
         initialPhone = currentUser.getPhone();
         initialAge = currentUser.getAge();
 
-        Label changePasswordLabel = new Label("Change Password");
+        Label changePasswordLabel = LanguageManager.TcreateLanguageitle("Kennwort ändern","Change Password","16"," #8969ba");
         changePasswordLabel.setStyle("-fx-text-fill: #8969ba; -fx-cursor: hand;");
         changePasswordLabel.setOnMouseClicked(_ -> showChangePasswordPopup());
 
-        Button applyButton = new Button("Apply");
+        Button applyButton = LanguageManager.createLanguageButton("Anwenden","Apply","16","white");
         applyButton.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10;");
         applyButton.setOnAction(_ -> {
             currentUser.setEmail(emailField.getText().toLowerCase());
@@ -162,7 +162,7 @@ public class AccountPage {
             }
         });
 
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = LanguageManager.createLanguageButton("Stornieren","Cancel","16","black");
         cancelButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 10;");
         cancelButton.setOnAction(_ -> {
             // Restore initial values

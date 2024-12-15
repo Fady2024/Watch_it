@@ -31,12 +31,6 @@ public class HomePage {
     private double startX;
 
     public HomePage(User user, Stage stage) {
-//        ComboBox<String> comboBox = new ComboBox<>();
-//        comboBox.getItems().addAll("English","German");
-//        comboBox.setValue("English");
-//
-        // إنشاء العناصر
-       // Label label = new Label("Hello");
 
         Banner.setCurrentUser(user);
 
@@ -61,7 +55,7 @@ public class HomePage {
         scrollPane.setStyle("-fx-background-color: #1c1c1c;");
 
         BorderPane layout = new BorderPane();
-        layout.setTop(Banner.getBanner(stage, "Home"));
+        layout.setTop(Banner.getBanner(stage, LanguageManager.getLanguageBasedString("Heim","Home")));
         layout.setCenter(scrollPane);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -69,19 +63,9 @@ public class HomePage {
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle("Home");
+        stage.setTitle(LanguageManager.getLanguageBasedString("Heim","Home"));
         stage.show();
-        ///////////////////////////////////////////////////////////////////////////////////
-//        comboBox.setOnAction(e -> {
-//            String selectedLanguage = comboBox.getValue();
-//            if(selectedLanguage=="English"){
-//                // update_english();
-//            }
-//            else if(selectedLanguage=="German") {
-//                // update_english();
-//
-//            }
-//        });
+
         scene.widthProperty().addListener((_, _, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), recentMovies, user, stage));
         adjustLayout(showContainer, stageWidth, recentMovies, user, stage);
 
@@ -109,7 +93,8 @@ public class HomePage {
         mostWatchedShowDesc.setWrappingWidth(((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth())-600); // Adjust width as needed
         Button Watch =LanguageManager.createLanguageButton("Betrachten","WATCH","18","black");
         Watch.setPrefSize(110, 50); // Set button size
-        Watch.setStyle("-fx-background-color: #8E0D7D;");
+        Watch.setStyle("-fx-background-color: #8E0D7D; -fx-text-fill: black; -fx-font-size: 18px;");
+
         Rectangle roundedRectangle = new Rectangle(110,40);
         roundedRectangle.setArcWidth(40);
         roundedRectangle.setArcHeight(40);

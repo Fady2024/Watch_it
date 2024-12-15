@@ -29,14 +29,10 @@ public class Top_Rated {
 
         List<Show> topMovies = ratingCalculator.getTopRatedShows(movies, movies.size());
         List<Show> topSeries = ratingCalculator.getTopRatedShows(series, series.size());
-        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-            mainContainer.getChildren().add(Categories("Filme", topMovies, user, stage));
-            mainContainer.getChildren().add(Categories("Serie", topSeries, user, stage));
-        } else {
-            mainContainer.getChildren().add(Categories("Movies", topMovies, user, stage));
-            mainContainer.getChildren().add(Categories("Series", topSeries, user, stage));
-        }
-
+        mainContainer.getChildren().add(Categories(LanguageManager.getLanguageBasedString("Filme","Movies")
+                , topMovies, user, stage));
+        mainContainer.getChildren().add(Categories(        LanguageManager.getLanguageBasedString("Serie","Series")
+                , topSeries, user, stage));
         ScrollPane scrollPane = new ScrollPane(mainContainer);
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background-color: #1c1c1c; -fx-border-color: transparent;");
@@ -50,7 +46,7 @@ public class Top_Rated {
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle("Top Rated");
+        stage.setTitle(LanguageManager.getLanguageBasedString("Top-Bewertungen","Top Rated"));
         stage.show();
     }
 

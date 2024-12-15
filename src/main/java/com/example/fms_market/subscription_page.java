@@ -81,10 +81,8 @@ String plan_name;
                 imageView.setFitHeight(400);
             } else {
                 image_path = "file:src/main/resources/image/premium plan.png";
-                if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-                    plan_name="Prämie";
-                } else {
-                    plan_name="Premium";                }
+
+                    plan_name=LanguageManager.getLanguageBasedString("Premium","Prämie");
 
                 Image image3 = new Image(image_path);
                 imageView = new ImageView(image3);
@@ -194,11 +192,9 @@ String plan_name;
     }
     private Button createBackButton(Stage stage) {
         Button backButton = new Button();
-        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-            backButton.setText("← Zurück");
-        } else {
-            backButton.setText("← Back");
-        }
+
+            backButton.setText(LanguageManager.getLanguageBasedString("← Zurück","← Back"));
+
         backButton.setStyle(
                 "-fx-background-color: transparent; " +
                         "-fx-font-size: 16px; " +

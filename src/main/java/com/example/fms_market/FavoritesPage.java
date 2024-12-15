@@ -46,7 +46,7 @@ public class FavoritesPage {
 
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle("Favorites");
+        stage.setTitle(LanguageManager.getLanguageBasedString("Favoritinnen","Favorites"));
         stage.show();
 
         sidebar.setSidebarListener(new Sidebar.SidebarListener() {
@@ -111,7 +111,7 @@ public class FavoritesPage {
     }
 
     private void showEmptyMessage() {
-        Label emptyLabel = new Label("No favorite shows found.");
+        Label emptyLabel = new Label(LanguageManager.getLanguageBasedString("Keine Lieblingssendungen gefunden.","No favorite shows found."));
         emptyLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-alignment: center;");
         emptyLabel.setPadding(new Insets(20));
 

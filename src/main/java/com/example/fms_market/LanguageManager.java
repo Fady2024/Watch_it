@@ -117,6 +117,9 @@ public class LanguageManager {
         return text;
 
     }
+    public static String getLanguageBasedString(String g, String e) {
+        return "German".equals(LanguageManager.getInstance().getLanguage()) ? g : e;
+    }
     public static Button createLanguageButton(String g, String e, String fontSize, String color) {
         // إنشاء خاصية للنص
         StringProperty buttonTextProperty = new SimpleStringProperty();
