@@ -14,6 +14,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+
 public class Sidebar extends VBox {
     private final Stage stage;
     private final User currentUser;
@@ -24,7 +26,10 @@ public class Sidebar extends VBox {
         FAVOURITES("🌟", "Favourites"),
         WATCHED("🎥", "Watched"),
         SUBSCRIPTION("📅", "Subscription"),
+        ABOUT_US("ℹ️", "About Us"),
         LOGOUT("🚪", "Logout");
+
+
 
         private final String icon;
         private final String text;
@@ -75,6 +80,7 @@ public class Sidebar extends VBox {
             }
         }
 
+        addMenuItem(SidebarState.ABOUT_US);
         // Add logout button
         addLogoutButton();
 
@@ -126,6 +132,14 @@ public class Sidebar extends VBox {
             if (state == SidebarState.HOME) {
                 navigateToHomePage();
             }
+            /*if (state == SidebarState.ABOUT_US) {
+                try {
+                    navigateToAboutUs();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }*/
+
         });
 
         menuContainer.getChildren().add(menuItem);
@@ -214,6 +228,7 @@ public class Sidebar extends VBox {
                 case FAVOURITES -> listener.onFavouritesSelected();
                 case WATCHED -> listener.onWatchedSelected();
                 case SUBSCRIPTION -> listener.onSubscriptionSelected();
+                case ABOUT_US -> listener.onAboutUsSelected();
             }
         }
     }
@@ -221,7 +236,6 @@ public class Sidebar extends VBox {
     public void setSidebarListener(SidebarListener listener) {
         this.listener = listener;
     }
-
     private void addLogoutButton() {
         Label iconLabel = new Label(SidebarState.LOGOUT.getIcon());
         iconLabel.setFont(Font.font(18));
@@ -279,6 +293,8 @@ public class Sidebar extends VBox {
         new HomePage(currentUser, stage);
     }
 
+
+
     private User getCurrentUser() {
         return currentUser;
     }
@@ -291,5 +307,7 @@ public class Sidebar extends VBox {
         void onWatchedSelected();
 
         void onSubscriptionSelected();
+        void onAboutUsSelected();
+
     }
 }

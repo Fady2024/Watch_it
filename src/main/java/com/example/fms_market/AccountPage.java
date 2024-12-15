@@ -69,6 +69,10 @@ public class AccountPage {
                 // Placeholder for subscription selection action
                 System.out.println("Subscription menu item selected.");
             }
+            public void onAboutUsSelected(){
+                navigateToAboutUs();
+
+            }
         });
 
         // Display user details directly
@@ -254,6 +258,14 @@ public class AccountPage {
             e.printStackTrace();
         }
     }
+    private void navigateToAboutUs() {
+        try {
+            new Developer_page(currentUser,stage, Sidebar.SidebarState.ABOUT_US);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
