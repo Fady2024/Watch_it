@@ -119,6 +119,7 @@ public class AccountPage {
         phoneField.setMaxWidth(300);
         phoneField.setStyle("-fx-alignment: center;");
 
+
         Label ageLabel = new Label("Age:");
         ageLabel.setStyle("-fx-text-fill: white;");
         TextField ageField = new TextField(currentUser.getAge());

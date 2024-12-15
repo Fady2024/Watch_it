@@ -58,30 +58,26 @@ public class payment_page {
         vbox.setPrefWidth(400);
         vbox.setPrefHeight(400);
 
-        Text title = createStyledText("Last Step", "30px", "white");
-        Text text = createStyledText("You arrived at the last step.Enter your card \ninformation and pay for your subscription plan.", "16px", "white");
-        Text cardnumber = createStyledText("Card Number\n" +
+        Text title = LanguageManager.createLanguageText("Letzter Schritt","Last Step", "30px", "white");
+        Text text = LanguageManager.createLanguageText("Sie sind beim letzten Schritt angekommen. Geben Sie Ihre \nKarteninformationen ein und bezahlen Sie Ihr Abonnement.","You arrived at the last step.Enter your card \ninformation and pay for your subscription plan.", "16px", "white");
+        Text cardnumber = LanguageManager.createLanguageText("Kartennummer\n"+ "\n"+"Geben Sie die 16-stellige Nummer auf der Karte ein","Card Number\n" +
                 "\n" +
                 "Enter the 16-digit number on the card", "16px", "white");
 
-        Text Expiredate = createStyledText("Expiry Date\n" +
+        Text Expiredate = LanguageManager.createLanguageText("Verfallsdatum\n"+"\n"+"Geben Sie das Ablaufdatum Ihrer Karte ein","Expiry Date\n" +
                 "\n" +
                 "Enter the Expiration date of your card", "16px", "white");
-        Text cvc = createStyledText("CVC\n" +
+        Text cvc = LanguageManager.createLanguageText("Kartenprüfziffer\n"+"\n"+"Geben Sie die 3- bis 4-stellige Nummer auf der Karte ein","CVC\n" +
                 "\n" +
                 "Enter the 3 a 4 digit number on the card", "16px", "white");
 
 
-        TextField numberField_card = new TextField();
-        numberField_card.setPromptText("Card Number");
+        TextField numberField_card = LanguageManager.languageTextField("Kartennummer","Card Number","14","black");
         numberField_card.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: #2B2D30;-fx-background-radius: 25;");
-
-        TextField numberField_date = new TextField();
-        numberField_date.setPromptText("MM/YY");
+        TextField numberField_date = LanguageManager.languageTextField("MM/JJ","MM/YY","14","black");
         numberField_date.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: #2B2D30;-fx-background-radius: 25;");
 
-        TextField numberField_cvc = new TextField();
-        numberField_cvc.setPromptText("cvc");
+        TextField numberField_cvc = LanguageManager.languageTextField("Kartenprüfziffer","cvc","14","black");
         numberField_cvc.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: #2B2D30;-fx-background-radius: 25;");
 
         Label errorMessageLabel = new Label();
@@ -132,17 +128,29 @@ public class payment_page {
         numberField_card.setTextFormatter(cardFormatter);
 
 
-        VBox.setMargin(title, new Insets(100, 0, 0, 0));
-        VBox.setMargin(text, new Insets(20, 0, 0, 20));
-        VBox.setMargin(cardnumber, new Insets(20, 100, 20, 0));
-        VBox.setMargin(numberField_card, new Insets(-25, 100, 200, 0));
-        VBox.setMargin(Expiredate, new Insets(-200, 100, 90, -10));
-        VBox.setMargin(numberField_date, new Insets(-95, 100, 90, 0));
-        VBox.setMargin(cvc, new Insets(-90, 100, 90, 10));
-        VBox.setMargin(numberField_cvc, new Insets(-100, 100, 90, 0));
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+            VBox.setMargin(Expiredate, new Insets(-stageHeight*0.2, stageWidth*0.13, stageHeight*0.09, -stageWidth*0.01));
+            VBox.setMargin(numberField_date, new Insets(-stageHeight*0.095, stageWidth*0.13, stageHeight*0.09, 0));
+            VBox.setMargin(cardnumber, new Insets(stageHeight*0.02, stageWidth*0.13, stageHeight*0.02, 0));
+            VBox.setMargin(numberField_card, new Insets(-stageHeight*0.025, stageWidth*0.13, stageHeight*0.2, 0));
+        } else {
+            VBox.setMargin(Expiredate, new Insets(-stageHeight*0.2, stageWidth*0.1, stageHeight*0.09, -stageWidth*0.01));
+            VBox.setMargin(numberField_date, new Insets(-stageHeight*0.095, stageWidth*0.1, stageHeight*0.09, 0));
+            VBox.setMargin(cardnumber, new Insets(stageHeight*0.02, stageWidth*0.1, stageHeight*0.02, 0));
+            VBox.setMargin(numberField_card, new Insets(-stageHeight*0.025, stageWidth*0.1, stageHeight*0.2, 0));
+        }
+//100=0.1
+        //20=0.02
+        //25=0.025
+        VBox.setMargin(title, new Insets(stageHeight*0.1, 0, 0, 0));
+        VBox.setMargin(text, new Insets(stageHeight*0.02, 0, 0, stageWidth*0.02));
+
+
+        VBox.setMargin(cvc, new Insets(-stageHeight*0.09, stageWidth*0.1, stageHeight*0.09, stageWidth*0.01));
+        VBox.setMargin(numberField_cvc, new Insets(-stageHeight*0.1, stageWidth*0.1, stageHeight*0.09, 0));
         Button backButton = createStyledButton("Back");
         Button proceedButton = createStyledButton("Proceed");
-
+        proceedButton.setStyle("-fx-font-size: 12px; -fx-background-color: #8E5BDC; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 30px; -fx-border-color: transparent;");
         if(numberField_cvc.getText().length()<3||numberField_card.getText().length()<16){valid=false;}
         backButton.setOnAction(e -> {
             new subscription_page(stage);
@@ -173,7 +181,7 @@ else{
         StackPane stackPane = new StackPane();
 
         StackPane stackPane3=new StackPane();
-        stackPane3.getChildren().addAll(numberField_card/*,imageView2*/);
+        stackPane3.getChildren().addAll(numberField_card);
 
         vbox.getChildren().addAll(title, text, cardnumber, numberField_card, Expiredate, numberField_date, cvc, numberField_cvc,buttonBox);
         vbox.setTranslateX(-300);

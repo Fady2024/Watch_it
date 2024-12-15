@@ -1,5 +1,8 @@
 package com.example.fms_market;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.control.ComboBox;
 import javafx.scene.shape.Rectangle;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
@@ -28,6 +31,13 @@ public class HomePage {
     private double startX;
 
     public HomePage(User user, Stage stage) {
+//        ComboBox<String> comboBox = new ComboBox<>();
+//        comboBox.getItems().addAll("English","German");
+//        comboBox.setValue("English");
+//
+        // إنشاء العناصر
+       // Label label = new Label("Hello");
+
         Banner.setCurrentUser(user);
 
         List<Movie> allMovies;
@@ -61,18 +71,27 @@ public class HomePage {
         stage.setScene(scene);
         stage.setTitle("Home");
         stage.show();
-
+        ///////////////////////////////////////////////////////////////////////////////////
+//        comboBox.setOnAction(e -> {
+//            String selectedLanguage = comboBox.getValue();
+//            if(selectedLanguage=="English"){
+//                // update_english();
+//            }
+//            else if(selectedLanguage=="German") {
+//                // update_english();
+//
+//            }
+//        });
         scene.widthProperty().addListener((_, _, newValue) -> adjustLayout(showContainer, newValue.doubleValue(), recentMovies, user, stage));
         adjustLayout(showContainer, stageWidth, recentMovies, user, stage);
 
     }
     private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies, User user, Stage stage) {
         int columns = (int) (width / (SHOW_CARD_WIDTH + 20));
-        showContainer.getChildren().clear();
 
-        Text mostWatchedShow = new Text("Most Watched Show");
+        Text mostWatchedShow = LanguageManager.createLanguageText("Meistgesehene Sendung","Most Watched Show","20","white");
+
         mostWatchedShow.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
-        mostWatchedShow.setStyle("-fx-fill: white;");
 
         VBox recentMoviesBox = new VBox(10);
         recentMoviesBox.setPadding(new Insets(10));
@@ -88,10 +107,9 @@ public class HomePage {
         mostWatchedShowDesc.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),18));
         mostWatchedShowDesc.setStyle("-fx-fill: #b1b1b1;");
         mostWatchedShowDesc.setWrappingWidth(((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth())-600); // Adjust width as needed
-        Button Watch = new Button("WATCH");
-        Watch.setStyle("-fx-background-color: #8E0D7D; -fx-text-fill: black; -fx-font-size: 18px;");
+        Button Watch =LanguageManager.createLanguageButton("Betrachten","WATCH","18","black");
         Watch.setPrefSize(110, 50); // Set button size
-
+        Watch.setStyle("-fx-background-color: #8E0D7D;");
         Rectangle roundedRectangle = new Rectangle(110,40);
         roundedRectangle.setArcWidth(40);
         roundedRectangle.setArcHeight(40);
@@ -110,13 +128,11 @@ public class HomePage {
         buttonContainer.setAlignment(Pos.CENTER_LEFT);
         buttonContainer.getChildren().addAll(Watch, Info);
 
-        Text RecentMovies = new Text("Recent Movies");
+        Text RecentMovies = LanguageManager.createLanguageText("Aktuelle Filme","Recent Movies","20","white");
         RecentMovies.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
-        RecentMovies.setStyle("-fx-fill: white;");
 
-        Text RecentSeries = new Text("Recent Series");
+        Text RecentSeries = LanguageManager.createLanguageText("Aktuelle Serien","Recent Series","20","white");
         RecentSeries.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
-        RecentSeries.setStyle("-fx-fill: white;");
         int column = 0;
         int row = 0;
 
@@ -175,6 +191,7 @@ public class HomePage {
         });
     }
 
+
     private void updateMovieInfo(Text titleLabel, Text descriptionLabel, List<Movie> recentMovies, int currentIndex) {
         Movie currentMovie = recentMovies.get(currentIndex);
         titleLabel.setText(currentMovie.getTitle());
@@ -214,4 +231,5 @@ public class HomePage {
         }
         return recentSeries;
     }
+
 }

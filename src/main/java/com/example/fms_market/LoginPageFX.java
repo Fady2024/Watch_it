@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
+import javafx.scene.control.ComboBox;
 
 public class LoginPageFX {
     private final Pane contentPane;

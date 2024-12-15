@@ -51,18 +51,35 @@ public class Revenue_page  {
 
 
 
-
-
+// تعريف المصفوفات خارج الـ if
+        String[] monthsGerman = {
+                "Januar", "Februar", "März", "April", "Mai", "Juni",
+                "Juli", "August", "September", "Oktober", "November", "Dezember"
+        };
         String[] months = {
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         };
 
-        Text previousMonth = createMonthLabel(months[parsedDate.getMonthValue() - 2]);
-        Text currentMonth = createMonthLabel(months[parsedDate.getMonthValue() - 1]);
+// اختيار المصفوفة المناسبة بناءً على اللغة
+        String[] selectedMonths;
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+            selectedMonths = monthsGerman; // إذا كانت اللغة ألمانية
+        } else {
+            selectedMonths = months; // إذا كانت اللغة الإنجليزية أو غيرها
+        }
+
+        Text previousMonth = createMonthLabel(selectedMonths[parsedDate.getMonthValue() - 2]);
+        Text currentMonth = createMonthLabel(selectedMonths[parsedDate.getMonthValue() - 1]);
         Text nextMonth;
-        if(parsedDate.getMonthValue()==12){ nextMonth = createMonthLabel("January");}
-        else {nextMonth = createMonthLabel(months[parsedDate.getMonthValue()]);}
+        if(parsedDate.getMonthValue()==12){
+            if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+                nextMonth = createMonthLabel("Januar");
+            } else {
+                nextMonth = createMonthLabel("January");            }
+
+           }
+        else {nextMonth = createMonthLabel(selectedMonths[parsedDate.getMonthValue()]);}
 
         currentMonth.setFont(Font.font(40));
         currentMonth.setFill(Color.BLACK);
@@ -81,11 +98,16 @@ public class Revenue_page  {
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Sample Data");
+
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+            series.setName("Beispieldaten");
+        } else {
+            series.setName("Sample Data");
+        }
 
         Rectangle rectangle = new Rectangle();
 
-                int cuurent_index= getMonthIndex(currentMonth.getText(),months);
+                int cuurent_index= getMonthIndex(currentMonth.getText(),selectedMonths);
 
         StackPane root = new StackPane(rectangle,barChart);
 
@@ -99,12 +121,13 @@ public class Revenue_page  {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
-        Text title = createStyledText("Admin Panel", "50px", "white");
+        Text title = LanguageManager.createLanguageText("Admin-Bereich","Admin Panel", "50px", "white");
         StackPane.setAlignment(title, Pos.TOP_CENTER);
         title.setTranslateX(stageWidth*0.1);
         title.setTranslateY(stageHeight*0.1);
         /////////////////////////////////////////////////////////////////////////////////////////
         ImageView imageView = new ImageView("file:src/main/resources/image/boxes (2).png");
+
         Text basic = createStyledText(String.valueOf( Subscription.getFreq_month()[cuurent_index][0]), "30px", "white");
         Text Standard = createStyledText(String.valueOf( Subscription.getFreq_month()[cuurent_index][1]), "30px", "white");
         Text Permium = createStyledText(String.valueOf( Subscription.getFreq_month()[cuurent_index][2]), "30px", "white");
@@ -133,10 +156,17 @@ public class Revenue_page  {
         double standard_arr = Subscription.getFreq_month()[cuurent_index][1];
         double premium_arr = Subscription.getFreq_month()[cuurent_index][2];
         System.out.println(cuurent_index+" "+Subscription.getFreq_month()[cuurent_index][2]);
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+
+
+            series.getData().add(new XYChart.Data<>("Prämie", premium_arr));
+        } else {
+
+            series.getData().add(new XYChart.Data<>("Premium", premium_arr));
+        }
+
         series.getData().add(new XYChart.Data<>("Basic",basic_arr));
         series.getData().add(new XYChart.Data<>("Standard", standard_arr));
-        series.getData().add(new XYChart.Data<>("Premium", premium_arr));
-
 
 
 
@@ -193,14 +223,16 @@ public class Revenue_page  {
 
 
         StackPane chartContainer = new StackPane();
-        createSimpleLineChart(chartContainer, stageWidth, stageHeight,currentMonth,months);
+
+            createSimpleLineChart(chartContainer, stageWidth, stageHeight,currentMonth,selectedMonths);
+
         ImageView image_box_max = new ImageView("file:src/main/resources/image/box_max.png");
         image_box_max.setScaleX(0.15);
         image_box_max.setScaleY(0.15);
 
         image_box_max.setTranslateY(stageHeight*0.1);
         image_box_max.setTranslateX(stageWidth*0.05);
-        Text max_month=createStyledText(Subscription.getMax_revenue(),"35px","white");
+        Text max_month=createStyledText(selectedMonths[Subscription.getMax_revenue()],"35px","white");
         max_month.setTranslateY(stageHeight*0.04);
         max_month.setTranslateX(stageWidth*0.04);
         StackPane stack_max_month = new StackPane();
@@ -237,7 +269,7 @@ stack_max_month.getChildren().addAll(image_box_max,max_month);
         showContainer.setStyle("-fx-background-color: #1c1c1c;");
         return showContainer;
     }
-    public static Text createStyledText(String content, String fontSize, String color) {
+    public  Text createStyledText(String content, String fontSize, String color) {
         Text text = new Text(content);
         text.setStyle("-fx-font-size: " + fontSize + "; -fx-fill: " + color + ";");
         return text;
@@ -330,18 +362,29 @@ private String getColorForValue(int index) {
 
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
+
         series.getData().add(new XYChart.Data<>("Basic", Subscription.getFreq_month()[current_index][0]));
         series.getData().add(new XYChart.Data<>("Standard", Subscription.getFreq_month()[current_index][1]));
-        series.getData().add(new XYChart.Data<>("Premium", Subscription.getFreq_month()[current_index][2]));
+
 
 
         CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Subscription Type");
+
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Frequency");
         yAxis.setLowerBound(0);
         xAxis.setTickLabelFill(Color.BLACK);
         yAxis.setTickLabelFill(Color.BLACK);
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+
+            xAxis.setLabel("Abonnementtyp");
+            yAxis.setLabel("Frequenz");
+            series.getData().add(new XYChart.Data<>("Prämie", Subscription.getFreq_month()[current_index][2]));
+        } else {
+            xAxis.setLabel("Subscription Type");
+            yAxis.setLabel("Frequency");
+
+            series.getData().add(new XYChart.Data<>("Premium", Subscription.getFreq_month()[current_index][2]));
+        }
 
         double maxValue = Math.max(Math.max(Subscription.getFreq_month()[current_index][0],
                         Subscription.getFreq_month()[current_index][1]),
@@ -391,12 +434,12 @@ private String getColorForValue(int index) {
     private void  createSimpleLineChart(StackPane chartContainer, double stageWidth, double stageHeight, Text currentMonth, String[] months) {
         int current_index = getMonthIndex(currentMonth.getText(), months);
         CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Subscription Type");
+
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Frequency");
+
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Subscriptions");
+
 
 
         for (int i=0;i<12;i++){
@@ -408,7 +451,18 @@ private String getColorForValue(int index) {
 
         LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.getData().add(series);
-        lineChart.setTitle("Subscription Frequencies");
+
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+            series.setName("Abonnements");
+            xAxis.setLabel("Abonnementtyp");
+            yAxis.setLabel("Frequenz");
+            lineChart.setTitle("Abonnementhäufigkeiten");
+
+
+        } else {
+
+
+        }
 
         xAxis.setTickLabelFill(Color.BLACK);
         yAxis.setTickLabelFill(Color.BLACK);

@@ -3,6 +3,7 @@
 package com.example.fms_market;
 
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -64,9 +65,12 @@ public class Banner {
         searchField.setPromptText("Search by keyword");
         searchField.setStyle("-fx-background-color: white; -fx-prompt-text-fill: gray;");
         searchField.setFont(Font.font("Arial", 15));
+        Button changeLanguageButton = new Button("Change Language");
+        changeLanguageButton.setOnAction(e -> LanguageManager.getInstance().toggleLanguage());
+
 
         Text revenue_admin = createNavLabel("Panel", currentPage.equals("Panel"), () -> new Revenue_page(stage,currentUser));
-        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel, topRatedLabel, searchField, userIcon));
+        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel, changeLanguageButton,topRatedLabel, searchField, userIcon));
 
         if (currentUser.getRole().equals("admin")) {
             commonComponents.add(revenue_admin); // Admin-specific component
