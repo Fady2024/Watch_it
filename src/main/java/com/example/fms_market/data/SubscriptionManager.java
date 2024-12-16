@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SubscriptionManager {
-    private static final String FILE_NAME = "subscriptions.json";
+    private static final String FILE_NAME = "src/main/resources/data/subscriptions.json";
     private static final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
     private static List<Subscription> subscriptions = new ArrayList<>();
 

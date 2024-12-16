@@ -5,12 +5,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class DataManager {
-    private static final String SHOWS_FILE_PATH = "data.json";
-    private static final String USERS_FILE_PATH = "users.json";
-    private static final String DIRECTORS_FILE_PATH = "director.json";
-    private static final String CAST_FILE_PATH = "cast.json";
+    private static final String RESOURCES_DIR = "src/main/resources/data";
+    private static final String SHOWS_FILE_PATH = Path.of(RESOURCES_DIR, "data.json").toString();
+    private static final String USERS_FILE_PATH = Path.of(RESOURCES_DIR, "users.json").toString();
+    private static final String DIRECTORS_FILE_PATH = Path.of(RESOURCES_DIR, "director.json").toString();
+    private static final String CAST_FILE_PATH = Path.of(RESOURCES_DIR, "cast.json").toString();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static ObjectNode showsRootNode;
     private static ObjectNode usersRootNode;

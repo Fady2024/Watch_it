@@ -1,5 +1,8 @@
-package com.example.fms_market;
+package com.example.fms_market.pages;
 
+import com.example.fms_market.data.UserJsonHandler;
+import com.example.fms_market.model.User;
+import com.example.fms_market.util.LanguageManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -82,7 +85,7 @@ public class AccountPage {
         VBox mainBox = new VBox(10);
         mainBox.setStyle("-fx-padding: 20px; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
-        Label userDetailsLabel =LanguageManager.TcreateLanguageitle("Benutzerdetails","User Details","24","white");
+        Label userDetailsLabel = LanguageManager.TcreateLanguageitle("Benutzerdetails","User Details","24","white");
         userDetailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding-bottom: 30px;");
 
         VBox userDetailsBox = new VBox(10);

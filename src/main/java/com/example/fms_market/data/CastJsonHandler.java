@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CastJsonHandler {
-    private static final String CAST_FILE_PATH = "cast.json";
+    private static final String CAST_FILE_PATH = "src/main/resources/data/cast.json";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void saveCast(Cast actor) throws IOException {

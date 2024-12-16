@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DirectorJsonHandler {
-    private static final String DIRECTORS_FILE_PATH = "director.json";
+    private static final String DIRECTORS_FILE_PATH = "src/main/resources/data/director.json";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void saveDirector(Director director) throws IOException {
