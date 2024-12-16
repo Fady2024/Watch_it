@@ -2,6 +2,7 @@
   "static_data" : {
     "current_year" : 2024
   },
+  "freq_month" : [ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 2, 0 ] ],
   "subscriptions" : [ {
     "plans" : "Standard",
     "user_id" : "userid",
