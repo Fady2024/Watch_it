@@ -56,11 +56,12 @@ public class HomePage {
 
         ScrollPane scrollPane = new ScrollPane(showContainer);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: #1c1c1c;");
+        scrollPane.setStyle("-fx-background: #1c1c1c; -fx-background-color: #1c1c1c; -fx-border-color: transparent;");
 
         BorderPane layout = new BorderPane();
         layout.setTop(Banner.getBanner(stage, LanguageManager.getLanguageBasedString("Heim","Home")));
         layout.setCenter(scrollPane);
+        layout.setStyle("-fx-background-color: #1c1c1c;");
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
@@ -142,7 +143,6 @@ public class HomePage {
             showContainer.setVgap(20);
             //column++;
             if (column == columns) {
-                column = 0;
                 row++;
             }
         }
@@ -150,7 +150,7 @@ public class HomePage {
         final int[] currentIndex = {0};
         updateMovieInfo(mostWatchedShowTitle, mostWatchedShowDesc, recentMovies, currentIndex[0]); // Initialize with the first movie
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), _ -> {
             updateMovieInfo(mostWatchedShowTitle, mostWatchedShowDesc, recentMovies, currentIndex[0]);
             currentIndex[0] = (currentIndex[0] + 1) % recentMovies.size();
         }));
@@ -175,9 +175,7 @@ public class HomePage {
             timeline.play();
         });
 
-        showContainer.setOnMouseReleased(event -> {
-            timeline.play();
-        });
+        showContainer.setOnMouseReleased(_ -> timeline.play());
     }
 
 
