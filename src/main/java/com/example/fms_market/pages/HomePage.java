@@ -88,6 +88,47 @@ public class HomePage {
     }
     private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies,List<Series> recentSeries, User user, Stage stage) {
         int columns = (int) (width / (SHOW_CARD_WIDTH + 20));
+        HBox adminBox = new HBox(10);
+
+        //Edit Show Button
+        Button editButton =LanguageManager.createLanguageButton("Show bearbeiten","Edit Show","18","black");
+        editButton.setPrefSize(150, 50); // Set button size
+        editButton.setPadding(new Insets(5,10,10,10));
+        editButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
+        editButton.setStyle("-fx-background-color: #BBAAD2; -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;-fx-padding: 0px 5px;");
+
+        Rectangle roundedRectangle2 = new Rectangle(150,50);
+        roundedRectangle2.setArcWidth(40);
+        roundedRectangle2.setArcHeight(40);
+        editButton.setClip(roundedRectangle2);
+
+
+        //Add Show Button
+        Button addButton =LanguageManager.createLanguageButton("Show hinzufügen","Add Show","18","black");
+        addButton.setPrefSize(150, 50); // Set button size
+        addButton.setPadding(new Insets(5,10,10,10));
+        addButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
+        addButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #BBAAD2, #522193); -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;");
+
+        Rectangle roundedRectangle3 = new Rectangle(150,50);
+        roundedRectangle3.setArcWidth(40);
+        roundedRectangle3.setArcHeight(40);
+        addButton.setClip(roundedRectangle3);
+
+        //Delete Show Button
+        Button deleteButton =LanguageManager.createLanguageButton("Show löschen","Delete Show","18","black");
+        deleteButton.setPrefSize(150, 50); // Set button size
+        deleteButton.setPadding(new Insets(5,10,10,10));
+        deleteButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
+        deleteButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #522193, #9F1F93); -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;-fx-padding: 0px 5px;");
+
+        Rectangle roundedRectangle4 = new Rectangle(150,50);
+        roundedRectangle4.setArcWidth(40);
+        roundedRectangle4.setArcHeight(40);
+        //deleteButton.setClip(roundedRectangle4);
+
+        adminBox.setAlignment(Pos.TOP_RIGHT);
+        adminBox.getChildren().addAll(editButton,addButton,deleteButton);
 
         Text mostWatchedShow = LanguageManager.createLanguageText("Meistgesehene Filme","Most Watched Movies","20","white");
 
@@ -139,8 +180,10 @@ public class HomePage {
         RecentSeries.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
         int column = 0;
         int row = 0;
-
-        recentMoviesBox.getChildren().addAll(mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
+        if(user.getRole()=="Admin"||user.getRole()=="admin")
+        recentMoviesBox.getChildren().addAll(adminBox,mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
+        else
+            recentMoviesBox.getChildren().addAll(mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
         showContainer.add(recentMoviesBox, column, row);
 
         showContainer.setHgap(27);
