@@ -54,11 +54,11 @@ public class Banner {
             }
         });
 
-        // User icon with emoji
+        //Profile icon with emoji
         Image profileIcon = new Image("Acount/iconamoon_profile-circle-fill.png");
         ImageView profileIconView = new ImageView(profileIcon);
-        profileIconView.setFitWidth(30);
-        profileIconView.setFitHeight(30);
+        profileIconView.setFitWidth(40);
+        profileIconView.setFitHeight(40);
 
         profileIconView.setOnMouseClicked(_ -> {
             if (sidebarListener != null) {
