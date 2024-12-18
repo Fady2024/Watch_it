@@ -6,6 +6,7 @@ import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
 import javafx.geometry.Pos;
+import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Cursor;
@@ -27,6 +28,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Objects;
+
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -76,7 +79,7 @@ public class LoginPageFX {
         contentPane = new Pane(languageComboBox);
 
         Pane leftPane = new Pane();
-        leftPane.setStyle("-fx-background-color: black;");
+        leftPane.setStyle("-fx-background-color: #1c1c1c;");
         leftPane.setPrefWidth(stageWidth / 2);
         leftPane.setPrefHeight(stageHeight);
 
@@ -112,56 +115,56 @@ public class LoginPageFX {
         rightInsidePane.setLayoutY((rightPane.getPrefHeight() - rightInsidePane.getPrefHeight()) / 2);
 
         Label titleLabel = new Label("WATCH IT");
-        titleLabel.setFont(new Font(36));
+        titleLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),36));
         titleLabel.setPadding(new Insets(0, 0, 35, 0));
-        titleLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;");
+        titleLabel.setStyle("-fx-text-fill: white;");
 
-        Image cameraIcon = new Image("Acount/camera.png");
+        Image cameraIcon = new Image("Acount/bxs_camera-movie.png");
         ImageView cameraIconView = new ImageView(cameraIcon);
         cameraIconView.setFitWidth(30);
         cameraIconView.setFitHeight(30);
         Text watchText = new Text("Watch Movies anytime");
-        watchText.setFont(new Font(20));
+        watchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         watchText.setStyle("-fx-fill: white;");
         HBox movie = new HBox(10);
         movie.getChildren().addAll(cameraIconView, watchText);
 
-        Image searchIcon = new Image("Acount/search.png");
+        Image searchIcon = new Image("Acount/majesticons_search-line.png");
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitWidth(30);
         searchIconView.setFitHeight(30);
         Text searchText = new Text("Search for any movie you want");
-        searchText.setFont(new Font(20));
+        searchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         searchText.setStyle("-fx-fill: white;");
         HBox search = new HBox(10);
         search.getChildren().addAll(searchIconView, searchText);
 
-        Image listIconImage = new Image("Acount/list.png");
+        Image listIconImage = new Image("Acount/jam_task-list.png");
         ImageView listIconView = new ImageView(listIconImage);
-        listIconView.setFitWidth(28);
-        listIconView.setFitHeight(33);
+        listIconView.setFitWidth(30);
+        listIconView.setFitHeight(30);
         Text watchedText = new Text("List your watched Movies");
-        watchedText.setFont(new Font(20));
+        watchedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         watchedText.setStyle("-fx-fill: white;");
         HBox list = new HBox(10);
         list.getChildren().addAll(listIconView, watchedText);
 
-        Image ratedIconImage = new Image("Acount/star.png");
+        Image ratedIconImage = new Image("Acount/tabler_star-filled.png");
         ImageView ratedIconView = new ImageView(ratedIconImage);
         ratedIconView.setFitWidth(30);
         ratedIconView.setFitHeight(30);
         Text ratedText = new Text("Show the most rated movies");
-        ratedText.setFont(new Font(20));
+        ratedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         ratedText.setStyle("-fx-fill: white;");
         HBox rated = new HBox(10);
         rated.getChildren().addAll(ratedIconView, ratedText);
 
-        Image favoriteIconImage = new Image("Acount/heart.png");
+        Image favoriteIconImage = new Image("Acount/solar_heart-bold.png");
         ImageView favoriteIconView = new ImageView(favoriteIconImage);
         favoriteIconView.setFitWidth(30);
         favoriteIconView.setFitHeight(30);
         Text favoriteText = new Text("Add Shows to your Favourite List");
-        favoriteText.setFont(new Font(20));
+        favoriteText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         favoriteText.setStyle("-fx-fill: white;");
         HBox favourite = new HBox(10);
         favourite.getChildren().addAll(favoriteIconView, favoriteText);
@@ -173,7 +176,7 @@ public class LoginPageFX {
         VBox titleBox = new VBox(titleLabel);
         titleBox.setAlignment(Pos.CENTER);
 
-        VBox itemsBox = new VBox(15, movie, search, list, rated, favourite);
+        VBox itemsBox = new VBox(40, movie, search, list, rated, favourite);
         itemsBox.setAlignment(Pos.TOP_LEFT);
 
         layout.getChildren().addAll(titleBox, itemsBox);
@@ -190,20 +193,22 @@ public class LoginPageFX {
 
         contentPane.getChildren().addAll(leftPane, rightPane);
 
-        loginForm = new VBox(10);
+        loginForm = new VBox(15);
         loginForm.setAlignment(Pos.TOP_CENTER);
         loginForm.setLayoutX(260);
-        loginForm.setLayoutY(200);
+        loginForm.setLayoutY(185);
 
         Label usernameLabel = new Label("Username:");
-        usernameLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
+        usernameLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        usernameLabel.setStyle("-fx-text-fill: white;");
 
         usernameBox = new VBox(0, usernameLabel, usernameField);
         usernameBox.setAlignment(Pos.CENTER_LEFT);
 
         passwordBox = new VBox();
         Label passwordLabel = new Label("Password:");
-        passwordLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: white;");
+        passwordLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        passwordLabel.setStyle("-fx-text-fill: white;");
         ImageView eyeIcon = createEyeIcon();
 
         passwordStack = new StackPane();
@@ -340,8 +345,8 @@ public class LoginPageFX {
         noAccountLabel.setTextFill(Color.WHITE);
 
         Hyperlink signUpLink = new Hyperlink("Sign up");
-        signUpLink.setTextFill(Color.DEEPSKYBLUE);
-        signUpLink.setStyle("-fx-font-weight: bold;");
+        //signUpLink.setTextFill(Color.DEEPSKYBLUE);
+        signUpLink.setStyle("-fx-font-weight: bold; -fx-text-fill: #1425BB;");
         signUpLink.setOnMouseClicked(_ -> new SignUpPage(stage));
 
         HBox signUpBox = new HBox(5);
@@ -353,19 +358,26 @@ public class LoginPageFX {
 
     private Label labelLogin() {
         Label loginTitle = new Label("Login");
-        loginTitle.setStyle("-fx-font-size: 35px; -fx-font-weight: bold;");
-        loginTitle.setTextFill(Color.WHITE);
+        loginTitle.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Lato-Bold.ttf")).toString(),40));
+        loginTitle.setStyle("-fx-text-fill: white;");
         return loginTitle;
     }
 
     private TextField createTextField() {
         TextField field = new TextField();
         field.setPromptText("Username");
-        field.setPrefWidth(250);
-        field.setPrefHeight(40);
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(4);
+        shadow.setRadius(8);
+        shadow.setSpread(0.1);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.25));
+        field.setEffect(shadow);
         field.setStyle("-fx-font-size: 16px;" +
-                "-fx-background-radius: 15px;" +
-                "-fx-border-radius: 15px;" +
+                "-fx-background-radius: 20px;" +
+                "-fx-border-radius: 20px;" +
                 "-fx-border-color: #CCCCCC;" +
                 "-fx-border-width: 1px;" +
                 "-fx-padding: 5px;" +
@@ -376,11 +388,18 @@ public class LoginPageFX {
     private PasswordField createPasswordField() {
         PasswordField field = new PasswordField();
         field.setPromptText("Password");
-        field.setPrefWidth(250);
-        field.setPrefHeight(40);
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(4);
+        shadow.setRadius(8);
+        shadow.setSpread(0.1);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.25));
+        field.setEffect(shadow);
         field.setStyle("-fx-font-size: 16px;" +
-                "-fx-background-radius: 15px;" +
-                "-fx-border-radius: 15px;" +
+                "-fx-background-radius: 20px;" +
+                "-fx-border-radius: 20px;" +
                 "-fx-border-color: #CCCCCC;" +
                 "-fx-border-width: 1px;" +
                 "-fx-padding: 5px;" +
@@ -389,24 +408,19 @@ public class LoginPageFX {
     }
 
     private ImageView createEyeIcon() {
-        Image eyeOpenImage = new Image("file:src/main/resources/Acount/visibility.png");
-        Image eyeClosedImage = new Image("file:src/main/resources/Acount/close-eye.png");
+        Image eyeOpenImage = new Image("file:src/main/resources/Acount/mdi_eye.png");
+        Image eyeClosedImage = new Image("file:src/main/resources/Acount/ph_eye-closed-bold.png");
         ImageView eyeIcon = new ImageView(eyeClosedImage);
-        eyeIcon.setFitWidth(30);
-        eyeIcon.setFitHeight(30);
+        eyeIcon.setFitWidth(25);
+        eyeIcon.setFitHeight(25);
         eyeIcon.setPickOnBounds(true);
         eyeIcon.setCursor(Cursor.HAND);
-
-        DropShadow shadow = new DropShadow();
-        shadow.setOffsetX(0);
-        shadow.setOffsetY(2);
-        shadow.setRadius(8);
-        shadow.setColor(Color.rgb(0, 0, 0, 0.8));
-        eyeIcon.setEffect(shadow);
 
         TextField visiblePasswordField = new TextField();
         visiblePasswordField.setPrefWidth(passwordField.getPrefWidth());
         visiblePasswordField.setPrefHeight(passwordField.getPrefHeight());
+        visiblePasswordField.setFont(passwordField.getFont());
+        visiblePasswordField.setEffect(passwordField.getEffect());
         visiblePasswordField.setStyle(passwordField.getStyle());
         visiblePasswordField.setPromptText(passwordField.getPromptText());
 
@@ -434,18 +448,25 @@ public class LoginPageFX {
 
         button.setPrefWidth(170);
         button.setPrefHeight(45);
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(4);
+        shadow.setRadius(8);
+        shadow.setSpread(0.1);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.25));
+        button.setEffect(shadow);
         button.setStyle(String.format(
-                "-fx-background-color: %s; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; " +
+                "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271); -fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; " +
                         "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", colorHex));
 
         button.setOnMouseEntered(_ ->
                 button.setStyle(String.format(
-                        "-fx-background-color: %s; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; " +
+                        "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271); -fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; " +
                                 "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", darkenColor())));
 
         button.setOnMouseExited(_ ->
                 button.setStyle(String.format(
-                        "-fx-background-color: %s; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; " +
+                        "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271); -fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; " +
                                 "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", colorHex)));
 
         return button;
