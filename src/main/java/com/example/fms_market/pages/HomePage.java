@@ -1,5 +1,6 @@
 package com.example.fms_market.pages;
 
+import com.example.fms_market.admin.AddShow;
 import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.Movie;
 import com.example.fms_market.model.Series;
@@ -102,13 +103,20 @@ public class HomePage {
         roundedRectangle2.setArcHeight(40);
         editButton.setClip(roundedRectangle2);
 
-
         //Add Show Button
         Button addButton =LanguageManager.createLanguageButton("Show hinzufügen","Add Show","18","black");
         addButton.setPrefSize(150, 50); // Set button size
         addButton.setPadding(new Insets(5,10,10,10));
         addButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
         addButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #BBAAD2, #522193); -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;");
+
+        addButton.setOnMouseClicked( e-> {
+            try {
+                new AddShow(user,stage);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         Rectangle roundedRectangle3 = new Rectangle(150,50);
         roundedRectangle3.setArcWidth(40);
@@ -125,7 +133,7 @@ public class HomePage {
         Rectangle roundedRectangle4 = new Rectangle(150,50);
         roundedRectangle4.setArcWidth(40);
         roundedRectangle4.setArcHeight(40);
-        //deleteButton.setClip(roundedRectangle4);
+        deleteButton.setClip(roundedRectangle4);
 
         adminBox.setAlignment(Pos.TOP_RIGHT);
         adminBox.getChildren().addAll(editButton,addButton,deleteButton);
@@ -263,7 +271,7 @@ public class HomePage {
             dates.add(movie.getDate());
         }
         Collections.sort(dates);
-        for (int i = dates.size() - 1; i >= Math.max(0, dates.size() - 2); i--) {
+        for (int i = dates.size() - 1; i >= Math.max(0, dates.size() - 6); i--) {
             for (Movie movie : movies) {
                 if (movie.getDate().equals(dates.get(i))) {
                     recentMovies.add(movie);
