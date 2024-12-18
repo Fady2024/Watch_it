@@ -89,7 +89,7 @@ public class HomePage {
     private void adjustLayout(GridPane showContainer, double width, List<Movie> recentMovies,List<Series> recentSeries, User user, Stage stage) {
         int columns = (int) (width / (SHOW_CARD_WIDTH + 20));
 
-        Text mostWatchedShow = LanguageManager.createLanguageText("Meistgesehener Film","Most Watched Movie","20","white");
+        Text mostWatchedShow = LanguageManager.createLanguageText("Meistgesehene Filme","Most Watched Movies","20","white");
 
         mostWatchedShow.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
 
