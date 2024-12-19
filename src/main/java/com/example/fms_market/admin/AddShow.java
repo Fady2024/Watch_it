@@ -29,7 +29,7 @@ import javafx.stage.StageStyle;
 import java.sql.Date;
 import java.util.List;
 
-class AddShow {
+public class AddShow {
 
     private final User currentUser;
     private final Stage stage;
@@ -207,7 +207,6 @@ class AddShow {
                             if(castExists(actor1Field.getText()))
                             {
                                 Cast.add(actor1Field.getText());
-                                addShowToCast(actor1Field.getText(),addTitleField.getText());
                                 actor1Field.setDisable(true);
                             }
                             else
@@ -232,7 +231,6 @@ class AddShow {
                             if(castExists(actor2Field.getText()))
                             {
                                 Cast.add(actor2Field.getText());
-                                addShowToCast(actor2Field.getText(),addTitleField.getText());
                                 actor2Field.setDisable(true);
                             }
                             else
@@ -258,7 +256,6 @@ class AddShow {
                             if(castExists(actor3Field.getText()))
                             {
                                 Cast.add(actor3Field.getText());
-                                addShowToCast(actor3Field.getText(),addTitleField.getText());
                                 actor3Field.setDisable(true);
                             }
                             else
@@ -284,7 +281,6 @@ class AddShow {
                             if(castExists(actor4Field.getText()))
                             {
                                 Cast.add(actor4Field.getText());
-                                addShowToCast(actor4Field.getText(),addTitleField.getText());
                                 actor4Field.setDisable(true);
                             }
                             else
@@ -310,7 +306,6 @@ class AddShow {
                             if(castExists(actor5Field.getText()))
                             {
                                 Cast.add(actor5Field.getText());
-                                addShowToCast(actor5Field.getText(),addTitleField.getText());
                                 actor5Field.setDisable(true);
                             }
                             else
@@ -336,7 +331,6 @@ class AddShow {
                             if(castExists(actor6Field.getText()))
                             {
                                 Cast.add(actor6Field.getText());
-                                addShowToCast(actor6Field.getText(),addTitleField.getText());
                                 actor6Field.setDisable(true);
                             }
                             else
@@ -362,7 +356,6 @@ class AddShow {
                             if(castExists(actor7Field.getText()))
                             {
                                 Cast.add(actor7Field.getText());
-                                addShowToCast(actor7Field.getText(),addTitleField.getText());
                                 actor7Field.setDisable(true);
                             }
                             else
@@ -388,7 +381,6 @@ class AddShow {
                             if(castExists(actor8Field.getText()))
                             {
                                 Cast.add(actor8Field.getText());
-                                addShowToCast(actor8Field.getText(),addTitleField.getText());
                                 actor8Field.setDisable(true);
                             }
                             else
@@ -414,7 +406,6 @@ class AddShow {
                             if(castExists(actor9Field.getText()))
                             {
                                 Cast.add(actor9Field.getText());
-                                addShowToCast(actor9Field.getText(),addTitleField.getText());
                                 actor9Field.setDisable(true);
                             }
                             else
@@ -440,7 +431,6 @@ class AddShow {
                             if(castExists(actor10Field.getText()))
                             {
                                 Cast.add(actor10Field.getText());
-                                addShowToCast(actor10Field.getText(),addTitleField.getText());
                                 actor10Field.setDisable(true);
                             }
                             else
@@ -563,6 +553,32 @@ class AddShow {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+
+                //add show to cast
+                try {
+                    if(castExists(actor1Field.getText()))
+                        addShowToCast(actor1Field.getText(),addTitleField.getText());
+                    if(castExists(actor2Field.getText()))
+                    {addShowToCast(actor2Field.getText(),addTitleField.getText());}
+                    if(castExists(actor3Field.getText()))
+                        addShowToCast(actor3Field.getText(),addTitleField.getText());
+                    if(castExists(actor4Field.getText()))
+                        addShowToCast(actor4Field.getText(),addTitleField.getText());
+                    if(castExists(actor5Field.getText()))
+                        addShowToCast(actor5Field.getText(),addTitleField.getText());
+                    if(castExists(actor6Field.getText()))
+                        addShowToCast(actor6Field.getText(),addTitleField.getText());
+                    if(castExists(actor7Field.getText()))
+                        addShowToCast(actor7Field.getText(),addTitleField.getText());
+                    if(castExists(actor8Field.getText()))
+                        addShowToCast(actor8Field.getText(),addTitleField.getText());
+                    if(castExists(actor9Field.getText()))
+                        addShowToCast(actor9Field.getText(),addTitleField.getText());
+                    if(castExists(actor10Field.getText()))
+                        addShowToCast(actor10Field.getText(),addTitleField.getText());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 movie.setCast(Cast);
             }
             else if(seriesButton.isSelected())
@@ -585,11 +601,7 @@ class AddShow {
                 }
                 series.setGenres(Arrays.asList(addGenresField.getText().split("\\s*,\\s*")));
                 try {
-                    if(hasSpace(addDirectorField.getText())==-1)
-                    {
-                        showAlert("Wrong Director Name","Please Enter Fullname");
-                    }
-                    else
+                    if(!(hasSpace(addDirectorField.getText())==-1))
                         checkDirector(addDirectorField.getText(),series);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
@@ -628,6 +640,32 @@ class AddShow {
                             throw new RuntimeException(ex);
                         }
                     }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                //add show to cast
+                try {
+                    if(castExists(actor1Field.getText()))
+                        addShowToCast(actor1Field.getText(),addTitleField.getText());
+                    if(castExists(actor2Field.getText()))
+                    {addShowToCast(actor2Field.getText(),addTitleField.getText());}
+                    if(castExists(actor3Field.getText()))
+                        addShowToCast(actor3Field.getText(),addTitleField.getText());
+                    if(castExists(actor4Field.getText()))
+                        addShowToCast(actor4Field.getText(),addTitleField.getText());
+                    if(castExists(actor5Field.getText()))
+                        addShowToCast(actor5Field.getText(),addTitleField.getText());
+                    if(castExists(actor6Field.getText()))
+                        addShowToCast(actor6Field.getText(),addTitleField.getText());
+                    if(castExists(actor7Field.getText()))
+                        addShowToCast(actor7Field.getText(),addTitleField.getText());
+                    if(castExists(actor8Field.getText()))
+                        addShowToCast(actor8Field.getText(),addTitleField.getText());
+                    if(castExists(actor9Field.getText()))
+                        addShowToCast(actor9Field.getText(),addTitleField.getText());
+                    if(castExists(actor10Field.getText()))
+                        addShowToCast(actor10Field.getText(),addTitleField.getText());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -843,14 +881,20 @@ class AddShow {
     }
 
     public boolean directorExists(String fullname) throws IOException {
-        fullname = fullname.toLowerCase();
-        String[] name = fullname.split(" ");
-        String firstname = name[0];
-        String lastname = name[1];
-        List<Director> allDirectors = DirectorJsonHandler.readDirectors();
-        for (int i = 0; i < allDirectors.size(); i++) {
-            if ((allDirectors.get(i).getFirstName().toLowerCase() + allDirectors.get(i).getLastName().toLowerCase()).equals(firstname + lastname)) {
-                return true;
+        if(hasSpace(fullname)==-1)
+        {
+            showAlert("Wrong Director Name","Please Enter Fullname");
+        }
+        else {
+            fullname = fullname.toLowerCase();
+            String[] name = fullname.split(" ");
+            String firstname = name[0];
+            String lastname = name[1];
+            List<Director> allDirectors = DirectorJsonHandler.readDirectors();
+            for (int i = 0; i < allDirectors.size(); i++) {
+                if ((allDirectors.get(i).getFirstName().toLowerCase() + allDirectors.get(i).getLastName().toLowerCase()).equals(firstname + lastname)) {
+                    return true;
+                }
             }
         }
         return false;

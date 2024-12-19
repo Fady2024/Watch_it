@@ -6,6 +6,8 @@ import com.example.fms_market.admin.Revenue_page;
 import com.example.fms_market.model.User;
 import com.example.fms_market.pages.*;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -52,10 +54,13 @@ public class Banner {
             }
         });
 
-        // User icon with emoji
-        Label userIcon = new Label("👤");
-        userIcon.setStyle("-fx-font-size: 30px;"); // Adjust the size as needed
-        userIcon.setOnMouseClicked(_ -> {
+        //Profile icon with emoji
+        Image profileIcon = new Image("Acount/iconamoon_profile-circle-fill.png");
+        ImageView profileIconView = new ImageView(profileIcon);
+        profileIconView.setFitWidth(40);
+        profileIconView.setFitHeight(40);
+
+        profileIconView.setOnMouseClicked(_ -> {
             if (sidebarListener != null) {
                 sidebarListener.onUserDetailsSelected();
             }
@@ -64,8 +69,11 @@ public class Banner {
 
         // Search field
         TextField searchField = new TextField();
-        searchField.setPromptText(LanguageManager.getLanguageBasedString("Suche nach Stichwort","Search by keyword"));
-        searchField.setStyle("-fx-background-color: white; -fx-prompt-text-fill: gray;");
+        searchField.setPrefWidth(300);
+        searchField.setPrefHeight(50);
+        searchField.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;-fx-border-width: 1;" +
+                "-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
+        searchField.setPromptText(LanguageManager.getLanguageBasedString("\uD83D\uDD0D Suche nach Stichwort","\uD83D\uDD0D Search by keyword"));
         searchField.setFont(Font.font("Arial", 15));
 
 
@@ -86,7 +94,7 @@ public class Banner {
         Text revenue_admin = createNavLabel(        LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
                 , currentPage.equals(        LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
                 ), () -> new Revenue_page(stage,currentUser));
-        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel,topRatedLabel, searchField, userIcon));
+        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel,topRatedLabel, searchField, profileIconView));
 
         if (currentUser.getRole().equals("admin")) {
             commonComponents.add(revenue_admin); // Admin-specific component

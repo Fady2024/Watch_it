@@ -35,6 +35,7 @@ import javafx.animation.FadeTransition;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MoviePageFX {
@@ -62,12 +63,12 @@ public class MoviePageFX {
         titleDescriptionDetails.setPadding(new Insets(20));
 
         Label title = new Label(show.getTitle());
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        title.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Italiana-Regular.ttf")).toString(),60));
         title.setTextFill(Color.WHITE);
 
         Label description = new Label(show.getDescription());
-        description.setFont(Font.font("Arial", 14));
-        description.setTextFill(Color.LIGHTGRAY);
+        description.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        description.setTextFill(Color.rgb(177,177,177));
         description.setWrapText(true);
 
         // Center Section (Horizontal Layout)
@@ -82,21 +83,21 @@ public class MoviePageFX {
 
         // Apply rounded corners to the poster
         Rectangle clip = new Rectangle(200, 300);
-        clip.setArcWidth(20);
-        clip.setArcHeight(20);
+        clip.setArcWidth(30);
+        clip.setArcHeight(30);
         poster.setClip(clip);
 
         VBox details = new VBox(10);
         details.setPadding(new Insets(20));
         details.setAlignment(Pos.TOP_LEFT);
 
-        Rectangle background = new Rectangle(100, 30);
+        Rectangle background = new Rectangle(100, 40);
         background.setArcWidth(30);
         background.setArcHeight(30);
-        background.setFill(Color.YELLOW);
+        background.setFill(Color.rgb(243,206,19));
 
         Label imdbRating = new Label(String.format("IMDb: %s", show.getImdb_score()));
-        imdbRating.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        imdbRating.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         imdbRating.setTextFill(Color.BLACK);
 
         StackPane imdbRatingWithBackground = new StackPane();
@@ -104,32 +105,32 @@ public class MoviePageFX {
         imdbRatingWithBackground.setAlignment(Pos.CENTER);
 
         Label duration = new Label(String.format("%d Min", show.getDuration()));
-        duration.setFont(Font.font("Arial", 14));
-        duration.setTextFill(Color.WHITE);
+        duration.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        duration.setTextFill(Color.rgb(177,177,177));
 
         Label date = new Label(new SimpleDateFormat("yyyy-MM-dd").format(show.getDate()));
-        date.setFont(Font.font("Arial", 14));
-        date.setTextFill(Color.WHITE);
+        date.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        date.setTextFill(Color.rgb(177,177,177));
 
         Label language = new Label(show.getLanguage() != null ? String.join(", ", show.getLanguage()) : "N/A");
-        language.setFont(Font.font("Arial", 14));
-        language.setTextFill(Color.WHITE);
+        language.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        language.setTextFill(Color.rgb(177,177,177));
 
         Label country = new Label(show.getCountry());
-        country.setFont(Font.font("Arial", 14));
-        country.setTextFill(Color.WHITE);
+        country.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        country.setTextFill(Color.rgb(177,177,177));
 
         Rectangle separator1 = new Rectangle(1, 30);
-        separator1.setFill(Color.WHITE);
+        separator1.setFill(Color.rgb(159,159,159));
 
         Rectangle separator2 = new Rectangle(1, 30);
-        separator2.setFill(Color.WHITE);
+        separator2.setFill(Color.rgb(159,159,159));
 
         Rectangle separator3 = new Rectangle(1, 30);
-        separator3.setFill(Color.WHITE);
+        separator3.setFill(Color.rgb(159,159,159));
 
         Rectangle separator4 = new Rectangle(1, 30);
-        separator4.setFill(Color.WHITE);
+        separator4.setFill(Color.rgb(159,159,159));
 
         Region spacer1 = new Region();
         Region spacer2 = new Region();
@@ -164,16 +165,16 @@ public class MoviePageFX {
         HBox revenueRow = new HBox(10);
         revenueRow.setPadding(new Insets(10, 0, 0, 0));
         Label revenue = new Label(String.format(LanguageManager.getLanguageBasedString("Einnahmen: %s$","Revenue: %s$"), show.getRevenue()));
-        revenue.setFont(Font.font("Arial", 14));
+        revenue.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         revenue.setTextFill(Color.WHITE);
 
         revenueRow.getChildren().add(revenue);
 
-        HBox budgetGenresRow = new HBox(10);
+        HBox budgetGenresRow = new HBox(30);
         budgetGenresRow.setPadding(new Insets(10, 0, 0, 0));
 
         Label budget = new Label(String.format("Budget: %s$", show.getBudget()));
-        budget.setFont(Font.font("Arial", 14));
+        budget.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         budget.setTextFill(Color.WHITE);
 
         Calculate_Rating calculateRating = new Calculate_Rating();
@@ -182,11 +183,11 @@ public class MoviePageFX {
         String showType = show.getType();
         String capitalizedShowType = showType.substring(0, 1).toUpperCase() + showType.substring(1);
         Label showTypeLabel = new Label(capitalizedShowType);
-        showTypeLabel.setFont(Font.font("Arial", 14));
+        showTypeLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         showTypeLabel.setTextFill(Color.WHITE);
 
         Label averageRatingTextLabel = new Label(String.format("%.1f", averageRating));
-        averageRatingTextLabel.setFont(Font.font("Arial", 14));
+        averageRatingTextLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         averageRatingTextLabel.setTextFill(Color.WHITE);
 
         HBox genres = new HBox(10);
@@ -213,24 +214,23 @@ public class MoviePageFX {
 
         Button addButton = new Button(LanguageManager.getLanguageBasedString("Hinzufügen","♥ Add"));
         boolean isFavorite = ShowCardUtil.isShowFavorite(user.getId(), show.getId());
-
-        addButton.setStyle(String.format("-fx-background-color: %s; -fx-text-fill: %s; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 16px; -fx-font-weight: bold;",
-                isFavorite ? "#ffcccc" : "#ffffff",
-                isFavorite ? "red" : "black"));
+        addButton.setPrefWidth(120);
+        addButton.setPrefHeight(50);
+        addButton.setStyle(String.format("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 18px; -fx-font-weight: bold;"));
         addButton.setOnAction(_ -> {
             try {
                 if (ShowCardUtil.isShowFavorite(user.getId(), show.getId())) {
                     // Remove favorite
                     UserJsonHandler.removeFavoriteShow(user.getId(), show.getId());
-                    addButton.setStyle("-fx-background-color: #ffffff; -fx-text-fill: black; " +
+                    addButton.setStyle("-fx-background-color: white; -fx-text-fill: black; " +
                             "-fx-padding: 10px 20px; -fx-background-radius: 20; " +
-                            "-fx-font-size: 16px; -fx-font-weight: bold;");
+                            "-fx-font-size: 18px; -fx-font-weight: bold;");
                 } else {
                     // Add to favorite
                     UserJsonHandler.addFavoriteShow(user.getId(), show.getId());
-                    addButton.setStyle("-fx-background-color: #ffcccc; -fx-text-fill: red; " +
+                    addButton.setStyle("-fx-background-color: white; -fx-text-fill: red; " +
                             "-fx-padding: 10px 20px; -fx-background-radius: 20; " +
-                            "-fx-font-size: 16px; -fx-font-weight: bold;");
+                            "-fx-font-size: 18px; -fx-font-weight: bold;");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -265,12 +265,12 @@ public class MoviePageFX {
         // Pop-up text labels
 
         Label firstRateLabel = new Label(LanguageManager.getLanguageBasedString("Bewertung hinzugefügt!","Rating added!"));
-        firstRateLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        firstRateLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         firstRateLabel.setTextFill(Color.GREEN);
         firstRateLabel.setVisible(false);
 
         Label updateRateLabel = new Label(LanguageManager.getLanguageBasedString("Bewertung aktualisiert!","Rating updated!"));
-        updateRateLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        updateRateLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         updateRateLabel.setTextFill(Color.ORANGE);
         updateRateLabel.setVisible(false);
 
@@ -338,16 +338,18 @@ public class MoviePageFX {
     private final int[] selectedRating = {0}; // Store the selected rating
 
     private HBox createAnimatedRatingBar() {
-        HBox ratingBar = new HBox(10);
+        HBox ratingBar = new HBox(15);
         ratingBar.setAlignment(Pos.CENTER);
         ratingBar.setPadding(new Insets(10));
 
         for (int i = 1; i <= 5; i++) {
             Polygon star = createStar();
+            star.setScaleX(1.4);
+            star.setScaleY(1.4);
             int currentRating = i;
 
-            star.setOnMouseEntered(_ -> applyScaleAnimation(star, 1.2));
-            star.setOnMouseExited(_ -> applyScaleAnimation(star, 1.0));
+            star.setOnMouseEntered(_ -> applyScaleAnimation(star, 1.6));
+            star.setOnMouseExited(_ -> applyScaleAnimation(star, 1.4));
 
             star.setOnMouseClicked(_ -> {
                 selectedRating[0] = currentRating;
@@ -395,8 +397,10 @@ public class MoviePageFX {
 
     private Button createGenreButton(String genre) {
         Button button = new Button(genre);
-        button.setFont(Font.font("Arial", 12));
-        button.setStyle("-fx-background-color: #ffffff; -fx-text-fill: black; -fx-padding: 5px 10px; -fx-border-radius: 15; -fx-background-radius: 15;");
+        button.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        button.setPrefWidth(105);
+        button.setPrefHeight(35);
+        button.setStyle("-fx-background-color: #ffffff; -fx-text-fill: black; -fx-padding: 5px 10px; -fx-border-radius: 25; -fx-background-radius: 25;");
         return button;
     }
 
@@ -416,9 +420,9 @@ public class MoviePageFX {
             }
 
             if (i < averageRating) {
-                segment.setFill(Color.YELLOW);
+                segment.setFill(Color.rgb(243,206,19));
             } else {
-                segment.setFill(Color.GRAY);
+                segment.setFill(Color.WHITE);
             }
 
             ratingBar.getChildren().add(segment);
@@ -432,29 +436,46 @@ public class MoviePageFX {
         box.setAlignment(Pos.TOP_CENTER);
         box.setStyle("-fx-background-color: white; -fx-border-radius: 12; -fx-background-radius: 12;");
 
-        Label title = new Label(titleText);
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        title.setTextFill(Color.WHITE);
-        title.setStyle("-fx-background-color: #6A1B9A; -fx-padding: 5; -fx-border-radius: 10 10 0 0; -fx-background-radius: 10 10 0 0;");
-        title.setMaxWidth(Double.MAX_VALUE);
-        title.setAlignment(Pos.CENTER);
+        Image directorIcon = new Image("Acount/ph_film-slate-fill.png");
+        ImageView directorIconView = new ImageView(directorIcon);
+        directorIconView.setFitWidth(30);
+        directorIconView.setFitHeight(30);
 
-        VBox contentBox = new VBox(5);
-        contentBox.setPadding(new Insets(10));
+        Image castIcon = new Image("Acount/ic_sharp-people.png");
+        ImageView castIconView = new ImageView(castIcon);
+        castIconView.setFitWidth(30);
+        castIconView.setFitHeight(30);
+
+        HBox titleBox = new HBox(10);
+        titleBox.setStyle("-fx-background-color: #5B146F; -fx-padding: 5; -fx-border-radius: 10 10 0 0; -fx-background-radius: 10 10 0 0;");
+        Label title = new Label(titleText);
+        title.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        title.setTextFill(Color.WHITE);
+        title.setStyle("-fx-background-color: #5B146F; -fx-padding: 5; -fx-border-radius: 10 10 0 0; -fx-background-radius: 10 10 0 0;");
+        title.setMaxWidth(Double.MAX_VALUE);
+        title.setPrefHeight(42);
+        title.setAlignment(Pos.CENTER);
+        if(titleText=="Director")
+        titleBox.getChildren().addAll(directorIconView,title);
+        else
+            titleBox.getChildren().addAll(castIconView,title);
+
+        VBox contentBox = new VBox(10);
+        contentBox.setPadding(new Insets(5,10,10,10));
         for (int i = 0; i < contentText.size(); i++) {
             Label contentLabel = new Label(contentText.get(i));
-            contentLabel.setFont(Font.font("Arial", 14));
-            contentLabel.setTextFill(Color.web("#6A1B9A"));
+            contentLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+            contentLabel.setTextFill(Color.web("Black"));
             contentLabel.setOnMouseClicked(_ -> navigateToDetailsPage(contentLabel.getText(), stage));
             contentBox.getChildren().add(contentLabel);
             if (i < contentText.size() - 1) {
                 Separator separator = new Separator();
-                separator.setStyle("-fx-background-color: #6A1B9A;");
+                separator.setStyle("-fx-background-color: Black;");
                 contentBox.getChildren().add(separator);
             }
         }
 
-        box.getChildren().addAll(title, contentBox);
+        box.getChildren().addAll(titleBox, contentBox);
         return box;
     }
 

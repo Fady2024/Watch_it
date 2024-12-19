@@ -246,7 +246,7 @@ public class Developer_page {
         team.add(new Team_members("Sara Emad", List.of("- Class: Subscription, GUI", "- Subscribed plans", "- Admin find highest revenue month"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Sara.jpg")).toString())));
         team.add(new Team_members("Fady Gerges", List.of("- Class: User, GUI", "- Banner", "- Add to favorite", "- JSON files, Add Rate", "- Display watched shows", "- Add shows to watch & Favorite list"),
-                new Image(Objects.requireNonNull(getClass().getResource("/dev/Fady.jpg")).toString())));
+                new Image(Objects.requireNonNull(getClass().getResource("/dev/Fady.png")).toString())));
         team.add(new Team_members("Marwan Waleed", List.of("- Class: Cast/ Director", "- GUI", "- Login in", "- Sign up", "- Best Actor"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Marwan.jpg")).toString())));
 

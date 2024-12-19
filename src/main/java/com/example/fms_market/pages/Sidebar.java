@@ -151,18 +151,7 @@ public class Sidebar extends VBox {
 
                     // Handle visibility of text labels and alignment for the menu items
                     menuContainer.getChildren().forEach(node -> {
-                        if (node instanceof VBox vbox) {
-                            vbox.getChildren().forEach(child -> {
-                                if (child instanceof HBox menuItem) {
-                                    Label textLabel = (Label) menuItem.getChildren().get(1);
-                                    textLabel.setVisible(isExpanded);
-                                    textLabel.setManaged(isExpanded);
-
-                                    menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
-                                    menuItem.setStyle(isExpanded ? "-fx-padding: 18px;" : "-fx-padding: 5px;");
-                                }
-                            });
-                        } else if (node instanceof HBox menuItem) {
+                        if (node instanceof HBox menuItem) {
                             Label textLabel = (Label) menuItem.getChildren().get(1);
                             textLabel.setVisible(isExpanded);
                             textLabel.setManaged(isExpanded);
@@ -173,7 +162,8 @@ public class Sidebar extends VBox {
                     });
 
                     // Ensure the LOGOUT button maintains its style
-                    HBox logoutButton = (HBox) menuContainer.getChildren().getLast();
+                    VBox logoutVBox = (VBox) menuContainer.getChildren().getLast();
+                    HBox logoutButton = (HBox) logoutVBox.getChildren().getFirst();
                     logoutButton.setStyle("-fx-padding: 5px; -fx-background-color: red; -fx-background-radius: 5;");
 
                     // Apply curve effect

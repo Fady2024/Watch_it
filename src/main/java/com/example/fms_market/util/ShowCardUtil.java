@@ -3,6 +3,7 @@ package com.example.fms_market.util;
 import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.Show;
 import com.example.fms_market.model.User;
+import com.example.fms_market.pages.HomePage;
 import com.example.fms_market.pages.MoviePageFX;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -92,8 +93,8 @@ public class ShowCardUtil {
         starCanvas.setAlignment(Pos.TOP_RIGHT);
         starCanvas.setTranslateX(30);
         Label ratingLabel = new Label(formattedRating);
-        ratingLabel.setFont(Font.font("Arial", 14));
-        ratingLabel.setTextFill(Color.BLACK);
+        ratingLabel.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),14));
+        ratingLabel.setStyle("-fx-text-fill: black;");
         ratingLabel.setAlignment(Pos.TOP_RIGHT);
         ratingLabel.setTranslateY(-32);
         ratingLabel.setTranslateX(formattedRating.matches("\\d+") ? -15 : -10);
@@ -177,7 +178,7 @@ public class ShowCardUtil {
     public static StackPane createFavoriteIcon(Show show, int userId, Runnable refreshCallback) {
         Label favoriteIcon = new Label("♥");
         boolean isFavorite = isShowFavorite(userId, show.getId());
-        favoriteIcon.setStyle(String.format("-fx-font-size: 30px; -fx-text-fill: %s; -fx-font-weight: bold;", isFavorite ? "red" : "white"));        favoriteIcon.setPadding(new Insets(5));
+        favoriteIcon.setStyle(String.format("-fx-font-size: 30px; -fx-text-fill: %s; -fx-font-weight: bold;", isFavorite ? "#F73151" : "white"));        favoriteIcon.setPadding(new Insets(5));
         favoriteIcon.setTranslateY(-10);
         favoriteIcon.setOnMouseClicked(event -> {
             toggleFavorite(userId, show.getId(), favoriteIcon, refreshCallback);
@@ -214,7 +215,7 @@ public class ShowCardUtil {
                 UserJsonHandler.addFavoriteShow(userId, showId);
             }
             boolean isFavorite = isShowFavorite(userId, showId);
-            favoriteIcon.setStyle(String.format("-fx-font-size: 30px; -fx-text-fill: %s;", isFavorite ? "red" : "white"));            refreshCallback.run();
+            favoriteIcon.setStyle(String.format("-fx-font-size: 30px; -fx-text-fill: %s;", isFavorite ? "F73151" : "white"));            refreshCallback.run();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -21,13 +21,12 @@ import java.util.List;
 import static com.example.fms_market.util.ShowCardUtil.createShowCard;
 
 public class Top_Rated {
-    private final VBox mainContainer;
 
     public Top_Rated(User user, Stage stage) throws IOException {
-        this.mainContainer = new VBox();
-        this.mainContainer.setSpacing(20);
-        this.mainContainer.setPadding(new Insets(20));
-        this.mainContainer.setStyle("-fx-background-color: #1c1c1c;");
+        VBox mainContainer = new VBox();
+        mainContainer.setSpacing(20);
+        mainContainer.setPadding(new Insets(20));
+        mainContainer.setStyle("-fx-background-color: #1c1c1c;");
 
         Calculate_Rating ratingCalculator = new Calculate_Rating();
         List<Show> movies = new ArrayList<>(ShowJsonHandler.readMovies());
@@ -41,11 +40,12 @@ public class Top_Rated {
                 , topSeries, user, stage));
         ScrollPane scrollPane = new ScrollPane(mainContainer);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: #1c1c1c; -fx-border-color: transparent;");
+        scrollPane.setStyle("-fx-background: #1c1c1c; -fx-background-color: #1c1c1c; -fx-border-color: transparent;");
 
         BorderPane layout = new BorderPane();
         layout.setTop(Banner.getBanner(stage, "Top Rated"));
         layout.setCenter(scrollPane);
+        layout.setStyle("-fx-background-color: #1c1c1c;");
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();

@@ -3,8 +3,9 @@ package com.example.fms_market.pages;
 import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -14,10 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
+import javafx.util.Duration;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -31,14 +30,9 @@ public class AccountPage {
     private final BorderPane layout;
     private final Stage stage;
 
-    private String initialEmail;
-    private String initialPhone;
-    private String initialAge;
-
     public AccountPage(User user, Stage stage, Sidebar.SidebarState initialState) {
         this.currentUser = user;
         this.stage = stage;
-
         Sidebar sidebar = new Sidebar(initialState, stage, currentUser);
         layout = new BorderPane();
         layout.setLeft(sidebar);
@@ -85,21 +79,19 @@ public class AccountPage {
         VBox mainBox = new VBox(10);
         mainBox.setStyle("-fx-padding: 20px; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
-        Label userDetailsLabel = LanguageManager.TcreateLanguageitle("Benutzerdetails","User Details","24","white");
+        Label userDetailsLabel = LanguageManager.TcreateLanguageitle("Benutzerdetails", "User Details", "24", "white");
         userDetailsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding-bottom: 30px;");
 
         VBox userDetailsBox = new VBox(10);
         userDetailsBox.setStyle("-fx-padding: 20px; -fx-background-color: #1c1c1c; -fx-alignment: center;");
 
-        Label photoLabel = LanguageManager.TcreateLanguageitle("Benutzerfoto:","User Photo:","16","white");
-      //  photoLabel.setStyle("-fx-text-fill: white;");
+        Label photoLabel = LanguageManager.TcreateLanguageitle("Benutzerfoto:", "User Photo:", "16", "white");
         ImageView userPhoto = new ImageView(new Image(STR."file:\{currentUser.getUser_photo_path()}"));
         userPhoto.setFitHeight(100);
         userPhoto.setFitWidth(100);
         Circle clip = new Circle(50, 50, 50);
         userPhoto.setClip(clip);
 
-        // Store initial photo path
         AtomicReference<String> initialPhotoPath = new AtomicReference<>(currentUser.getUser_photo_path());
         AtomicReference<File> selectedFileRef = new AtomicReference<>();
 
@@ -119,29 +111,25 @@ public class AccountPage {
         emailField.setMaxWidth(300);
         emailField.setStyle("-fx-alignment: center;");
 
-        Label phoneLabel = LanguageManager.TcreateLanguageitle("Telefon:","Phone:","16","white");
-      //  phoneLabel.setStyle("-fx-text-fill: white;");
+        Label phoneLabel = LanguageManager.TcreateLanguageitle("Telefon:", "Phone:", "16", "white");
         TextField phoneField = new TextField(currentUser.getPhone());
         phoneField.setMaxWidth(300);
         phoneField.setStyle("-fx-alignment: center;");
 
-
-        Label ageLabel = LanguageManager.TcreateLanguageitle("Alter:","Age:","16","white");
-       // ageLabel.setStyle("-fx-text-fill: white;");
+        Label ageLabel = LanguageManager.TcreateLanguageitle("Alter:", "Age:", "16", "white");
         TextField ageField = new TextField(currentUser.getAge());
         ageField.setMaxWidth(300);
         ageField.setStyle("-fx-alignment: center;");
 
-        // Store initial values
-        initialEmail = currentUser.getEmail();
-        initialPhone = currentUser.getPhone();
-        initialAge = currentUser.getAge();
+        AtomicReference<String> initialEmail = new AtomicReference<>(currentUser.getEmail());
+        AtomicReference<String> initialPhone = new AtomicReference<>(currentUser.getPhone());
+        AtomicReference<String> initialAge = new AtomicReference<>(currentUser.getAge());
 
-        Label changePasswordLabel = LanguageManager.TcreateLanguageitle("Kennwort ändern","Change Password","16"," #8969ba");
+        Label changePasswordLabel = LanguageManager.TcreateLanguageitle("Kennwort ändern", "Change Password", "16", "#8969ba");
         changePasswordLabel.setStyle("-fx-text-fill: #8969ba; -fx-cursor: hand;");
         changePasswordLabel.setOnMouseClicked(_ -> showChangePasswordPopup());
 
-        Button applyButton = LanguageManager.createLanguageButton("Anwenden","Apply","16","white");
+        Button applyButton = LanguageManager.createLanguageButton("Anwenden", "Apply", "16", "white");
         applyButton.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10;");
         applyButton.setOnAction(_ -> {
             currentUser.setEmail(emailField.getText().toLowerCase());
@@ -154,43 +142,100 @@ public class AccountPage {
                 }
                 UserJsonHandler.saveUser(currentUser);
                 showAlert("Success", "User details updated successfully.");
-                // Update initial values
-                initialEmail = currentUser.getEmail();
-                initialPhone = currentUser.getPhone();
-                initialAge = currentUser.getAge();
+                initialEmail.set(currentUser.getEmail());
+                initialPhone.set(currentUser.getPhone());
+                initialAge.set(currentUser.getAge());
                 initialPhotoPath.set(currentUser.getUser_photo_path());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
 
-        Button cancelButton = LanguageManager.createLanguageButton("Stornieren","Cancel","16","black");
+        Button cancelButton = LanguageManager.createLanguageButton("Stornieren", "Cancel", "16", "black");
         cancelButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 10;");
         cancelButton.setOnAction(_ -> {
-            // Restore initial values
-            emailField.setText(initialEmail);
-            phoneField.setText(initialPhone);
-            ageField.setText(initialAge);
-            userPhoto.setImage(new Image(STR."file:\{initialPhotoPath}"));
+            emailField.setText(initialEmail.get());
+            phoneField.setText(initialPhone.get());
+            ageField.setText(initialAge.get());
+            userPhoto.setImage(new Image(STR."file:\{initialPhotoPath.get()}"));
             currentUser.setUser_photo_path(initialPhotoPath.get());
             selectedFileRef.set(null);
         });
-        ComboBox<String> languageComboBox = new ComboBox<>();
-        languageComboBox.getItems().addAll("English", "German");
-        languageComboBox.setValue(LanguageManager.getLanguageBasedString("German","English"));
-        languageComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+        Button languageButton = new Button("🌐");
+        languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: white;");
+        Popup popup = new Popup();
+        VBox menuBox = new VBox(5);
+        menuBox.setStyle("-fx-background-color: #333333; -fx-padding: 10px; -fx-background-radius: 10;");
+
+        Label englishLabel = new Label("English");
+        englishLabel.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10; " +
+                "-fx-padding: 5px 10px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.5, 0, 1);");
+
+        Label germanLabel = new Label("German");
+        germanLabel.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10; " +
+                "-fx-padding: 5px 10px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.5, 0, 1);");
+
+        menuBox.getChildren().addAll(englishLabel, germanLabel);
+        popup.getContent().add(menuBox);
+
+        // Create the PauseTransition
+        PauseTransition hideTransition = new PauseTransition(Duration.seconds(2));
+        hideTransition.setOnFinished(_ -> popup.hide());
+
+        // Add mouse event handlers to reset the transition if the mouse hovers over the popup
+        menuBox.setOnMouseEntered(_ -> hideTransition.stop());
+        menuBox.setOnMouseExited(_ -> hideTransition.play());
+
+        languageButton.setOnAction(_ -> Platform.runLater(() -> {
+            double popupX = languageButton.localToScreen(languageButton.getBoundsInLocal()).getMaxX() - 70;
+            double popupY = languageButton.localToScreen(languageButton.getBoundsInLocal()).getMaxY() - 10;
+            if (popup.isShowing()) {
+                ScaleTransition hideScaleTransition = new ScaleTransition(Duration.millis(300), menuBox);
+                hideScaleTransition.setFromX(1.0);
+                hideScaleTransition.setFromY(1.0);
+                hideScaleTransition.setToX(0.1);
+                hideScaleTransition.setToY(0.1);
+                hideScaleTransition.setOnFinished(_ -> popup.hide());
+                hideScaleTransition.play();
+            } else {
+                menuBox.setScaleX(0.1);
+                menuBox.setScaleY(0.1);
+
+                ScaleTransition showTransition = new ScaleTransition(Duration.millis(300), menuBox);
+                showTransition.setFromX(0.1);
+                showTransition.setFromY(0.1);
+                showTransition.setToX(1.0);
+                showTransition.setToY(1.0);
+
+                popup.show(languageButton, popupX, popupY);
+                showTransition.play();
+                hideTransition.playFromStart(); // Start the hide transition
+            }
+        }));
+
+        englishLabel.setOnMouseClicked(_ -> {
+            if (!"English".equals(LanguageManager.getInstance().getLanguage())) {
                 LanguageManager.getInstance().toggleLanguage();
             }
+            popup.hide();
         });
-        languageComboBox.setTranslateY(-620);
-        languageComboBox.setTranslateX(640);
+
+        germanLabel.setOnMouseClicked(_ -> {
+            if (!"German".equals(LanguageManager.getInstance().getLanguage())) {
+                LanguageManager.getInstance().toggleLanguage();
+            }
+            popup.hide();
+        });
+
+        languageButton.setTranslateY(-620);
+        languageButton.setTranslateX(640);
+
         HBox buttonBox = new HBox(10, cancelButton, applyButton);
         buttonBox.setStyle("-fx-alignment: center;");
         userDetailsBox.getChildren().addAll(photoLabel, userPhoto, emailLabel, emailField, phoneLabel, phoneField, ageLabel, ageField, changePasswordLabel, buttonBox);
 
-        mainBox.getChildren().addAll(userDetailsLabel, userDetailsBox,languageComboBox);
+        mainBox.getChildren().addAll(userDetailsLabel, userDetailsBox, languageButton);
         layout.setCenter(mainBox);
     }
 
