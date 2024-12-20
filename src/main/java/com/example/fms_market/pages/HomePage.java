@@ -188,8 +188,8 @@ public class HomePage {
         RecentSeries.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
         int column = 0;
         int row = 0;
-        if(user.getRole()=="Admin"||user.getRole()=="admin")
-        recentMoviesBox.getChildren().addAll(adminBox,mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
+        if(user.getRole().equals("Admin")||user.getRole().equals("admin"))
+            recentMoviesBox.getChildren().addAll(adminBox,mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
         else
             recentMoviesBox.getChildren().addAll(mostWatchedShow, mostWatchedShowTitle, mostWatchedShowDesc, buttonContainer);
         showContainer.add(recentMoviesBox, column, row);
