@@ -20,8 +20,8 @@ public class HelloApplication extends Application {
     public void start(Stage stage) {
         try {
             DataManager.loadData();
-
-            new HomePage(new User("feew","fwef","fwefw","fwef","Wefwe","fwefw"),stage);
+            //new LoginPageFX(stage);
+           new HomePage(new User("ouio","feew","fwef","fwefw","fwef","Wefwe","fwefw"),stage);
 
             DataManager.saveData();
         } catch (IOException e) {

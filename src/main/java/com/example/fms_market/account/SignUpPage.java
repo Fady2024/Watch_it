@@ -256,7 +256,7 @@ public class SignUpPage {
                     user_photo_path = profileImage.getAbsolutePath();
                 }
 
-                UserJsonHandler.saveUser(new User(email, password, "customer", phone, age, user_photo_path));
+             //   UserJsonHandler.saveUser(new User(email, password, "customer", phone, age, user_photo_path));
                 showAlert(Alert.AlertType.INFORMATION, "Sign Up Successful!");
                 new LoginPageFX(primaryStage);
             } catch (IOException ex) {

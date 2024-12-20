@@ -6,25 +6,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
 
-@JsonPropertyOrder({"id", "email", "password", "role", "phone", "age", "user_photo_path", "favoriteShowIds"})
+@JsonPropertyOrder({"id", "username", "email", "password", "role", "phone", "age", "user_photo_path", "favoriteShowIds"})
 public class User {
-    private int id; // Changed from static to instance variable
+    private int id;
     private String email;
     private String password;
     private final String role;
     private String phone;
     private String age;
     private String user_photo_path;
-    private List<Integer> favoriteShowIds; // List of favorite show IDs
+    private List<Integer> favoriteShowIds;
+    private String username;
 
     @JsonCreator
     public User(
-                @JsonProperty("email") String email,
-                @JsonProperty("password") String password,
-                @JsonProperty("role") String role,
-                @JsonProperty("phone") String phone,
-                @JsonProperty("age") String age,
-                @JsonProperty("user_photo_path") String userPhotoPath) {
+            @JsonProperty("username") String username,
+            @JsonProperty("email") String email,
+            @JsonProperty("password") String password,
+            @JsonProperty("role") String role,
+            @JsonProperty("phone") String phone,
+            @JsonProperty("age") String age,
+            @JsonProperty("user_photo_path") String userPhotoPath) {
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -33,7 +36,6 @@ public class User {
         this.user_photo_path = userPhotoPath;
     }
 
-    // Setter for id
     public void setId(int id) {
         this.id = id;
     }
@@ -54,7 +56,10 @@ public class User {
         this.favoriteShowIds = favoriteShowIds;
     }
 
-    // Getter methods
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public int getId() {
         return id;
     }
@@ -87,11 +92,15 @@ public class User {
         return user_photo_path;
     }
 
-    public void setUser_photo_path( String user_photo_path){
-        this.user_photo_path=user_photo_path;
+    public void setUser_photo_path(String user_photo_path) {
+        this.user_photo_path = user_photo_path;
     }
 
     public List<Integer> getFavoriteShowIds() {
         return favoriteShowIds;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
