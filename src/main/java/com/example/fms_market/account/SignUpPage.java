@@ -16,13 +16,14 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+import javafx.scene.shape.Rectangle;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -529,29 +530,57 @@ public class SignUpPage {
     private void selectProfileImage(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-        profileImage = fileChooser.showOpenDialog(primaryStage);
+        File profileImage = fileChooser.showOpenDialog(primaryStage);
 
-        profileImagePanel.getChildren().clear();  // Clear previous content
+        profileImagePanel.getChildren().clear();
 
         if (profileImage != null) {
             Image img = new Image(profileImage.toURI().toString());
             ImageView imageView = new ImageView(img);
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
-            StackPane centeredPane = new StackPane();
-            centeredPane.getChildren().add(imageView);
-            StackPane.setAlignment(imageView, Pos.CENTER);
+
+            double frameWidth = profileImagePanel.getWidth();
+            double frameHeight = profileImagePanel.getHeight();
+            double imgWidth = img.getWidth();
+            double imgHeight = img.getHeight();
+            double scaleFactor = Math.max(frameWidth / imgWidth, frameHeight / imgHeight);
+
+            imageView.setFitWidth(imgWidth * scaleFactor);
+            imageView.setFitHeight(imgHeight * scaleFactor);
+
+            imageView.setPreserveRatio(true);
+
+            Circle clip = new Circle(frameWidth / 2);
+            clip.setCenterX(frameWidth / 2);
+            clip.setCenterY(frameHeight / 2);
+            imageView.setClip(clip);
+
+            StackPane centeredPane = new StackPane(imageView);
             profileImagePanel.getChildren().add(centeredPane);
+
+            profileImagePanel.setStyle("-fx-background-color: transparent;");
         } else {
+            profileImagePanel.setStyle("-fx-background-color: #636363;" +
+                    "-fx-border-color: white;" +
+                    "-fx-border-width: 2;" +
+                    "-fx-background-radius: 30;" +
+                    "-fx-border-radius: 30;" );
+
             Label cameraEmoji = new Label("📷");
-            cameraEmoji.setStyle("-fx-font-size: 40px; -fx-text-fill: gray;");
+            cameraEmoji.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
             StackPane stackPane = new StackPane();
             stackPane.getChildren().add(cameraEmoji);
-            StackPane.setAlignment(cameraEmoji, Pos.CENTER);
-            cameraEmoji.setTranslateY(25);
+            stackPane.setPrefSize(profileImagePanel.getWidth(), profileImagePanel.getHeight());
+
+            Circle clip = new Circle(profileImagePanel.getWidth() / 2);
+            clip.setCenterX(profileImagePanel.getWidth() / 2);
+            clip.setCenterY(profileImagePanel.getHeight() / 2);
+            stackPane.setClip(clip);
+
             profileImagePanel.getChildren().add(stackPane);
         }
     }
+
+
     private void validatePasswordStrength(String password) {
         int score = calculatePasswordStrength(password);
         updateStrengthBar(score);
@@ -628,7 +657,4 @@ public class SignUpPage {
         StackPane.setAlignment(alertButton, Pos.CENTER);
         alert.showAndWait();
     }
-
-
-
 }

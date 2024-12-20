@@ -1,5 +1,6 @@
 package com.example.fms_market.pages;
 
+import com.example.fms_market.account.SignUpPage;
 import com.example.fms_market.account.WelcomePage;
 import com.example.fms_market.pages.HomePage;
 import com.example.fms_market.model.User;
@@ -236,7 +237,7 @@ String plan_name;
                 );
         });
 
-        backButton.setOnAction(_ -> new WelcomePage(stage));
+        backButton.setOnAction(_ -> new SignUpPage(stage));
         return backButton;
     }
 }
