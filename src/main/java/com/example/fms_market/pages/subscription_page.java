@@ -1,6 +1,8 @@
 package com.example.fms_market.pages;
 
 import com.example.fms_market.account.WelcomePage;
+import com.example.fms_market.pages.HomePage;
+import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,6 +20,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 
 public class subscription_page {
+
     public subscription_page(Stage stage){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
@@ -231,7 +234,6 @@ String plan_name;
                                 "-fx-border-radius: 20px; " +
                                 "-fx-padding: 10px 20px;"
                 );
-
         });
 
         backButton.setOnAction(_ -> new WelcomePage(stage));

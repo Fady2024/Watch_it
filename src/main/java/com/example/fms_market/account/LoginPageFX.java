@@ -6,7 +6,6 @@ import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
 import javafx.geometry.Pos;
-import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Cursor;
@@ -29,7 +28,6 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
-
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -50,7 +48,6 @@ public class LoginPageFX {
     private final VBox passwordBox;
 
     public LoginPageFX(Stage stage) {
-        // Initialize passwordStack
         passwordStack = new StackPane();
 
         ComboBox<String> languageComboBox = new ComboBox<>();
@@ -345,7 +342,6 @@ public class LoginPageFX {
         noAccountLabel.setTextFill(Color.WHITE);
 
         Hyperlink signUpLink = new Hyperlink("Sign up");
-        //signUpLink.setTextFill(Color.DEEPSKYBLUE);
         signUpLink.setStyle("-fx-font-weight: bold; -fx-text-fill: #1425BB;");
         signUpLink.setOnMouseClicked(_ -> new SignUpPage(stage));
 
@@ -504,5 +500,6 @@ public class LoginPageFX {
             login.setTextFill(Color.WHITE);
         }
     }
-}
 
+
+}

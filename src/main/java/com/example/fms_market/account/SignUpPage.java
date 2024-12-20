@@ -1,273 +1,531 @@
 package com.example.fms_market.account;
 
-import com.example.fms_market.util.TopPanel;
 import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.User;
 import com.example.fms_market.pages.subscription_page;
+import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 public class SignUpPage {
+    private final Pane contentPane;
     private File profileImage;
     private final VBox profileImagePanel = new VBox();
-    private boolean _hasDigits = false;
-    private boolean _hasSpecialChar = false;
-    private boolean _hasUppercase = false;
-    private boolean _hasLowercase = false;
     private String user_photo_path;
-    private final Label emailLabel = new Label("Email:");
-    private final Label passwordLabel = new Label("Password:");
-    private final Label ageLabel = new Label("Age:");
-    private final Label phoneLabel = new Label("Phone:");
-    private final Text loginLabel;
-    private final Button backButton;
+    private String username;
+    private final Label signup;
+    private final HBox loginLabel;
     private final Button signUpButton;
-    private static boolean isStrengthPanelVisible;
 
-    private final Label digitCheckIcon = new Label("❌");
-    private final Label specialCharCheckIcon = new Label("❌");
-    private final Label upperCaseCheckIcon = new Label("❌");
-    private final Label lowerCaseCheckIcon = new Label("❌");
 
-    private final TextField emailField = new TextField();
-    private final TextField phoneField = new TextField();
-    private final PasswordField passwordField = new PasswordField();
-    private final TextField ageField = new TextField();
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int stageWidth = (int) screenSize.getWidth();
+    int stageHeight = (int) (screenSize.getHeight() / 1.1);
+
+    private final Label passwordStrengthMessage = new Label();
 
     private final VBox strengthPanel = new VBox();
-    private final Pane contentPane = new Pane();
-    private final TopPanel dayNightSwitch; // Declare signUpText as an instance variable
+    private final ProgressBar strengthBar = new ProgressBar(0);
+
+    private TextField first_name = new TextField("First Name");
+    private TextField last_name = new TextField("Last Name");
+    Text signup_label;
+    private TextField usernsme = new TextField("User Name");
+    private TextField emailField = new TextField("Email");
+    private TextField phoneField = new TextField("Phone");
+    private PasswordField passwordField = new PasswordField();
+    private TextField ageField = new TextField("Age");
 
     public SignUpPage(Stage primaryStage) {
-        primaryStage.setTitle("Sign Up Page");
+        ComboBox<String> languageComboBox = new ComboBox<>();
+        languageComboBox.getItems().addAll("English", "German");
+        languageComboBox.setValue("English");
+        languageComboBox.setTranslateY(20);
+        languageComboBox.setTranslateX(200);
+        signup = labelSignup();
+        signUpButton = createButton();
+        signUpButton.setOnAction(event -> handleSignUp(primaryStage));
+        contentPane = new Pane(languageComboBox);
+        maincontentpane();
 
-        backButton = createBackButton(primaryStage);
+        setupProfileImagePanel(primaryStage);
+        setupStrengthPanel();
+        first_name = createFirstNameField();
+        last_name = createLastNameField();
+        usernsme = createUserNameField();
+        emailField = createEmailField();
+        phoneField = createPhoneField();
+        ageField = createAgeField();
+        passwordField = createPasswordField();
+        signup_label = new Text("Sign Up");
+        signup_label.setFill(Color.WHITE);
+        signup_label.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 44));
+        strengthBar.setPrefWidth(200);
+        strengthBar.setPrefHeight(10);
 
-// Profile image panel setup
-        profileImagePanel.setPrefSize(110, 110);
-        profileImagePanel.setStyle("-fx-background-color: lightgray; -fx-border-color: gray; -fx-border-width: 2;");
-
-// Create a label with a camera emoji
-        Label cameraEmoji = new Label("📷");
-        cameraEmoji.setStyle("-fx-font-size: 40px; -fx-text-fill: gray;");
-
-// Use StackPane to center the emoji and profile image
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(cameraEmoji);
-
-// Adjust the alignment to move the emoji down
-        StackPane.setAlignment(cameraEmoji, Pos.CENTER); // Centered vertically and horizontally
-
-// Alternatively, you can use a manual translation to move it further down
-        cameraEmoji.setTranslateY(25); // Adjust this value to control how far down the emoji moves
-
-// Set mouse event to select profile image on click
-        profileImagePanel.setOnMouseClicked(_ -> {
-            selectProfileImage(primaryStage);
-            stackPane.getChildren().clear();  // Remove camera emoji when image is selected
+        passwordField.setOnKeyReleased(_ -> validatePasswordStrength(passwordField.getText()));
+        contentPane.getChildren().addAll(
+                signup_label,
+                first_name,
+                last_name,
+                usernsme,
+                profileImagePanel,
+                emailField,
+                phoneField,
+                passwordField,
+                ageField,
+                strengthPanel,
+                signUpButton,
+                loginLabel = createLoginText(primaryStage)
+        );
+        passwordField.setOnKeyReleased(event -> {
+            validatePasswordStrength(passwordField.getText());
+            signUpButton.setDisable(calculatePasswordStrength(passwordField.getText()) < 75);
         });
 
-        profileImagePanel.getChildren().add(stackPane); // Add StackPane to the profileImagePanel
 
-        // Strength panel for password
-        strengthPanel.setSpacing(5);
-        strengthPanel.getChildren().addAll(
-                new HBox(10, digitCheckIcon, new Label("Contains digits")),
-                new HBox(10, specialCharCheckIcon, new Label("Contains special characters")),
-                new HBox(10, upperCaseCheckIcon, new Label("Contains uppercase letter")),
-                new HBox(10, lowerCaseCheckIcon, new Label("Contains lowercase letter"))
-        );
-        strengthPanel.setVisible(false);
-
-        // Password field logic
-        passwordField.setOnKeyReleased(_ -> validatePasswordStrength(passwordField.getText()));
-        dayNightSwitch = new TopPanel();
-
-        // Sign-up button
-         signUpButton = new Button("Sign Up");
-        signUpButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white;");
-        signUpButton.setOnAction(_ -> new subscription_page(primaryStage));
-
-        // Login label
-        loginLabel=createLoginText(primaryStage);
-
-        setupContentPane(dayNightSwitch);
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int stageWidth = (int) screenSize.getWidth();
-        int stageHeight = (int) (screenSize.getHeight() / 1.1);
-        // Set initial positions and sizes
         updateLayout(stageWidth, stageHeight);
 
-        // Create the scene and add resize listener
         Scene scene = new Scene(contentPane, stageWidth, stageHeight);
-        scene.widthProperty().addListener((_, _, newVal) -> updateLayout(newVal.doubleValue(), scene.getHeight()));
-        scene.heightProperty().addListener((_, _, newVal) -> updateLayout(scene.getWidth(), newVal.doubleValue()));
-
+        scene.widthProperty().addListener((observable, oldVal, newVal) -> updateLayout(newVal.doubleValue(), scene.getHeight()));
+        scene.heightProperty().addListener((observable, oldVal, newVal) -> updateLayout(scene.getWidth(), newVal.doubleValue()));
         primaryStage.setScene(scene);
         primaryStage.show();
-        dayNightSwitch.addActionListener(this::updateColors);
-        updateColors();
     }
 
-    private void setupContentPane(TopPanel dayNightSwitch) {
-        contentPane.getChildren().addAll(dayNightSwitch.getCanvas(),
-                backButton, profileImagePanel, emailLabel, emailField, phoneLabel, phoneField,
-                passwordLabel, passwordField, ageLabel, ageField, strengthPanel, signUpButton, loginLabel
-        );
-        // Initial layout (before resize)
-        updateLayout(contentPane.getWidth(), contentPane.getHeight());
+    private void maincontentpane() {
+        Pane rightPane = new Pane();
+        rightPane.setStyle("-fx-background-color: #1c1c1c;");
+        rightPane.setPrefWidth((double) stageWidth / 2);
+        rightPane.setPrefHeight(stageHeight);
 
+        Pane insidePane = new Pane();
+        insidePane.setStyle("-fx-background-color: #636363; -fx-background-radius: 20px;");
+        double insidePaneWidth = (double) stageWidth / 4;
+        double insidePaneHeight = stageHeight / 1.5;
+        insidePane.setPrefWidth(insidePaneWidth);
+        insidePane.setPrefHeight(insidePaneHeight);
+        insidePane.setLayoutX((rightPane.getPrefWidth() - insidePane.getPrefWidth()) / 2);
+        insidePane.setLayoutY((rightPane.getPrefHeight() - insidePane.getPrefHeight()) / 2);
+        rightPane.getChildren().add(insidePane);
+
+        Pane leftPane = new Pane();
+        leftPane.setStyle("-fx-background-color: #3e1a47;");
+        leftPane.setPrefWidth((double) stageWidth / 2);
+        leftPane.setPrefHeight(stageHeight);
+        Pane leftInsidePane = new Pane();
+        leftInsidePane.setStyle("-fx-background-color: #a67c9d;" +
+                "-fx-background-radius: 20px;");
+
+        double leftInsidePaneWidth = (double) stageWidth / 4;
+        double leftInsidePaneHeight = stageHeight / 1.5;
+        leftInsidePane.setPrefWidth(leftInsidePaneWidth);
+        leftInsidePane.setPrefHeight(leftInsidePaneHeight);
+
+        leftInsidePane.setLayoutX((rightPane.getPrefWidth() - leftInsidePane.getPrefWidth()) / 2);
+        leftInsidePane.setLayoutY((rightPane.getPrefHeight() - leftInsidePane.getPrefHeight()) / 2);
+
+        Label titleLabel = new Label("WATCH IT");
+        titleLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 36));
+        titleLabel.setPadding(new Insets(0, 0, 35, 0));
+        titleLabel.setStyle("-fx-text-fill: white;");
+
+        Image cameraIcon = new Image("Acount/bxs_camera-movie.png");
+        ImageView cameraIconView = new ImageView(cameraIcon);
+        cameraIconView.setFitWidth(30);
+        cameraIconView.setFitHeight(30);
+        Text watchText = new Text("Watch Movies anytime");
+        watchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
+        watchText.setStyle("-fx-fill: white;");
+        HBox movie = new HBox(10);
+        movie.getChildren().addAll(cameraIconView, watchText);
+
+        Image searchIcon = new Image("Acount/majesticons_search-line.png");
+        ImageView searchIconView = new ImageView(searchIcon);
+        searchIconView.setFitWidth(30);
+        searchIconView.setFitHeight(30);
+        Text searchText = new Text("Search for any movie you want");
+        searchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
+        searchText.setStyle("-fx-fill: white;");
+        HBox search = new HBox(10);
+        search.getChildren().addAll(searchIconView, searchText);
+
+        Image listIconImage = new Image("Acount/jam_task-list.png");
+        ImageView listIconView = new ImageView(listIconImage);
+        listIconView.setFitWidth(30);
+        listIconView.setFitHeight(30);
+        Text watchedText = new Text("List your watched Movies");
+        watchedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
+        watchedText.setStyle("-fx-fill: white;");
+        HBox list = new HBox(10);
+        list.getChildren().addAll(listIconView, watchedText);
+
+        Image ratedIconImage = new Image("Acount/tabler_star-filled.png");
+        ImageView ratedIconView = new ImageView(ratedIconImage);
+        ratedIconView.setFitWidth(30);
+        ratedIconView.setFitHeight(30);
+        Text ratedText = new Text("Show the most rated movies");
+        ratedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
+        ratedText.setStyle("-fx-fill: white;");
+        HBox rated = new HBox(10);
+        rated.getChildren().addAll(ratedIconView, ratedText);
+
+        Image favoriteIconImage = new Image("Acount/solar_heart-bold.png");
+        ImageView favoriteIconView = new ImageView(favoriteIconImage);
+        favoriteIconView.setFitWidth(30);
+        favoriteIconView.setFitHeight(30);
+        Text favoriteText = new Text("Add Shows to your Favourite List");
+        favoriteText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
+        favoriteText.setStyle("-fx-fill: white;");
+        HBox favourite = new HBox(10);
+        favourite.getChildren().addAll(favoriteIconView, favoriteText);
+
+        VBox layout = new VBox(15);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(5, 5, 5, 5));
+
+        VBox titleBox = new VBox(titleLabel);
+        titleBox.setAlignment(Pos.CENTER);
+
+        VBox itemsBox = new VBox(40, movie, search, list, rated, favourite);
+        itemsBox.setAlignment(Pos.TOP_LEFT);
+
+        layout.getChildren().addAll(titleBox, itemsBox);
+        layout.setPrefWidth(stageWidth * 0.22);
+        layout.setPrefHeight(stageHeight);
+
+        layout.setLayoutX((leftInsidePane.getPrefWidth() - layout.getPrefWidth()) / 2);
+        layout.setLayoutY((leftInsidePane.getPrefHeight() - layout.getPrefHeight()) / 2);
+
+        leftInsidePane.getChildren().add(layout);
+        leftPane.getChildren().add(leftInsidePane);
+
+        rightPane.setLayoutX(leftPane.getPrefWidth());
+
+        contentPane.getChildren().addAll(leftPane, rightPane);
     }
+
     private void updateLayout(double width, double height) {
         double centerX = width / 2.0;
-        double ySpacing = 50;
-        double startY = (height / 5)+100;
+        double ySpacing = 43;
+        double startY = (height / 5) + 100;
+        signup_label.setLayoutX(centerX + 300);
+        signup_label.setLayoutY(startY - 80);
 
-        profileImagePanel.setLayoutX(centerX - 50);
-        profileImagePanel.setLayoutY(startY-120);
+        profileImagePanel.setLayoutX(centerX + 363);
+        profileImagePanel.setLayoutY(startY - 67);
 
-        emailLabel.setLayoutX(centerX - 150);
-        emailLabel.setLayoutY(startY);
+        first_name.setLayoutX(centerX + 295);
+        first_name.setLayoutY(startY);
 
-        emailField.setLayoutX(centerX - 75);
-        emailField.setLayoutY(startY);
+        last_name.setLayoutX(centerX + 397);
+        last_name.setLayoutY(startY);
+        usernsme.setLayoutX(centerX + 295);
+        usernsme.setLayoutY(startY + 2 * ySpacing);
 
-        phoneLabel.setLayoutX(centerX - 150);
-        phoneLabel.setLayoutY(startY + ySpacing);
-
-        phoneField.setLayoutX(centerX - 75);
+        ageField.setLayoutX(centerX + 295);
+        ageField.setLayoutY(startY + 3 * ySpacing);
+        phoneField.setLayoutX(centerX + 295);
         phoneField.setLayoutY(startY + ySpacing);
-
-        passwordLabel.setLayoutX(centerX - 150);
-        passwordLabel.setLayoutY(startY + 2 * ySpacing);
-
-        passwordField.setLayoutX(centerX - 75);
-        passwordField.setLayoutY(startY + 2 * ySpacing);
-
-        strengthPanel.setLayoutX(centerX - 75);
-        strengthPanel.setLayoutY(startY + 3 * ySpacing);
-
-        ageLabel.setLayoutY(isStrengthPanelVisible?startY + 5 * ySpacing:startY + 3 * ySpacing);
-        ageLabel.setLayoutX(centerX - 150);
-
-        ageField.setLayoutX(centerX - 75);
-        ageField.setLayoutY(isStrengthPanelVisible?startY + 5 * ySpacing:startY + 3 * ySpacing);
-
-
-
-       backButton.setLayoutX(10);
-        backButton.setLayoutY(10);
-
-        signUpButton.setLayoutX(centerX - 50);
-        signUpButton.setLayoutY(isStrengthPanelVisible?startY + 6 * ySpacing:startY + 4 * ySpacing);
-
-        loginLabel.setLayoutX(centerX - 85);
-        loginLabel.setLayoutY(isStrengthPanelVisible?startY + 7 * ySpacing:startY + 5 * ySpacing);
-
-        // Position the dayNightSwitch on the right
-        double dayNightSwitchWidth = 50; // Example width of the switch canvas
-        double margin = 110; // Margin from the right edge
-        dayNightSwitch.getCanvas().setLayoutX(width - dayNightSwitchWidth - margin);
-        dayNightSwitch.getCanvas().setLayoutY(10); // Top right corner
-        contentPane.requestLayout(); // This triggers a re-layout of the contentPane when anything changes
-
+        emailField.setLayoutX(centerX + 295);
+        emailField.setLayoutY(startY + 4 * ySpacing);
+        passwordField.setLayoutX(centerX + 295);
+        passwordField.setLayoutY(startY + 5 * ySpacing);
+        strengthPanel.setLayoutX(centerX+295);
+        strengthPanel.setLayoutY(startY + 6 * ySpacing);
+        signUpButton.setLayoutX(centerX + 310);
+        signUpButton.setLayoutY(startY + 7 * ySpacing);
+        loginLabel.setLayoutX(centerX + 295);
+        loginLabel.setLayoutY(startY + 8 * ySpacing);
     }
+
     private void updateLayoutAndRecalculate() {
         updateLayout(contentPane.getWidth(), contentPane.getHeight());
-        contentPane.requestLayout();  // Ensure re-layout is triggered
+        contentPane.requestLayout();
     }
-    private void validatePasswordStrength(String password) {
-        _hasDigits = Pattern.compile("[0-9]").matcher(password).find();
-        _hasSpecialChar = Pattern.compile("[!@#$%^&*(),.?\":{}|<>]").matcher(password).find();
-        _hasUppercase = Pattern.compile("[A-Z]").matcher(password).find();
-        _hasLowercase = Pattern.compile("[a-z]").matcher(password).find();
 
-        // Set the icon and color based on the password validation
-        digitCheckIcon.setText(_hasDigits ? "✅" : "❌");
-        digitCheckIcon.setTextFill(_hasDigits ? Color.GREEN : Color.RED);
+    private HBox createLoginText(Stage stage) {
+        Text loginText = new Text("Alraedy have an account?");
+        loginText.setFill(Color.WHITE);
+        Hyperlink loginLink = new Hyperlink("Login");
+        loginLink.setStyle("-fx-font-weight: bold; -fx-text-fill: #1425BB;");
+        loginLink.setOnMouseClicked(_ -> new LoginPageFX(stage));
+        HBox loginBox = new HBox(5);
+        loginBox.getChildren().addAll(loginText, loginLink);
+        loginBox.setAlignment(Pos.CENTER);
 
-        specialCharCheckIcon.setText(_hasSpecialChar ? "✅" : "❌");
-        specialCharCheckIcon.setTextFill(_hasSpecialChar ? Color.GREEN : Color.RED);
-
-        upperCaseCheckIcon.setText(_hasUppercase ? "✅" : "❌");
-        upperCaseCheckIcon.setTextFill(_hasUppercase ? Color.GREEN : Color.RED);
-
-        lowerCaseCheckIcon.setText(_hasLowercase ? "✅" : "❌");
-        lowerCaseCheckIcon.setTextFill(_hasLowercase ? Color.GREEN : Color.RED);
-
-        // Set visibility of the strength panel based on whether the password is empty or not
-        isStrengthPanelVisible = !password.isEmpty();
-        strengthPanel.setVisible(isStrengthPanelVisible);
-
-        // Update layout and trigger a re-layout if needed
-        updateLayoutAndRecalculate();
+        return loginBox;
     }
-    private Text createLoginText(Stage stage) {
-        Text loginText = new Text("If you have an account, Login!");
-        LinearGradient gradient = new LinearGradient(0, 0, 1, 1, true, javafx.scene.paint.CycleMethod.NO_CYCLE,
-                new Stop(0, Color.rgb(255, 165, 0)),
-                new Stop(0.5, Color.rgb(34, 193, 195)),
-                new Stop(1, Color.rgb(253, 29, 29)));
 
-        loginText.setFill(gradient);
-        loginText.setStyle("-fx-font-size: 14px; -fx-cursor: hand;");
-        loginText.setOnMouseClicked((MouseEvent _) -> new LoginPageFX(stage));
-        return loginText;
+    private Label labelSignup() {
+        Label signupTitle = new Label("Sign Up");
+        signupTitle.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Lato-Bold.ttf")).toString(), 40));
+        signupTitle.setStyle("-fx-text-fill: white;");
+        return signupTitle;
+    }
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&-]+(?:\\.[a-zA-Z0-9_+&-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
     private void handleSignUp(Stage primaryStage) {
         String email = emailField.getText().trim().toLowerCase();
         String password = passwordField.getText().trim();
         String phone = phoneField.getText().trim();
         String age = ageField.getText().trim();
+        String firstName = first_name.getText().trim();
+        String lastName = last_name.getText().trim();
+        String userName = usernsme.getText().trim();
 
-        if (email.isEmpty() || password.isEmpty() || phone.isEmpty() || age.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "All fields are required!");
+        if (email.isEmpty() || password.isEmpty() || phone.isEmpty() || age.isEmpty()|| firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty()) {
+            if (email.isEmpty()) {
+                playShakeTransition(emailField);
+            }
+            if (password.isEmpty()) {
+                playShakeTransition(passwordField);
+            }
+            if (phone.isEmpty()) {
+                playShakeTransition(phoneField);
+            }
+            if (age.isEmpty()) {
+                playShakeTransition(ageField);
+            }
+            if (firstName.isEmpty()) {
+                playShakeTransition(first_name);
+            }
+            if (lastName.isEmpty()) {
+                playShakeTransition(last_name);
+            }
+            if (userName.isEmpty()) {
+                playShakeTransition(usernsme);
+            }
+            showAlert(Alert.AlertType.ERROR, "Error! All fields are required!");
+            return;
+        }
+        if (!isValidEmail(email)) {
+            playShakeTransition(emailField);
+            showAlert(Alert.AlertType.ERROR, "Invalid email ! Please enter a valid email address.");
             return;
         }
 
         if (isValidPassword()) {
             try {
                 if (UserJsonHandler.emailExists(email)) {
+                    playShakeTransition(emailField);
                     showAlert(Alert.AlertType.ERROR, "Email already exists! Please use a different email.");
                     return;
                 }
 
-                // Ensure the user_photo_path is set
                 if (profileImage != null) {
                     user_photo_path = profileImage.getAbsolutePath();
                 }
 
-             //   UserJsonHandler.saveUser(new User(email, password, "customer", phone, age, user_photo_path));
+                UserJsonHandler.saveUser(new User( username,email, password, "customer",phone, age, user_photo_path));
                 showAlert(Alert.AlertType.INFORMATION, "Sign Up Successful!");
-                new LoginPageFX(primaryStage);
+                new subscription_page(primaryStage);
             } catch (IOException ex) {
                 showAlert(Alert.AlertType.ERROR, "Error saving user: " + ex.getMessage());
                 ex.printStackTrace();
             }
         } else {
             showAlert(Alert.AlertType.ERROR, "Password does not meet the criteria!");
+            playShakeTransition(passwordField);
         }
     }
 
+    private TextField createFirstNameField() {
+        TextField field = new TextField();
+        field.setPromptText("First Name");
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        applyNameStyle(field);
+        return field;
+    }
+
+    private TextField createLastNameField() {
+        TextField field = new TextField();
+        field.setPromptText("Last Name");
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        applyNameStyle(field);
+        return field;
+    }
+
+    private void applyNameStyle(TextField field) {
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(4);
+        shadow.setRadius(8);
+        shadow.setSpread(0.1);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.25));
+        field.setEffect(shadow);
+        field.setStyle("-fx-font-size: 12px;" +
+                "-fx-background-radius: 15px;" +
+                "-fx-border-radius: 15px;" +
+                "-fx-border-color: #CCCCCC;" +
+                "-fx-border-width: 1px;" +
+                "-fx-padding: 3px;" +
+                "-fx-background-color: #FFFFFF;");
+        field.setPrefWidth(95);
+        field.setPrefHeight(35);
+
+    }
+
+    private TextField createUserNameField() {
+        PasswordField field = new PasswordField();
+        field.setPromptText("User Name");
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        applyTextFieldStyle(field);
+        return field;
+    }
+
+    private PasswordField createPasswordField() {
+        PasswordField field = new PasswordField();
+        field.setPromptText("Password");
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        applyTextFieldStyle(field);
+        return field;
+    }
+
+    private TextField createEmailField() {
+        TextField field = new TextField();
+        field.setPromptText("Email");
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        applyTextFieldStyle(field);
+        return field;
+    }
+
+    private TextField createAgeField() {
+        TextField field = new TextField();
+        field.setPromptText("Age");
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        applyTextFieldStyle(field);
+        return field;
+    }
+
+    private TextField createPhoneField() {
+        TextField field = new TextField();
+        field.setPromptText("Phone");
+        field.setPrefWidth(270);
+        field.setPrefHeight(55);
+        applyTextFieldStyle(field);
+        return field;
+    }
+    private void applyTextFieldStyle(TextField field) {
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(4);
+        shadow.setRadius(8);
+        shadow.setSpread(0.1);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.25));
+        field.setEffect(shadow);
+        field.setStyle("-fx-font-size: 12px;" +
+                "-fx-background-radius: 15px;" +
+                "-fx-border-radius: 15px;" +
+                "-fx-border-color: #CCCCCC;" +
+                "-fx-border-width: 1px;" +
+                "-fx-padding: 3px;" +
+                "-fx-background-color: #FFFFFF;");
+        field.setPrefWidth(200);
+        field.setPrefHeight(35);
+    }
+
+    private Button createButton() {
+        Button button = new Button("Sign Up");
+        String colorHex = colorToHex();
+        button.setPrefWidth(170);
+        button.setPrefHeight(45);
+        applyButtonStyle(button, colorHex);
+        return button;
+    }
+
+    private void applyButtonStyle(Button button, String colorHex) {
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(4);
+        shadow.setRadius(8);
+        shadow.setSpread(0.1);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.25));
+        button.setEffect(shadow);
+        button.setStyle(String.format(
+                "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271); -fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; " +
+                        "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", colorHex));
+
+        button.setOnMouseEntered(_ ->
+                button.setStyle(String.format(
+                        "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271); -fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; " +
+                                "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", darkenColor())));
+
+        button.setOnMouseExited(_ ->
+                button.setStyle(String.format(
+                        "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271); -fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; " +
+                                "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", colorHex)));
+    }
+
+    private String colorToHex() {
+        return String.format("#%02X%02X%02X",
+                (int) (Color.PURPLE.getRed() * 255),
+                (int) (Color.PURPLE.getGreen() * 255),
+                (int) (Color.PURPLE.getBlue() * 255));
+    }
+
+    private String darkenColor() {
+        double factor = 0.8;
+        return String.format("#%02X%02X%02X",
+                (int) (Color.PURPLE.getRed() * 255 * factor),
+                (int) (Color.PURPLE.getGreen() * 255 * factor),
+                (int) (Color.PURPLE.getBlue() * 255 * factor));
+    }
+
+    private void setupProfileImagePanel(Stage primaryStage) {
+        double size = 60;
+
+        profileImagePanel.setPrefSize(size, size);
+        profileImagePanel.setStyle(
+                "-fx-background-color: #636363;" +
+                        "-fx-border-color: white;" +
+                        "-fx-border-width: 2;" +
+                        "-fx-background-radius: 30;" +
+                        "-fx-border-radius: 30;"
+        );
+
+        StackPane stackPane = new StackPane();
+        Label cameraEmoji = new Label("📷");
+        cameraEmoji.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+        stackPane.getChildren().add(cameraEmoji);
+        StackPane.setAlignment(cameraEmoji, Pos.CENTER);
+        cameraEmoji.setTranslateY(15);
+
+        profileImagePanel.setOnMouseClicked(_ -> selectProfileImage(primaryStage));
+        profileImagePanel.getChildren().add(stackPane);
+    }
     private void selectProfileImage(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
@@ -276,163 +534,101 @@ public class SignUpPage {
         profileImagePanel.getChildren().clear();  // Clear previous content
 
         if (profileImage != null) {
-            // Image selection
             Image img = new Image(profileImage.toURI().toString());
             ImageView imageView = new ImageView(img);
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
-
-            // Using StackPane to center the image
             StackPane centeredPane = new StackPane();
             centeredPane.getChildren().add(imageView);
             StackPane.setAlignment(imageView, Pos.CENTER);
-
-            // Add the centered pane to the profileImagePanel
             profileImagePanel.getChildren().add(centeredPane);
         } else {
-            // Show camera emoji if no profile image is selected
             Label cameraEmoji = new Label("📷");
             cameraEmoji.setStyle("-fx-font-size: 40px; -fx-text-fill: gray;");
-
-            // Use StackPane to center the emoji
             StackPane stackPane = new StackPane();
             stackPane.getChildren().add(cameraEmoji);
-
-            // Adjust the alignment to move the emoji down
             StackPane.setAlignment(cameraEmoji, Pos.CENTER);
-
-            // Optionally, move the emoji further down with translation
-            cameraEmoji.setTranslateY(25);  // Adjust this value to control how far down the emoji moves
-
-            // Add the emoji pane to the profileImagePanel
+            cameraEmoji.setTranslateY(25);
             profileImagePanel.getChildren().add(stackPane);
         }
     }
+    private void validatePasswordStrength(String password) {
+        int score = calculatePasswordStrength(password);
+        updateStrengthBar(score);
+        if (!password.isEmpty()) {
+            updatePasswordStrengthMessage(score);
+        } else {
+            passwordStrengthMessage.setText("");
+        }
+        updateLayoutAndRecalculate();
+    }
 
-    private Button createBackButton(Stage stage) {
-        Button backButton = new Button("← Back");
-        backButton.setStyle(
-                "-fx-background-color: transparent; " +
-                        "-fx-font-size: 16px; " +
-                        "-fx-text-fill: #333333; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-color: #888888; " +
-                        "-fx-border-radius: 20px; " +
-                        "-fx-padding: 10px 20px;"
-        );
+    private void setupStrengthPanel() {
+        strengthPanel.setSpacing(5);
+        strengthPanel.setStyle("-fx-background-color: #636363;");
+        strengthBar.setPrefWidth(150);
+        strengthBar.setPrefHeight(8);
+        strengthPanel.getChildren().add(strengthBar);
+        passwordStrengthMessage.setWrapText(true);
+        strengthPanel.getChildren().add(passwordStrengthMessage);
+        passwordField.setOnKeyReleased(event -> validatePasswordStrength(passwordField.getText()));
+    }
 
-        backButton.setOnMouseEntered(_ -> backButton.setStyle(
-                "-fx-background-color: transparent; " +
-                        "-fx-font-size: 16px; " +
-                        "-fx-text-fill: #0066cc; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-color: #0066cc; " +
-                        "-fx-border-radius: 20px; " +
-                        "-fx-padding: 10px 20px;"
-        ));
+    private int calculatePasswordStrength(String password) {
+        return (Pattern.compile("[0-9]").matcher(password).find() ? 25 : 0) +
+                (Pattern.compile("[!@#$%^&*(),.?\":{}|<>]").matcher(password).find() ? 25 : 0) +
+                (Pattern.compile("[A-Z]").matcher(password).find() ? 25 : 0) +
+                (Pattern.compile("[a-z]").matcher(password).find() ? 25 : 0);
+    }
 
-        // Updated setOnMouseExited handler
-        backButton.setOnMouseExited(_ -> {
-            if (TopPanel.isDayValue()) {
-                // Day theme styles
-                backButton.setStyle(
-                        "-fx-background-color: transparent; " +
-                                "-fx-font-size: 16px; " +
-                                "-fx-text-fill: #333333; " +
-                                "-fx-font-weight: bold; " +
-                                "-fx-border-width: 2px; " +
-                                "-fx-border-color: #888888; " +
-                                "-fx-border-radius: 20px; " +
-                                "-fx-padding: 10px 20px;"
-                );
-            } else {
-                // Night theme styles
-                backButton.setStyle(
-                        "-fx-background-color: transparent; " +
-                                "-fx-font-size: 16px; " +
-                                "-fx-text-fill: white; " +
-                                "-fx-font-weight: bold; " +
-                                "-fx-border-width: 2px; " +
-                                "-fx-border-color: white; " +
-                                "-fx-border-radius: 20px; " +
-                                "-fx-padding: 10px 20px;"
-                );
-            }
-        });
+    private void updateStrengthBar(int score) {
+        strengthBar.setProgress(score / 100.0);
+    }
+    private void updatePasswordStrengthMessage(int score) {
+        if (score > 0 && score <= 30) {
+            setPasswordStrengthMessage("Too weak! Add digits, special chars, upper/lowercase.", "#9C0000");
+        } else if (score > 30 && score < 70) {
+            setPasswordStrengthMessage("Weak. Add variety for strength.", "#FF7F00");
+        } else if (score >= 70 && score < 80) {
+            setPasswordStrengthMessage("Okay. Add more for a strong password.", "#FFEB3B");
+        } else if (score >= 80) {
+            setPasswordStrengthMessage("Strong password.", "#4CAF50");
+        }
+    }
 
-        backButton.setOnAction(_ -> new WelcomePage(stage));
-        return backButton;
+    private void setPasswordStrengthMessage(String message, String color) {
+        passwordStrengthMessage.setText(message);
+        passwordStrengthMessage.setTextFill(Color.web(color));
+        passwordStrengthMessage.setStyle("-fx-font-size: 11px;");
     }
 
     private boolean isValidPassword() {
-        return _hasDigits && _hasSpecialChar && _hasUppercase && _hasLowercase;
+        return calculatePasswordStrength(passwordField.getText()) >= 50;
     }
-    private void updateColors() {
-        boolean isDayMode = TopPanel.isDayValue();
-
-        String backgroundColor = isDayMode ? "white" : "#2b2b2b"; // Light or dark background
-        String textColor = isDayMode ? "black" : "white";         // Light or dark text
-        String buttonColor = isDayMode ? "#007bff" : "#0056b3";   // Light or dark button
-        String labelStyle = String.format("-fx-text-fill: %s;", textColor);
-
-        // Update the background of the content pane
-        contentPane.setStyle(String.format("-fx-background-color: %s;", backgroundColor));
-
-        // Update label styles
-        emailLabel.setStyle(labelStyle);
-        passwordLabel.setStyle(labelStyle);
-        phoneLabel.setStyle(labelStyle);
-        ageLabel.setStyle(labelStyle);
-        loginLabel.setStyle(String.format("-fx-text-fill: %s; -fx-underline: true; -fx-cursor: hand;", textColor));
-
-
-        // Update button styles
-        backButton.setStyle(String.format("-fx-font-size: 10px; -fx-font-weight: bold; -fx-background-color: %s; -fx-text-fill: %s;", backgroundColor, textColor));
-        signUpButton.setStyle(String.format("-fx-background-color: %s; -fx-text-fill: white;", buttonColor));
-
-        // Update strength panel styles
-        String checkIconColor = isDayMode ? "green" : "lightgreen";
-        String crossIconColor = isDayMode ? "red" : "darkred";
-        digitCheckIcon.setStyle(String.format("-fx-text-fill: %s;", _hasDigits ? checkIconColor : crossIconColor));
-        specialCharCheckIcon.setStyle(String.format("-fx-text-fill: %s;", _hasSpecialChar ? checkIconColor : crossIconColor));
-        upperCaseCheckIcon.setStyle(String.format("-fx-text-fill: %s;", _hasUppercase ? checkIconColor : crossIconColor));
-        lowerCaseCheckIcon.setStyle(String.format("-fx-text-fill: %s;", _hasLowercase ? checkIconColor : crossIconColor));
-
-        // Profile image panel border update
-        profileImagePanel.setStyle(String.format("-fx-background-color: %s; -fx-border-color: gray; -fx-border-width: 2;", backgroundColor));
-
-    if(isDayMode){
-        contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #f5f7fa, #c3cfe2);");
-        backButton.setStyle(
-                "-fx-background-color: transparent; " +
-                        "-fx-font-size: 16px; " +
-                        "-fx-text-fill: #333333; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-color: #888888; " +
-                        "-fx-border-radius: 20px; " +
-                        "-fx-padding: 10px 20px;"
-        );
-    }else{
-        contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #232526, #414345);");
-        backButton.setStyle(
-                "-fx-background-color: transparent; " +
-                        "-fx-font-size: 16px; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-color: white; " +
-                        "-fx-border-radius: 20px; " +
-                        "-fx-padding: 10px 20px;"
-        );
-    }
-
+    private void playShakeTransition(Node node) {
+        TranslateTransition transition = new TranslateTransition(Duration.millis(100), node);
+        transition.setFromX(0);
+        transition.setByX(10);
+        transition.setCycleCount(6);
+        transition.setAutoReverse(true);
+        transition.play();
     }
 
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type, message, ButtonType.OK);
+        alert.getDialogPane().getStyleClass().add("alert");
+        alert.getDialogPane().setStyle("-fx-background-color: #1c1c1c;");
+        alert.getDialogPane().setHeaderText(null);
+        alert.getDialogPane().setStyle("-fx-background-color: #fee2fe; -fx-text-fill: white;");
+        alert.getDialogPane().setContent(new VBox(10, new Text(message)));
+        Button alertButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+        alertButton.setStyle("-fx-background-color: #6a0dad; -fx-text-fill: white; -fx-font-weight: bold; -fx-alignment: center;");
+        alertButton.setOnMouseEntered(event -> alertButton.setStyle("-fx-background-color: #6a006a; -fx-text-fill: white;"));
+        alertButton.setOnMouseExited(event -> alertButton.setStyle("-fx-background-color: #b300b3; -fx-text-fill: white;"));
+        StackPane.setAlignment(alertButton, Pos.CENTER);
         alert.showAndWait();
     }
+
+
+
 }
