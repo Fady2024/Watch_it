@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 public class WelcomePage {
 
-    private static final String WELCOME_MESSAGE = "Welcome to FMS Market!";
+    private static final String WELCOME_MESSAGE = "Welcome to WATCH IT!";
     private static final String AUDIO_FILE_PATH = "/FMS.wav";
     private static final int ANIMATION_SPEED = 10;
     private static final int TYPING_SPEED = 70;

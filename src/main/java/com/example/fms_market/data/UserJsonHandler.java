@@ -1,12 +1,16 @@
 package com.example.fms_market.data;
 import com.example.fms_market.model.User;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserJsonHandler {
+    private static final String USER_JSON_PATH = "src/main/resources/data/users.json";
 
     public static void saveUser(User user) throws IOException {
         ObjectNode rootNode = DataManager.getUsersRootNode();
@@ -49,6 +53,16 @@ public class UserJsonHandler {
             }
         }
         return null;
+    }
+
+    public static String getUserPhotoPathByUsername(String username) throws IOException {
+        List<User> users = readUsers();
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return user.getUser_photo_path() != null ? user.getUser_photo_path() : "src/main/resources/Acount/user.png";
+            }
+        }
+        return "src/main/resources/Acount/user.png";
     }
 
     public static void addFavoriteShow(int userId, int showId) throws IOException {

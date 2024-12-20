@@ -21,7 +21,7 @@ public class HelloApplication extends Application {
         try {
             DataManager.loadData();
 
-            new HomePage(new User("feew","fwef","fwefw","fwef","Wefwe","fwefw"),stage);
+            new HomePage(new User("feew","fwef","fwefw","fwef","Wefwe","fwefw","hdh"),stage);
 
             DataManager.saveData();
         } catch (IOException e) {

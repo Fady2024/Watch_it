@@ -50,7 +50,6 @@ public class LoginPageFX {
     private final VBox passwordBox;
 
     public LoginPageFX(Stage stage) {
-        // Initialize passwordStack
         passwordStack = new StackPane();
 
         ComboBox<String> languageComboBox = new ComboBox<>();
@@ -345,7 +344,6 @@ public class LoginPageFX {
         noAccountLabel.setTextFill(Color.WHITE);
 
         Hyperlink signUpLink = new Hyperlink("Sign up");
-        //signUpLink.setTextFill(Color.DEEPSKYBLUE);
         signUpLink.setStyle("-fx-font-weight: bold; -fx-text-fill: #1425BB;");
         signUpLink.setOnMouseClicked(_ -> new SignUpPage(stage));
 
@@ -504,5 +502,6 @@ public class LoginPageFX {
             login.setTextFill(Color.WHITE);
         }
     }
-}
 
+
+}
