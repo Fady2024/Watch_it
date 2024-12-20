@@ -12,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -61,6 +63,13 @@ public class AddShow {
         stage.setTitle("AddShow");
         stage.show();
 
+        //Back Icon
+        Image backIconImage = new Image("Acount/stash_arrow-left-solid.png");
+        ImageView backIconView = new ImageView(backIconImage);
+        backIconView.setFitWidth(40);
+        backIconView.setFitHeight(40);
+        backIconView.setStyle("-fx-fill: white; -fx-cursor: hand;");
+        backIconView.setOnMouseClicked(e -> new HomePage(currentUser,stage));
 
         //Back button
         Text backLabel = new Text("Back");
@@ -717,6 +726,7 @@ public class AddShow {
         });
 
         int column=0,row=0;
+        showContainer.add(backIconView,column+2,row);
         showContainer.add(backLabel,column+3,row);
         showContainer.add(addLabel,column+3,row+2);
         showContainer.add(grid,column+3,row+4);
@@ -884,11 +894,11 @@ public class AddShow {
         HBox buttonBox = new HBox(10);
         Button cancelButton = new Button("Cancel");
         cancelButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
-                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;");
+                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;-fx-text-fill: black;");
         cancelButton.setPrefSize(180,50);
         Button confirmButton = new Button("Confirm");
         confirmButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
-                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;");
+                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;-fx-text-fill: black;");
         confirmButton.setPrefSize(180,50);
 
 
