@@ -144,8 +144,10 @@ public class ShowJsonHandler {
 
     public static void deleteShow(int id) throws IOException {
         ObjectNode rootNode = DataManager.getShowsRootNode();
+        //ObjectNode rootNode1 = DataManager.getCommentsRootNode();
         ArrayNode shows = (ArrayNode) rootNode.path("shows");
         ArrayNode ratings = (ArrayNode) rootNode.path("ratings");
+        //ArrayNode comments = (ArrayNode) rootNode1.path("comments");
 
         for (int i = 0; i < shows.size(); i++) {
             JsonNode show = shows.get(i);
@@ -167,6 +169,14 @@ public class ShowJsonHandler {
                 i--;
             }
         }
+
+//        for (int i = 0; i < comments.size(); i++) {
+//            JsonNode comment = comments.get(i);
+//            if (comment.get("show_id").asInt() == id) {
+//                comments.remove(i);
+//                i--;
+//            }
+//        }
 
         rootNode.set("shows", shows);
         rootNode.set("ratings", ratings);

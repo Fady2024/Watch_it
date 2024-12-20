@@ -66,6 +66,36 @@ public class ShowCardUtil {
         return showCard;
     }
 
+    public static VBox createDeleteShowCard(Show show, User user, Stage stage) {
+        VBox showCard = new VBox(5);
+        showCard.setAlignment(Pos.TOP_CENTER);
+
+        ImageView posterView = createPosterView(show.getPoster());
+        Label title = new Label(show.getTitle());
+        title.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
+        title.setTextFill(Color.WHITE);
+        title.setAlignment(Pos.CENTER);
+        title.setWrapText(true);
+        title.setMaxWidth(SHOW_CARD_WIDTH);
+
+
+        Rectangle rectangle = new Rectangle(SHOW_CARD_WIDTH, SHOW_CARD_HEIGHT - 30);
+        rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setArcWidth(20);
+        rectangle.setArcHeight(20);
+        StackPane posterContainer = new StackPane( posterView,rectangle);
+        posterContainer.setAlignment(Pos.TOP_LEFT);
+        StackPane.setAlignment(rectangle, Pos.BOTTOM_CENTER);
+        StackPane.setAlignment(createRatedIcon(show), Pos.TOP_RIGHT);
+        showCard.getChildren().addAll(posterContainer, title);
+
+        posterContainer.setOnMouseEntered(_ -> posterContainer.setStyle("-fx-background-color: #333333; -fx-border-color: #6A1B9A; -fx-border-width: 3; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        posterContainer.setOnMouseExited(_ -> posterContainer.setStyle(""));
+
+        return showCard;
+    }
+
     private static ImageView createPosterView(String posterPath) {
         Image moviePoster = new Image(posterPath, false);
         ImageView posterView = new ImageView(moviePoster);

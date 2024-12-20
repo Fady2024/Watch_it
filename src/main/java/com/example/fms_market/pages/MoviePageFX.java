@@ -28,7 +28,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.animation.FadeTransition;
@@ -210,13 +209,12 @@ public class MoviePageFX {
                         "-fx-background-radius: 20;" +
                         "-fx-font-size: 35px;"
         );
-        playButton.setOnAction(_ -> new VideoPlayerFX(show.getVideo(), stage));
+        playButton.setOnAction(_ -> new VideoPlayerFX(show.getVideo(),show.getId(), stage,user));
 
         Button addButton = new Button(LanguageManager.getLanguageBasedString("Hinzufügen","♥ Add"));
-        boolean isFavorite = ShowCardUtil.isShowFavorite(user.getId(), show.getId());
         addButton.setPrefWidth(120);
         addButton.setPrefHeight(50);
-        addButton.setStyle(String.format("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 18px; -fx-font-weight: bold;"));
+        addButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 18px; -fx-font-weight: bold;");
         addButton.setOnAction(_ -> {
             try {
                 if (ShowCardUtil.isShowFavorite(user.getId(), show.getId())) {
@@ -455,7 +453,7 @@ public class MoviePageFX {
         title.setMaxWidth(Double.MAX_VALUE);
         title.setPrefHeight(42);
         title.setAlignment(Pos.CENTER);
-        if(titleText=="Director")
+        if(titleText.equals("Director"))
         titleBox.getChildren().addAll(directorIconView,title);
         else
             titleBox.getChildren().addAll(castIconView,title);

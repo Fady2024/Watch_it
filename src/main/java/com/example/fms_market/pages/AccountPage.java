@@ -105,6 +105,12 @@ public class AccountPage {
             }
         });
 
+        Label usernameLabel = new Label("Username:");
+        usernameLabel.setStyle("-fx-text-fill: white;");
+        TextField usernameField = new TextField(currentUser.getUsername());
+        usernameField.setMaxWidth(300);
+        usernameField.setStyle("-fx-alignment: center;");
+
         Label emailLabel = new Label("Email:");
         emailLabel.setStyle("-fx-text-fill: white;");
         TextField emailField = new TextField(currentUser.getEmail());
@@ -233,7 +239,7 @@ public class AccountPage {
 
         HBox buttonBox = new HBox(10, cancelButton, applyButton);
         buttonBox.setStyle("-fx-alignment: center;");
-        userDetailsBox.getChildren().addAll(photoLabel, userPhoto, emailLabel, emailField, phoneLabel, phoneField, ageLabel, ageField, changePasswordLabel, buttonBox);
+        userDetailsBox.getChildren().addAll(photoLabel, userPhoto,usernameLabel, usernameField, emailLabel, emailField, phoneLabel, phoneField, ageLabel, ageField, changePasswordLabel, buttonBox);
 
         mainBox.getChildren().addAll(userDetailsLabel, userDetailsBox, languageButton);
         layout.setCenter(mainBox);

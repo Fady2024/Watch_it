@@ -12,10 +12,13 @@ import javafx.scene.control.TextField;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.awt.*;
@@ -60,6 +63,13 @@ public class AddShow {
         stage.setTitle("AddShow");
         stage.show();
 
+        //Back Icon
+        Image backIconImage = new Image("Acount/stash_arrow-left-solid.png");
+        ImageView backIconView = new ImageView(backIconImage);
+        backIconView.setFitWidth(40);
+        backIconView.setFitHeight(40);
+        backIconView.setStyle("-fx-fill: white; -fx-cursor: hand;");
+        backIconView.setOnMouseClicked(e -> new HomePage(currentUser,stage));
 
         //Back button
         Text backLabel = new Text("Back");
@@ -556,26 +566,47 @@ public class AddShow {
 
                 //add show to cast
                 try {
-                    if(castExists(actor1Field.getText()))
-                        addShowToCast(actor1Field.getText(),addTitleField.getText());
-                    if(castExists(actor2Field.getText()))
-                    {addShowToCast(actor2Field.getText(),addTitleField.getText());}
-                    if(castExists(actor3Field.getText()))
-                        addShowToCast(actor3Field.getText(),addTitleField.getText());
-                    if(castExists(actor4Field.getText()))
-                        addShowToCast(actor4Field.getText(),addTitleField.getText());
-                    if(castExists(actor5Field.getText()))
-                        addShowToCast(actor5Field.getText(),addTitleField.getText());
-                    if(castExists(actor6Field.getText()))
-                        addShowToCast(actor6Field.getText(),addTitleField.getText());
-                    if(castExists(actor7Field.getText()))
-                        addShowToCast(actor7Field.getText(),addTitleField.getText());
-                    if(castExists(actor8Field.getText()))
-                        addShowToCast(actor8Field.getText(),addTitleField.getText());
-                    if(castExists(actor9Field.getText()))
-                        addShowToCast(actor9Field.getText(),addTitleField.getText());
-                    if(castExists(actor10Field.getText()))
-                        addShowToCast(actor10Field.getText(),addTitleField.getText());
+                    if(!(hasSpace(actor1Field.getText())==-1)&&!(actor1Field.getText()).isEmpty()) {
+                        if (castExists(actor1Field.getText()))
+                            addShowToCast(actor1Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor2Field.getText())==-1)&&!(actor2Field.getText()).isEmpty()) {
+                        if (castExists(actor2Field.getText())) {
+                            addShowToCast(actor2Field.getText(), addTitleField.getText());
+                        }
+                    }
+                    if(!(hasSpace(actor3Field.getText())==-1)&&!(actor3Field.getText()).isEmpty()) {
+                        if (castExists(actor3Field.getText()))
+                            addShowToCast(actor3Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor4Field.getText())==-1)&&!(actor4Field.getText()).isEmpty()) {
+                        if (castExists(actor4Field.getText()))
+                            addShowToCast(actor4Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor5Field.getText())==-1)&&!(actor5Field.getText()).isEmpty()) {
+                        if (castExists(actor5Field.getText()))
+                            addShowToCast(actor5Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor6Field.getText())==-1)&&!(actor6Field.getText()).isEmpty()) {
+                        if (castExists(actor6Field.getText()))
+                            addShowToCast(actor6Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor7Field.getText())==-1)&&!(actor7Field.getText()).isEmpty()) {
+                        if (castExists(actor7Field.getText()))
+                            addShowToCast(actor7Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor8Field.getText())==-1)&&!(actor8Field.getText()).isEmpty()) {
+                        if (castExists(actor8Field.getText()))
+                            addShowToCast(actor8Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor9Field.getText())==-1)&&!(actor9Field.getText()).isEmpty()) {
+                        if (castExists(actor9Field.getText()))
+                            addShowToCast(actor9Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor10Field.getText())==-1)&&!(actor10Field.getText()).isEmpty()) {
+                        if (castExists(actor10Field.getText()))
+                            addShowToCast(actor10Field.getText(), addTitleField.getText());
+                    }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -646,26 +677,47 @@ public class AddShow {
 
                 //add show to cast
                 try {
-                    if(castExists(actor1Field.getText()))
-                        addShowToCast(actor1Field.getText(),addTitleField.getText());
-                    if(castExists(actor2Field.getText()))
-                    {addShowToCast(actor2Field.getText(),addTitleField.getText());}
-                    if(castExists(actor3Field.getText()))
-                        addShowToCast(actor3Field.getText(),addTitleField.getText());
-                    if(castExists(actor4Field.getText()))
-                        addShowToCast(actor4Field.getText(),addTitleField.getText());
-                    if(castExists(actor5Field.getText()))
-                        addShowToCast(actor5Field.getText(),addTitleField.getText());
-                    if(castExists(actor6Field.getText()))
-                        addShowToCast(actor6Field.getText(),addTitleField.getText());
-                    if(castExists(actor7Field.getText()))
-                        addShowToCast(actor7Field.getText(),addTitleField.getText());
-                    if(castExists(actor8Field.getText()))
-                        addShowToCast(actor8Field.getText(),addTitleField.getText());
-                    if(castExists(actor9Field.getText()))
-                        addShowToCast(actor9Field.getText(),addTitleField.getText());
-                    if(castExists(actor10Field.getText()))
-                        addShowToCast(actor10Field.getText(),addTitleField.getText());
+                    if(!(hasSpace(actor1Field.getText())==-1)&&!(actor1Field.getText()).isEmpty()) {
+                        if (castExists(actor1Field.getText()))
+                            addShowToCast(actor1Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor2Field.getText())==-1)&&!(actor2Field.getText()).isEmpty()) {
+                        if (castExists(actor2Field.getText())) {
+                            addShowToCast(actor2Field.getText(), addTitleField.getText());
+                        }
+                    }
+                    if(!(hasSpace(actor3Field.getText())==-1)&&!(actor3Field.getText()).isEmpty()) {
+                        if (castExists(actor3Field.getText()))
+                            addShowToCast(actor3Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor4Field.getText())==-1)&&!(actor4Field.getText()).isEmpty()) {
+                        if (castExists(actor4Field.getText()))
+                            addShowToCast(actor4Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor5Field.getText())==-1)&&!(actor5Field.getText()).isEmpty()) {
+                        if (castExists(actor5Field.getText()))
+                            addShowToCast(actor5Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor6Field.getText())==-1)&&!(actor6Field.getText()).isEmpty()) {
+                        if (castExists(actor6Field.getText()))
+                            addShowToCast(actor6Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor7Field.getText())==-1)&&!(actor7Field.getText()).isEmpty()) {
+                        if (castExists(actor7Field.getText()))
+                            addShowToCast(actor7Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor8Field.getText())==-1)&&!(actor8Field.getText()).isEmpty()) {
+                        if (castExists(actor8Field.getText()))
+                            addShowToCast(actor8Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor9Field.getText())==-1)&&!(actor9Field.getText()).isEmpty()) {
+                        if (castExists(actor9Field.getText()))
+                            addShowToCast(actor9Field.getText(), addTitleField.getText());
+                    }
+                    if(!(hasSpace(actor10Field.getText())==-1)&&!(actor10Field.getText()).isEmpty()) {
+                        if (castExists(actor10Field.getText()))
+                            addShowToCast(actor10Field.getText(), addTitleField.getText());
+                    }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -674,6 +726,7 @@ public class AddShow {
         });
 
         int column=0,row=0;
+        showContainer.add(backIconView,column+2,row);
         showContainer.add(backLabel,column+3,row);
         showContainer.add(addLabel,column+3,row+2);
         showContainer.add(grid,column+3,row+4);
@@ -701,59 +754,89 @@ public class AddShow {
     }
 
     private void addActorPopup() {
-        Director director = new Director();
+        Cast cast = new Cast();
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.initOwner(stage);
         popupStage.initStyle(StageStyle.UNDECORATED);
 
-        VBox popupVBox = new VBox(1);
+        VBox popupVBox = new VBox(10);
+        VBox fnBox = new VBox(10);
+        VBox lnBox = new VBox(10);
+        VBox texts = new VBox(10);
+
+        Text existText = new Text("This actor doesn't exist");
+        existText.setFill(Paint.valueOf("#B5B5B5"));
+        existText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),14));
+        Text addNewText = new Text("Add new Actor");
+        addNewText.setFill(Paint.valueOf("white"));
+        addNewText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),20));
+        texts.getChildren().addAll(existText,addNewText);
 
         Text firstnameLabel = CreateLabel("Firstname");
         TextField firstnameField = CreateField("Firstname");
+        firstnameField.setPrefSize(180,60);
+        fnBox.getChildren().addAll(firstnameLabel,firstnameField);
 
         Text lastnameLabel = CreateLabel("Lastname");
         TextField lastnameField = CreateField("Lastname");
+        lastnameField.setPrefSize(180,60);
+        lnBox.getChildren().addAll(lastnameLabel,lastnameField);
 
-        Text showsLabel = CreateLabel("Shows");
-        TextField showsField = CreateField("show 1,show 2");
-
+        VBox ageBox = new VBox(10);
         Text ageLabel = CreateLabel("Age");
         TextField ageField = CreateField("Age");
+        ageField.setPrefSize(380,60);
+        ageBox.getChildren().addAll(ageLabel,ageField);
 
+        VBox genderBox = new VBox(10);
         Text genderLabel = CreateLabel("Gender");
         TextField genderField = CreateField("Gender");
+        genderField.setPrefSize(380,60);
+        genderBox.getChildren().addAll(genderLabel,genderField);
 
+        VBox nationalityBox = new VBox(10);
         Text nationalityLabel = CreateLabel("Nationality");
         TextField nationalityField = CreateField("Nationality");
+        nationalityField.setPrefSize(380,60);
+        nationalityBox.getChildren().addAll(nationalityLabel,nationalityField);
 
         HBox buttonBox = new HBox(10);
         Button cancelButton = new Button("Cancel");
+        cancelButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
+        "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;");
+        cancelButton.setPrefSize(180,50);
         Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
+                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;");
+        confirmButton.setPrefSize(180,50);
+
 
         cancelButton.setOnAction(e -> popupStage.close());
         confirmButton.setOnAction(e -> {
-            director.setFirstName(firstnameField.getText());
-            director.setLastName(lastnameField.getText());
-            director.setShows(Arrays.asList(showsField.getText().split("\\s*,\\s*")));
-            director.setAge(Integer.parseInt(ageField.getText()));
-            director.setGender(genderField.getText());
-            director.setNationality(nationalityField.getText());
+            cast.setFirst_name(firstnameField.getText());
+            cast.setLast_name(lastnameField.getText());
+            cast.setAge(Integer.parseInt(ageField.getText()));
+            cast.setGender(genderField.getText());
+            cast.setNationality(nationalityField.getText());
             try {
-                DirectorJsonHandler.saveDirector(director);
+                CastJsonHandler.saveCast(cast);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            showAlert("Success","Director Added Succesfully");
+            showAlert("Success","Actor Added Succesfully");
             popupStage.close();
         });
-
+        HBox nameBox = new HBox(20);
+        nameBox.setAlignment(Pos.CENTER);
+        nameBox.getChildren().addAll(fnBox,lnBox);
+        popupVBox.setAlignment(Pos.CENTER);
         buttonBox.getChildren().addAll(cancelButton, confirmButton);
-        popupVBox.getChildren().addAll(firstnameLabel, firstnameField, lastnameLabel,lastnameField, showsLabel,
-                showsField,ageLabel,ageField,genderLabel,genderField,nationalityLabel, buttonBox);
-        popupVBox.setStyle("-fx-padding: 20px; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
+        popupVBox.getChildren().addAll(texts,nameBox,ageBox,genderBox,nationalityBox, buttonBox);
+        popupVBox.setPadding(new Insets(30,60,30,60));
+        popupVBox.setStyle("-fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
 
-        Scene popupScene = new Scene(popupVBox, 600, 400);
+        Scene popupScene = new Scene(popupVBox, 500, 600);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
         popupStage.setScene(popupScene);
         popupStage.setTitle("Add New Actor");
@@ -767,35 +850,63 @@ public class AddShow {
         popupStage.initOwner(stage);
         popupStage.initStyle(StageStyle.UNDECORATED);
 
-        VBox popupVBox = new VBox(1);
+        VBox popupVBox = new VBox(10);
+        VBox fnBox = new VBox(10);
+        VBox lnBox = new VBox(10);
+        VBox texts = new VBox(10);
+
+        Text existText = new Text("This director doesn't exist");
+        existText.setFill(Paint.valueOf("#B5B5B5"));
+        existText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),14));
+        Text addNewText = new Text("Add new Director");
+        addNewText.setFill(Paint.valueOf("white"));
+        addNewText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),20));
+        texts.getChildren().addAll(existText,addNewText);
 
         Text firstnameLabel = CreateLabel("Firstname");
         TextField firstnameField = CreateField("Firstname");
+        firstnameField.setPrefSize(180,60);
+        fnBox.getChildren().addAll(firstnameLabel,firstnameField);
 
         Text lastnameLabel = CreateLabel("Lastname");
         TextField lastnameField = CreateField("Lastname");
+        lastnameField.setPrefSize(180,60);
+        lnBox.getChildren().addAll(lastnameLabel,lastnameField);
 
-        Text showsLabel = CreateLabel("Shows");
-        TextField showsField = CreateField("show 1,show 2");
-
+        VBox ageBox = new VBox(10);
         Text ageLabel = CreateLabel("Age");
         TextField ageField = CreateField("Age");
+        ageField.setPrefSize(380,60);
+        ageBox.getChildren().addAll(ageLabel,ageField);
 
+        VBox genderBox = new VBox(10);
         Text genderLabel = CreateLabel("Gender");
         TextField genderField = CreateField("Gender");
+        genderField.setPrefSize(380,60);
+        genderBox.getChildren().addAll(genderLabel,genderField);
 
+        VBox nationalityBox = new VBox(10);
         Text nationalityLabel = CreateLabel("Nationality");
         TextField nationalityField = CreateField("Nationality");
+        nationalityField.setPrefSize(380,60);
+        nationalityBox.getChildren().addAll(nationalityLabel,nationalityField);
 
         HBox buttonBox = new HBox(10);
         Button cancelButton = new Button("Cancel");
+        cancelButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
+                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;-fx-text-fill: black;");
+        cancelButton.setPrefSize(180,50);
         Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
+                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;-fx-text-fill: black;");
+        confirmButton.setPrefSize(180,50);
+
+
 
         cancelButton.setOnAction(e -> popupStage.close());
         confirmButton.setOnAction(e -> {
             director.setFirstName(firstnameField.getText());
             director.setLastName(lastnameField.getText());
-            director.setShows(Arrays.asList(showsField.getText().split("\\s*,\\s*")));
             director.setAge(Integer.parseInt(ageField.getText()));
             director.setGender(genderField.getText());
             director.setNationality(nationalityField.getText());
@@ -807,13 +918,16 @@ public class AddShow {
             showAlert("Success","Director Added Succesfully");
             popupStage.close();
         });
-
+        HBox nameBox = new HBox(20);
+        nameBox.setAlignment(Pos.CENTER);
+        nameBox.getChildren().addAll(fnBox,lnBox);
+        popupVBox.setAlignment(Pos.CENTER);
         buttonBox.getChildren().addAll(cancelButton, confirmButton);
-        popupVBox.getChildren().addAll(firstnameLabel, firstnameField, lastnameLabel,lastnameField, showsLabel,
-                showsField,ageLabel,ageField,genderLabel,genderField,nationalityLabel, buttonBox);
-        popupVBox.setStyle("-fx-padding: 20px; -fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
+        popupVBox.getChildren().addAll(texts,nameBox,ageBox,genderBox,nationalityBox, buttonBox);
+        popupVBox.setPadding(new Insets(30,60,30,60));
+        popupVBox.setStyle("-fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
 
-        Scene popupScene = new Scene(popupVBox, 600, 400);
+        Scene popupScene = new Scene(popupVBox, 500, 600);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
         popupStage.setScene(popupScene);
         popupStage.setTitle("Add New Director");
@@ -901,14 +1015,20 @@ public class AddShow {
     }
 
     public boolean castExists(String fullname) throws IOException {
-        fullname = fullname.toLowerCase();
-        String[] name = fullname.split(" ");
-        String firstname = name[0];
-        String lastname = name[1];
-        List<Cast> allCast = CastJsonHandler.readCast();
-        for (int i = 0; i < allCast.size(); i++) {
-            if ((allCast.get(i).getFirst_name().toLowerCase() + allCast.get(i).getLast_name().toLowerCase()).equals(firstname + lastname)) {
-                return true;
+        if(hasSpace(fullname)==-1)
+        {
+            showAlert("Wrong Cast Name","Please Enter Fullname");
+        }
+        else {
+            fullname = fullname.toLowerCase();
+            String[] name = fullname.split(" ");
+            String firstname = name[0];
+            String lastname = name[1];
+            List<Cast> allCast = CastJsonHandler.readCast();
+            for (int i = 0; i < allCast.size(); i++) {
+                if ((allCast.get(i).getFirst_name().toLowerCase() + allCast.get(i).getLast_name().toLowerCase()).equals(firstname + lastname)) {
+                    return true;
+                }
             }
         }
         return false;

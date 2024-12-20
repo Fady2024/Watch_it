@@ -1,5 +1,3 @@
-// src/main/java/com/example/fms_market/Banner.java
-
 package com.example.fms_market.util;
 
 import com.example.fms_market.admin.Revenue_page;
@@ -12,11 +10,9 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -102,10 +98,6 @@ public class Banner {
         banner.getChildren().addAll(commonComponents);
 
         return banner;
-    }
-
-    public static void setSidebarListener(Sidebar.SidebarListener listener) {
-        sidebarListener = listener;
     }
 
     private static Text createNavLabel(String text, boolean isCurrentPage, Runnable action) {
