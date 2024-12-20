@@ -5,6 +5,7 @@ import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.Comment;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.Banner;
+import com.example.fms_market.util.LanguageManager;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -117,7 +118,7 @@ public class VideoPlayerFX {
         commentsContainer.setStyle("-fx-background-color: #333333; -fx-padding: 16; -fx-border-radius: 8;");
         loadComments();
 
-        Button addCommentButton = new Button("Add Comment");
+        Button addCommentButton = new Button(LanguageManager.getLanguageBasedString("Kommentar hinzufügen","Add Comment"));
         addCommentButton.setTranslateX(20);
         addCommentButton.setStyle("-fx-background-color: #8e5bdc; -fx-text-fill: black;-fx-border-radius: 10; -fx-background-radius: 10;");
         addCommentButton.setOnAction(e -> showAddCommentDialog());
@@ -130,7 +131,7 @@ public class VideoPlayerFX {
         try {
             List<Comment> comments = CommentJsonHandler.readComments(videoId);
             if (comments.isEmpty()) {
-                Text noCommentsText = new Text("No comments yet. Be the first to comment!");
+                Text noCommentsText = new Text(LanguageManager.getLanguageBasedString("Noch keine Kommentare. Sei der Erste, der einen Kommentar schreibt!","No comments yet. Be the first to comment!"));
                 noCommentsText.setStyle("-fx-font-size: 14px; -fx-fill: white;");
                 commentsContainer.getChildren().add(noCommentsText);
             } else {
@@ -174,7 +175,7 @@ public class VideoPlayerFX {
         Text commentText = new Text(comment.getCommentText());
         commentText.setStyle("-fx-font-size: 14px; -fx-fill: white;");
 
-        Button replyButton = new Button("Reply");
+        Button replyButton = new Button(LanguageManager.getLanguageBasedString("Antwort","Reply"));
         replyButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         replyButton.setOnAction(e -> showAddReplyDialog(comment));
 
@@ -189,7 +190,8 @@ public class VideoPlayerFX {
                 repliesBox.getChildren().add(createReplyBox(reply));
             }
 
-            Button toggleRepliesButton = new Button(STR."Show Replies (\{comment.getReplies().size()})");
+            Button toggleRepliesButton = new Button(
+                    STR."Show Replies (\{comment.getReplies().size()})");
             toggleRepliesButton.setOnAction(e -> {
                 if (repliesBox.isVisible()) {
                     repliesBox.setVisible(false);
@@ -275,12 +277,12 @@ public class VideoPlayerFX {
         dialogLayout.setStyle("-fx-padding: 16; -fx-background-color: rgba(68, 68, 68, 0.9); -fx-border-radius: 10; -fx-background-radius: 10;");
 
         TextArea commentField = new TextArea();
-        commentField.setPromptText("Write your comment");
+        commentField.setPromptText(LanguageManager.getLanguageBasedString("Schreiben Sie Ihren Kommentar","Write your comment"));
 
         HBox buttonBox = new HBox(10);
         buttonBox.setStyle("-fx-alignment: center; -fx-padding: 10 0 0 0;");
 
-        Button submitButton = new Button("Submit");
+        Button submitButton = new Button(LanguageManager.getLanguageBasedString("Einreichen","Submit"));
         submitButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         submitButton.setOnAction(e -> {
             try {
@@ -293,13 +295,13 @@ public class VideoPlayerFX {
             }
         });
 
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
         cancelButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
         cancelButton.setOnAction(e -> commentDialog.close());
 
         buttonBox.getChildren().addAll(submitButton, cancelButton);
 
-        Label addCommentLabel = new Label("Add Your Comment");
+        Label addCommentLabel = new Label(LanguageManager.getLanguageBasedString("Hinzufügen Dein Kommentar","Add Your Comment"));
         addCommentLabel.setStyle("-fx-text-fill: white;");
 
         dialogLayout.getChildren().addAll(addCommentLabel, commentField, buttonBox);
@@ -315,20 +317,20 @@ public class VideoPlayerFX {
         dialogLayout.setStyle("-fx-padding: 16; -fx-background-color: rgba(68, 68, 68, 0.9); -fx-border-radius: 10; -fx-background-radius: 10;");
 
         TextArea replyField = new TextArea();
-        replyField.setPromptText("Write your reply");
+        replyField.setPromptText(LanguageManager.getLanguageBasedString("Schreiben Sie Ihre Antwort","Write your reply"));
 
         HBox buttonBox = new HBox(10);
         buttonBox.setStyle("-fx-alignment: center; -fx-padding: 10 0 0 0;");
 
         Button submitButton = getSubmitButton(parentComment, replyField);
 
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
         cancelButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
         cancelButton.setOnAction(e -> replyDialog.close());
 
         buttonBox.getChildren().addAll(submitButton, cancelButton);
 
-        Label addReplyLabel = new Label("Add Your Reply");
+        Label addReplyLabel = new Label(LanguageManager.getLanguageBasedString("Fügen Sie Ihre Antwort hinzu","Add Your Reply"));
         addReplyLabel.setStyle("-fx-text-fill: white;");
 
         dialogLayout.getChildren().addAll(addReplyLabel, replyField, buttonBox);
@@ -340,7 +342,7 @@ public class VideoPlayerFX {
 
     @NotNull
     private Button getSubmitButton(Comment parentComment, TextArea replyField) {
-        Button submitButton = new Button("Submit");
+        Button submitButton = new Button(LanguageManager.getLanguageBasedString("Einreichen","Submit"));
         submitButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         submitButton.setOnAction(e -> {
             try {

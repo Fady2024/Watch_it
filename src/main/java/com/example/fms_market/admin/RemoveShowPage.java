@@ -77,17 +77,17 @@ public class RemoveShowPage {
         }
 
         // Remove Button
-        Button removeButton = new Button("Remove Show");
+        Button removeButton = new Button(LanguageManager.getLanguageBasedString("Show entfernen","Remove Show"));
         removeButton.setOnAction(_ -> {
             String selectedTitle = showSelector.getValue();
             if (selectedTitle == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "No show selected.");
+                showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler","Error"), LanguageManager.getLanguageBasedString("Keine Show ausgewählt.","No show selected."));
                 return;
             }
 
             int showId = getShowIdByTitle(selectedTitle);
             if (showId == -1) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Show not found.");
+                showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler","Error"), LanguageManager.getLanguageBasedString("Anzeige nicht gefunden.","Show not found."));
                 return;
             }
 
@@ -99,13 +99,13 @@ public class RemoveShowPage {
                     // Reload data on the JavaFX Application Thread
                     Platform.runLater(() -> {
                         reloadShowData();
-                        showAlert(Alert.AlertType.INFORMATION, "Success", "Show removed successfully.");
+                        showAlert(Alert.AlertType.INFORMATION, LanguageManager.getLanguageBasedString("Erfolg","Success"), LanguageManager.getLanguageBasedString("Show erfolgreich entfernt.","Show removed successfully."));
                         // Refresh all pages
                         refreshAllPages();
                     });
                 } catch (IOException e) {
                     Platform.runLater(() -> {
-                        showAlert(Alert.AlertType.ERROR, "Error", "Failed to remove the show.");
+                        showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler","Error"), LanguageManager.getLanguageBasedString("Die Sendung konnte nicht entfernt werden.","Failed to remove the show."));
                         e.printStackTrace();
                     });
                 }
@@ -195,7 +195,7 @@ public class RemoveShowPage {
         backIconView.setFitHeight(40);
 
         //Back button
-        Text backLabel = new Text("Back");
+        Text backLabel = new Text(LanguageManager.getLanguageBasedString("Zurück","Back"));
         backLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),32));
         backLabel.setStyle("-fx-fill: white;" );
 
@@ -205,7 +205,7 @@ public class RemoveShowPage {
         backBox.setOnMouseClicked(e -> new HomePage(user,stage));
 
         //Add new Show Label
-        Text deleteLabel = new Text("Select a Show to Delete:");
+        Text deleteLabel = new Text(LanguageManager.getLanguageBasedString("Wählen Sie eine Sendung zum Löschen aus:","Select a Show to Delete:"));
         deleteLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),34));
         deleteLabel.setStyle("-fx-fill: white;");
         GridPane grid = new GridPane();
@@ -319,23 +319,23 @@ public class RemoveShowPage {
         VBox popupVBox = new VBox(50);
         VBox texts = new VBox(10);
 
-        Text addNewText = new Text("Are You Sure You Want to Delete This Show From WATCH IT?");
+        Text addNewText = new Text(LanguageManager.getLanguageBasedString("Möchten Sie diese Sendung wirklich aus WATCH IT löschen?","Are You Sure You Want to Delete This Show From WATCH IT?"));
         addNewText.setFill(Paint.valueOf("white"));
         addNewText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),20));
         texts.getChildren().addAll(addNewText);
         addNewText.setWrappingWidth(380);
         HBox buttonBox = new HBox(10);
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
         cancelButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
                 "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;-fx-text-fill: black;");
         cancelButton.setPrefSize(180,50);
-        Button confirmButton = new Button("Confirm");
+        Button confirmButton = new Button(LanguageManager.getLanguageBasedString("Bestätigen","Confirm"));
         confirmButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
                 "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;-fx-text-fill: black;");
         confirmButton.setPrefSize(180,50);
         cancelButton.setOnAction(e -> popupStage.close());
         confirmButton.setOnAction(e-> {
-            showAlert("Success", "Show Deleted Succesfully");
+            showAlert(LanguageManager.getLanguageBasedString("Erfolg","Success"), LanguageManager.getLanguageBasedString("Erfolgreich gelöscht anzeigen","Show Deleted Successfully"));
             popupStage.close();
             new HomePage(user,stage);
             try {
@@ -353,7 +353,7 @@ public class RemoveShowPage {
         Scene popupScene = new Scene(popupVBox, 500, 250);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
         popupStage.setScene(popupScene);
-        popupStage.setTitle("Confirm Delete");
+        popupStage.setTitle(LanguageManager.getLanguageBasedString("Löschen bestätigen","Confirm Delete"));
         popupStage.show();
     }
     private void showAlert(String title, String message) {

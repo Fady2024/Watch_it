@@ -221,16 +221,14 @@ public class AccountPage {
         }));
 
         englishLabel.setOnMouseClicked(_ -> {
-            if (!"English".equals(LanguageManager.getInstance().getLanguage())) {
                 LanguageManager.getInstance().toggleLanguage();
-            }
+
             popup.hide();
         });
 
         germanLabel.setOnMouseClicked(_ -> {
-            if (!"German".equals(LanguageManager.getInstance().getLanguage())) {
                 LanguageManager.getInstance().toggleLanguage();
-            }
+
             popup.hide();
         });
 

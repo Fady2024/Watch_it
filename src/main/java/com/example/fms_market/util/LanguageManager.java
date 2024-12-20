@@ -22,7 +22,6 @@ public class LanguageManager {
         return instance;
     }
 
-    // دالة لتغيير اللغة
     public void toggleLanguage() {
         if ("English".equals(language.get())) {
             language.set("German");
@@ -32,19 +31,16 @@ public class LanguageManager {
         notifyListeners();
     }
 
-    // إضافة مستمع للتغيير
     public void addActionListener(Runnable listener) {
         actionListeners.add(listener);
     }
 
-    // إعلام المستمعين عند حدوث تغيير في اللغة
     private void notifyListeners() {
         for (Runnable listener : actionListeners) {
             listener.run();
         }
     }
 
-    // الحصول على خاصية اللغة
     public StringProperty languageProperty() {
         return language;
     }
@@ -53,26 +49,22 @@ public class LanguageManager {
         return language.get();
     }
     public static Label TcreateLanguageitle(String g, String e, String fontSize, String color) {
-        // إنشاء خاصية للنص
         StringProperty textProperty = new SimpleStringProperty();
 
-        // إضافة مستمع لتحديث النص عند تغيير اللغة
         LanguageManager.getInstance().addActionListener(() -> {
             if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-                textProperty.set(g); // النص باللغة الألمانية
+                textProperty.set(g);
             } else {
-                textProperty.set(e); // النص باللغة الإنجليزية
+                textProperty.set(e);
             }
         });
 
-        // ضبط النص الحالي بناءً على اللغة الحالية
         if ("German".equals(LanguageManager.getInstance().getLanguage())) {
             textProperty.set(g);
         } else {
             textProperty.set(e);
         }
 
-        // إنشاء كائن Label وربطه بالخاصية
         Label label = new Label();
         label.setStyle("-fx-font-size: " + fontSize + "; -fx-text-fill: " + color + ";");
         label.textProperty().bind(textProperty);
@@ -145,30 +137,25 @@ public class LanguageManager {
 
 
     public static TextField languageTextField(String g, String e, String fontSize, String color) {
-        // إنشاء StringProperty لتخزين النص التلميحي
         StringProperty promptTextProperty = new SimpleStringProperty();
 
-        // إضافة مستمع لتغيير اللغة
         LanguageManager.getInstance().addActionListener(() -> {
             if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-                promptTextProperty.set(g);  // إذا كانت اللغة ألمانية
+                promptTextProperty.set(g);
             } else {
-                promptTextProperty.set(e);  // إذا كانت اللغة الإنجليزية أو أخرى
+                promptTextProperty.set(e);
             }
         });
 
-        // تعيين النص التلميحي بناءً على اللغة الحالية
         if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-            promptTextProperty.set(g);  // تعيين النص التلميحي لألمانية
+            promptTextProperty.set(g);
         } else {
-            promptTextProperty.set(e);  // تعيين النص التلميحي للإنجليزية
+            promptTextProperty.set(e);
         }
 
-        // إنشاء TextField وتعيين الخصائص الخاصة به
         TextField textField = new TextField();
         textField.setStyle("-fx-font-size: " + fontSize + "; -fx-text-fill: " + color + ";");
 
-        // ربط النص التلميحي بـ promptTextProperty
         textField.promptTextProperty().bind(promptTextProperty);
 
         return textField;

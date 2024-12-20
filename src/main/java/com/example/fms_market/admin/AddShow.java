@@ -5,6 +5,7 @@ import com.example.fms_market.data.DirectorJsonHandler;
 import com.example.fms_market.pages.HomePage;
 import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.*;
+import com.example.fms_market.util.LanguageManager;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -60,7 +61,7 @@ public class AddShow {
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle("AddShow");
+        stage.setTitle(LanguageManager.getLanguageBasedString("HinzufügenAnzeigen","AddShow"));
         stage.show();
 
         //Back Icon
@@ -72,7 +73,7 @@ public class AddShow {
         backIconView.setOnMouseClicked(e -> new HomePage(currentUser,stage));
 
         //Back button
-        Text backLabel = new Text("Back");
+        Text backLabel = new Text(LanguageManager.getLanguageBasedString("Zurück","Back"));
         backLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),32));
         backLabel.setStyle("-fx-fill: white; -fx-cursor: hand;");
         backLabel.setOnMouseClicked(e -> new HomePage(currentUser,stage));
@@ -81,7 +82,7 @@ public class AddShow {
         boolean checkEmptyFields = false;
 
         //Add new Show Label
-        Text addLabel = new Text("Add New Show");
+        Text addLabel = new Text(LanguageManager.getLanguageBasedString("Neue Show hinzufügen","Add New Show"));
         addLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),44));
         addLabel.setStyle("-fx-fill: white;");
         GridPane grid = new GridPane();
@@ -89,20 +90,20 @@ public class AddShow {
         grid.setVgap(10);
 
         //Add Title Field
-        Text addTitleLabel = CreateLabel("Title");
-        TextField addTitleField = CreateField("Title");
+        Text addTitleLabel = CreateLabel(LanguageManager.getLanguageBasedString("Titel","Title"));
+        TextField addTitleField = CreateField(LanguageManager.getLanguageBasedString("Titel","Title"));
         grid.add(addTitleLabel,1,1);
         grid.add(addTitleField,1,2);
 
         //Add Release Date Field
-        Text addDateLabel = CreateLabel("Release Date");
+        Text addDateLabel = CreateLabel(LanguageManager.getLanguageBasedString("Veröffentlichungsdatum","Release Date"));
         TextField addDateField = CreateField("YYYY-MM-DD");
         grid.add(addDateLabel,2,1);
         grid.add(addDateField,2,2);
 
         //Add Duration Field
-        Text addDurationLabel = CreateLabel("Duration");
-        TextField addDurationField = CreateField("Duration");
+        Text addDurationLabel = CreateLabel(LanguageManager.getLanguageBasedString("Dauer","Duration"));
+        TextField addDurationField = CreateField(LanguageManager.getLanguageBasedString("Dauer","Duration"));
         grid.add(addDurationLabel,1,3);
         grid.add(addDurationField,1,4);
 
@@ -113,27 +114,27 @@ public class AddShow {
         grid.add(addGenresField,2,4);
 
         //Add Director Field
-        Text addDirectorLabel = CreateLabel("Director");
-        TextField addDirectorField = CreateField("Director");
+        Text addDirectorLabel = CreateLabel(LanguageManager.getLanguageBasedString("Direktorin","Director"));
+        TextField addDirectorField = CreateField(LanguageManager.getLanguageBasedString("Direktorin","Director"));
         grid.add(addDirectorLabel,1,5);
         grid.add(addDirectorField,1,6);
 
         //Add Language Field
-        Text addLanguageLabel = CreateLabel("Language");
-        TextField addLanguageField = CreateField("Language");
+        Text addLanguageLabel = CreateLabel(LanguageManager.getLanguageBasedString("Sprache","Language"));
+        TextField addLanguageField = CreateField(LanguageManager.getLanguageBasedString("Sprache","Language"));
         grid.add(addLanguageLabel,2,5);
         grid.add(addLanguageField,2,6);
 
         //Add IMDb_Score Field
-        Text addIMDbLabel = CreateLabel("IMDb Score(0-10)");
+        Text addIMDbLabel = CreateLabel(LanguageManager.getLanguageBasedString("IMDb Punktzahl(0-10)","IMDb Score(0-10)"));
         addIMDbLabel.setStyle("-fx-fill: white");
-        TextField addIMDbField = CreateField("IMDb Score");
+        TextField addIMDbField = CreateField(LanguageManager.getLanguageBasedString("IMDb Punktzahl","IMDb Score"));
         grid.add(addIMDbLabel,1,7);
         grid.add(addIMDbField,1,8);
 
         //Add Country Field
-        Text addCountryLabel = CreateLabel("Country");
-        TextField addCountryField = CreateField("Country");
+        Text addCountryLabel = CreateLabel(LanguageManager.getLanguageBasedString("Land","Country"));
+        TextField addCountryField = CreateField(LanguageManager.getLanguageBasedString("Land","Country"));
         grid.add(addCountryLabel,2,7);
         grid.add(addCountryField,2,8);
 
@@ -144,8 +145,8 @@ public class AddShow {
         grid.add(addBudgetField,1,10);
 
         //Add Revenue Field
-        Text addRevenueLabel = CreateLabel("Revenue");
-        TextField addRevenueField = CreateField("Revenue");
+        Text addRevenueLabel = CreateLabel(LanguageManager.getLanguageBasedString("Einnahmen","Revenue"));
+        TextField addRevenueField = CreateField(LanguageManager.getLanguageBasedString("Einnahmen","Revenue"));
         grid.add(addRevenueLabel,2,9);
         grid.add(addRevenueField,2,10);
 
@@ -162,14 +163,14 @@ public class AddShow {
         grid.add(addVideoField,2,12);
 
         //Select Type
-        Text selectTypeLabel = CreateLabel("Type");
+        Text selectTypeLabel = CreateLabel(LanguageManager.getLanguageBasedString("Typ","Type"));
         ToggleGroup type = new ToggleGroup();
-        RadioButton movieButton = new RadioButton("Movie");
+        RadioButton movieButton = new RadioButton(LanguageManager.getLanguageBasedString("Film","Movie"));
         movieButton.setToggleGroup(type);
         movieButton.setStyle("-fx-text-fill: white");
         movieButton.setFont(new Font("Thoma",14));
         movieButton.setSelected(true);
-        RadioButton seriesButton = new RadioButton("Series");
+        RadioButton seriesButton = new RadioButton(LanguageManager.getLanguageBasedString("Serie","Series"));
         seriesButton.setStyle("-fx-text-fill: white");
         seriesButton.setFont(new Font("Thoma",14));
         seriesButton.setToggleGroup(type);
@@ -181,13 +182,13 @@ public class AddShow {
         radio.add(seriesButton,1,1);
 
         //Add Description Field
-        Text addDescLabel = CreateLabel("Description");
+        Text addDescLabel = CreateLabel(LanguageManager.getLanguageBasedString("Beschreibung","Description"));
         TextArea addDescField = new TextArea();
         addDescField.setPrefWidth(300);
         addDescField.setPrefHeight(158);
         addDescField.setStyle("-fx-background-radius: 20; -fx-border-radius: 20;" +
                 " -fx-border-width: 1;-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;" );
-        addDescField.setPromptText("Description");
+        addDescField.setPromptText(LanguageManager.getLanguageBasedString("Beschreibung","Description"));
         grid.add(addDescLabel,2,13);
         grid.add(addDescField,2,14);
         grid.add(radio,1,13);
@@ -197,21 +198,21 @@ public class AddShow {
         castGrid.setVgap(10);
 
         //Cast Label
-        Text castLabel = new Text("Cast");
+        Text castLabel = new Text(LanguageManager.getLanguageBasedString("Gießen","Cast"));
         castLabel.setFont(Font.font("Thoma", 28));
         castLabel.setStyle("-fx-fill: white;");
         castGrid.add(castLabel,1,1);
-        Text maxLabel = addActorLabel("Maximum 10 Actors(Full name)");
+        Text maxLabel = addActorLabel(LanguageManager.getLanguageBasedString("Maximal 10 Schauspieler (vollständiger Name)","Maximum 10 Actors(Full name)"));
         castGrid.add(maxLabel,1,2);
         List<String> Cast = new ArrayList<>();
 
         //Actor 1
-        TextField actor1Field = addActorField("Actor 1");
+        TextField actor1Field = addActorField(LanguageManager.getLanguageBasedString("Schauspieler 1","Actor 1"));
         Button actor1Button = addActorButton();
         actor1Button.setOnMouseClicked(e->
                 {
                     if (hasSpace(actor1Field.getText()) == -1) {
-                        showAlert("Wrong name", "Please enter full name");
+                        showAlert(LanguageManager.getLanguageBasedString("Falscher Name","Wrong name"), LanguageManager.getLanguageBasedString("Bitte vollständigen Namen eingeben","Please enter full name"));
                     } else {
                         try {
                             if(castExists(actor1Field.getText()))
@@ -230,12 +231,12 @@ public class AddShow {
         castGrid.add(actor1Field,1,3);
         castGrid.add(actor1Button,2,3);
         //Actor 2
-        TextField actor2Field = addActorField("Actor 2");
+        TextField actor2Field = addActorField(LanguageManager.getLanguageBasedString("Schauspieler 2","Actor 2"));
         Button actor2Button = addActorButton();
         actor2Button.setOnMouseClicked(e->
                 {
                     if (hasSpace(actor2Field.getText()) == -1) {
-                        showAlert("Wrong name", "Please enter full name");
+                        showAlert(LanguageManager.getLanguageBasedString("Falscher Name","Wrong name"), LanguageManager.getLanguageBasedString("Bitte vollständigen Namen eingeben","Please enter full name"));
                     } else {
                         try {
                             if(castExists(actor2Field.getText()))
@@ -255,12 +256,12 @@ public class AddShow {
         castGrid.add(actor2Button,4,3);
 
         //Actor 3
-        TextField actor3Field = addActorField("Actor 3");
+        TextField actor3Field = addActorField(LanguageManager.getLanguageBasedString("Schauspieler 3","Actor 3"));
         Button actor3Button = addActorButton();
         actor3Button.setOnMouseClicked(e->
                 {
                     if (hasSpace(actor3Field.getText()) == -1) {
-                        showAlert("Wrong name", "Please enter full name");
+                        showAlert(LanguageManager.getLanguageBasedString("Falscher Name","Wrong name"), LanguageManager.getLanguageBasedString("Bitte vollständigen Namen eingeben","Please enter full name"));
                     } else {
                         try {
                             if(castExists(actor3Field.getText()))
@@ -463,7 +464,7 @@ public class AddShow {
         buttonsGrid.setVgap(20);
 
         //Add Cancel Button
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
         cancelButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         cancelButton.setStyle("-fx-text-fill: black; -fx-background-radius: 20; -fx-border-radius: 20;" +
                 "-fx-border-width: 1;-fx-padding: 5px; -fx-background-color: #ffffff;");
@@ -473,7 +474,7 @@ public class AddShow {
         buttonsGrid.add(cancelButton,1,0);
 
         //Add Save Button
-        Button saveButton = new Button("Save");
+        Button saveButton = new Button(LanguageManager.getLanguageBasedString("Speichern","Save"));
         saveButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         saveButton.setStyle("-fx-text-fill: black; -fx-background-radius: 20; -fx-border-radius: 20;" +
                 "-fx-border-width: 1;-fx-padding: 5px; -fx-background-color: #8D5BDC;");
@@ -487,13 +488,13 @@ public class AddShow {
                     ||addRevenueField.getText().isEmpty()||addPosterField.getText().isEmpty()||addVideoField.getText().isEmpty()
                     ||addDescField.getText().isEmpty())
             {
-                showAlert("Some Fields are Empty", "Please Fill All the Fields and Try Again");
+                showAlert(LanguageManager.getLanguageBasedString("Einige Felder sind leer","Some Fields are Empty"), LanguageManager.getLanguageBasedString("Bitte füllen Sie alle Felder aus und versuchen Sie es erneut","Please Fill All the Fields and Try Again"));
             }
             else if(Integer.parseInt(addIMDbField.getText())>10||Integer.parseInt(addIMDbField.getText())<0)
-                showAlert("Wrong Input","IMDb Score Must be From 0-10");
+                showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Der IMDb-Score muss zwischen 0 und 10 liegen.","IMDb Score Must be From 0-10"));
             else if(Cast.isEmpty())
             {
-                showAlert("Cast Fields are Empty", "Please Add Cast and Try Again");
+                showAlert(LanguageManager.getLanguageBasedString("Besetzungsfelder sind leer","Cast Fields are Empty"), LanguageManager.getLanguageBasedString("Bitte fügen Sie Cast hinzu und versuchen Sie es erneut","Please Add Cast and Try Again"));
             }
             else if(movieButton.isSelected())
             {
@@ -504,20 +505,20 @@ public class AddShow {
                 }
                 catch (IllegalArgumentException exp)
                 {
-                    showAlert("Wrong Input","Please Enter Date With the Right Format");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Bitte geben Sie das Datum im richtigen Format ein","Please Enter Date With the Right Format"));
                 }
                 try {
                     movie.setDuration(Integer.parseInt(addDurationField.getText()));
                 }
                 catch (NumberFormatException ex)
                 {
-                    showAlert("Wrong Input","Please Enter Only Integers In Duration Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Geben Sie im Feld „Dauer“ bitte nur Ganzzahlen ein.","Please Enter Only Integers In Duration Field"));
                 }
                 movie.setGenres(Arrays.asList(addGenresField.getText().split("\\s*,\\s*")));
                 try {
                     if(hasSpace(addDirectorField.getText())==-1)
                     {
-                    showAlert("Wrong Director Name","Please Enter Fullname");
+                    showAlert(LanguageManager.getLanguageBasedString("Falscher Regisseurname","Wrong Director Name"),LanguageManager.getLanguageBasedString("Bitte geben Sie den vollständigen Namen ein","Please Enter Fullname"));
                     }
                     else {
                         checkDirector(addDirectorField.getText(), movie);
@@ -532,7 +533,7 @@ public class AddShow {
                 }
                 catch (NumberFormatException ex)
                 {
-                    showAlert("Wrong Input","Please Enter Only Integers In IMDb Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Bitte geben Sie im IMDb-Feld nur ganze Zahlen ein","Please Enter Only Integers In IMDb Field"));
                 }
                 movie.setCountry(addCountryField.getText());
                 try {
@@ -540,17 +541,17 @@ public class AddShow {
                 }
                 catch (NumberFormatException ex)
                 {
-                    showAlert("Wrong Input","Please Enter Only Integers In Budget Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Geben Sie im Feld „Budget“ bitte nur ganze Zahlen ein","Please Enter Only Integers In Budget Field"));
                 }
                 try {
                     movie.setBudget(Integer.parseInt(addRevenueField.getText()));
                 }
                 catch (NumberFormatException ex) {
-                    showAlert("Wrong Input", "Please Enter Only Integers In Budget Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"), LanguageManager.getLanguageBasedString("Geben Sie im Feld „Budget“ bitte nur ganze Zahlen ein","Please Enter Only Integers In Budget Field"));
                 }
                 movie.setPoster(addPosterField.getText());
                 movie.setVideo(addVideoField.getText());
-                movie.setType("movie");
+                movie.setType(LanguageManager.getLanguageBasedString("Film","movie"));
                 movie.setDescription(addDescLabel.getText());
                 try {
                     if(directorExists(addDirectorField.getText())) {
@@ -621,14 +622,14 @@ public class AddShow {
                 }
                 catch (IllegalArgumentException exp)
                 {
-                    showAlert("Wrong Input","Please Enter Date With the Right Format");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Bitte geben Sie das Datum im richtigen Format ein","Please Enter Date With the Right Format"));
                 }
                 try {
                     series.setDuration(Integer.parseInt(addDurationField.getText()));
                 }
                 catch (NumberFormatException ex)
                 {
-                    showAlert("Wrong Input","Please Enter Only Integers In Duration Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Geben Sie im Feld „Dauer“ bitte nur Ganzzahlen ein.","Please Enter Only Integers In Duration Field"));
                 }
                 series.setGenres(Arrays.asList(addGenresField.getText().split("\\s*,\\s*")));
                 try {
@@ -643,7 +644,7 @@ public class AddShow {
                 }
                 catch (NumberFormatException ex)
                 {
-                    showAlert("Wrong Input","Please Enter Only Integers In IMDb Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Bitte geben Sie im IMDb-Feld nur ganze Zahlen ein","Please Enter Only Integers In IMDb Field"));
                 }
                 series.setCountry(addCountryField.getText());
                 try {
@@ -651,17 +652,17 @@ public class AddShow {
                 }
                 catch (NumberFormatException ex)
                 {
-                    showAlert("Wrong Input","Please Enter Only Integers In Budget Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"),LanguageManager.getLanguageBasedString("Geben Sie im Feld „Budget“ bitte nur ganze Zahlen ein","Please Enter Only Integers In Budget Field"));
                 }
                 try {
                     series.setBudget(Integer.parseInt(addRevenueField.getText()));
                 }
                 catch (NumberFormatException ex) {
-                    showAlert("Wrong Input", "Please Enter Only Integers In Budget Field");
+                    showAlert(LanguageManager.getLanguageBasedString("Falsche Eingabe","Wrong Input"), LanguageManager.getLanguageBasedString("Geben Sie im Feld „Budget“ bitte nur ganze Zahlen ein","Please Enter Only Integers In Budget Field"));
                 }
                 series.setPoster(addPosterField.getText());
                 series.setVideo(addVideoField.getText());
-                series.setType("movie");
+                series.setType(LanguageManager.getLanguageBasedString("Film","movie"));
                 series.setDescription(addDescLabel.getText());
                 try {
                     if(directorExists(addDirectorField.getText())) {
@@ -765,27 +766,27 @@ public class AddShow {
         VBox lnBox = new VBox(10);
         VBox texts = new VBox(10);
 
-        Text existText = new Text("This actor doesn't exist");
+        Text existText = new Text(LanguageManager.getLanguageBasedString("Dieser Schauspieler existiert nicht","This actor doesn't exist"));
         existText.setFill(Paint.valueOf("#B5B5B5"));
         existText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),14));
-        Text addNewText = new Text("Add new Actor");
+        Text addNewText = new Text(LanguageManager.getLanguageBasedString("Neuen Schauspieler hinzufügen","Add new Actor"));
         addNewText.setFill(Paint.valueOf("white"));
         addNewText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),20));
         texts.getChildren().addAll(existText,addNewText);
 
-        Text firstnameLabel = CreateLabel("Firstname");
-        TextField firstnameField = CreateField("Firstname");
+        Text firstnameLabel = CreateLabel(LanguageManager.getLanguageBasedString("Vorname","Firstname"));
+        TextField firstnameField = CreateField(LanguageManager.getLanguageBasedString("Vorname","Firstname"));
         firstnameField.setPrefSize(180,60);
         fnBox.getChildren().addAll(firstnameLabel,firstnameField);
 
-        Text lastnameLabel = CreateLabel("Lastname");
-        TextField lastnameField = CreateField("Lastname");
+        Text lastnameLabel = CreateLabel(LanguageManager.getLanguageBasedString("Nachname","Lastname"));
+        TextField lastnameField = CreateField(LanguageManager.getLanguageBasedString("Nachname","Lastname"));
         lastnameField.setPrefSize(180,60);
         lnBox.getChildren().addAll(lastnameLabel,lastnameField);
 
         VBox ageBox = new VBox(10);
-        Text ageLabel = CreateLabel("Age");
-        TextField ageField = CreateField("Age");
+        Text ageLabel = CreateLabel(LanguageManager.getLanguageBasedString("Alter","Age"));
+        TextField ageField = CreateField(LanguageManager.getLanguageBasedString("Alter","Age"));
         ageField.setPrefSize(380,60);
         ageBox.getChildren().addAll(ageLabel,ageField);
 
@@ -796,17 +797,17 @@ public class AddShow {
         genderBox.getChildren().addAll(genderLabel,genderField);
 
         VBox nationalityBox = new VBox(10);
-        Text nationalityLabel = CreateLabel("Nationality");
-        TextField nationalityField = CreateField("Nationality");
+        Text nationalityLabel = CreateLabel(LanguageManager.getLanguageBasedString("Nationalität","Nationality"));
+        TextField nationalityField = CreateField(LanguageManager.getLanguageBasedString("Nationalität","Nationality"));
         nationalityField.setPrefSize(380,60);
         nationalityBox.getChildren().addAll(nationalityLabel,nationalityField);
 
         HBox buttonBox = new HBox(10);
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
         cancelButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
         "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;");
         cancelButton.setPrefSize(180,50);
-        Button confirmButton = new Button("Confirm");
+        Button confirmButton = new Button(LanguageManager.getLanguageBasedString("Bestätigen","Confirm"));
         confirmButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
                 "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;");
         confirmButton.setPrefSize(180,50);
@@ -824,7 +825,7 @@ public class AddShow {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            showAlert("Success","Actor Added Succesfully");
+            showAlert(LanguageManager.getLanguageBasedString("Erfolg","Success"),LanguageManager.getLanguageBasedString("Schauspieler erfolgreich hinzugefügt","Actor Added Succesfully"));
             popupStage.close();
         });
         HBox nameBox = new HBox(20);
@@ -839,7 +840,7 @@ public class AddShow {
         Scene popupScene = new Scene(popupVBox, 500, 600);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
         popupStage.setScene(popupScene);
-        popupStage.setTitle("Add New Actor");
+        popupStage.setTitle(LanguageManager.getLanguageBasedString("Neuen Schauspieler hinzufügen","Add New Actor"));
         popupStage.show();
     }
 
@@ -855,27 +856,27 @@ public class AddShow {
         VBox lnBox = new VBox(10);
         VBox texts = new VBox(10);
 
-        Text existText = new Text("This director doesn't exist");
+        Text existText = new Text(LanguageManager.getLanguageBasedString("Dieser Regisseur existiert nicht","This director doesn't exist"));
         existText.setFill(Paint.valueOf("#B5B5B5"));
         existText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),14));
-        Text addNewText = new Text("Add new Director");
+        Text addNewText = new Text(LanguageManager.getLanguageBasedString("Neuen Direktor hinzufügen","Add new Director"));
         addNewText.setFill(Paint.valueOf("white"));
         addNewText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),20));
         texts.getChildren().addAll(existText,addNewText);
 
-        Text firstnameLabel = CreateLabel("Firstname");
-        TextField firstnameField = CreateField("Firstname");
+        Text firstnameLabel = CreateLabel(LanguageManager.getLanguageBasedString("Vorname","Firstname"));
+        TextField firstnameField = CreateField(LanguageManager.getLanguageBasedString("Vorname","Firstname"));
         firstnameField.setPrefSize(180,60);
         fnBox.getChildren().addAll(firstnameLabel,firstnameField);
 
-        Text lastnameLabel = CreateLabel("Lastname");
-        TextField lastnameField = CreateField("Lastname");
+        Text lastnameLabel = CreateLabel(LanguageManager.getLanguageBasedString("Nachname","Lastname"));
+        TextField lastnameField = CreateField(LanguageManager.getLanguageBasedString("Nachname","Lastname"));
         lastnameField.setPrefSize(180,60);
         lnBox.getChildren().addAll(lastnameLabel,lastnameField);
 
         VBox ageBox = new VBox(10);
-        Text ageLabel = CreateLabel("Age");
-        TextField ageField = CreateField("Age");
+        Text ageLabel = CreateLabel(LanguageManager.getLanguageBasedString("Alter","Age"));
+        TextField ageField = CreateField(LanguageManager.getLanguageBasedString("Alter","Age"));
         ageField.setPrefSize(380,60);
         ageBox.getChildren().addAll(ageLabel,ageField);
 
@@ -886,17 +887,17 @@ public class AddShow {
         genderBox.getChildren().addAll(genderLabel,genderField);
 
         VBox nationalityBox = new VBox(10);
-        Text nationalityLabel = CreateLabel("Nationality");
-        TextField nationalityField = CreateField("Nationality");
+        Text nationalityLabel = CreateLabel(LanguageManager.getLanguageBasedString("Nationalität","Nationality"));
+        TextField nationalityField = CreateField(LanguageManager.getLanguageBasedString("Nationalität","Nationality"));
         nationalityField.setPrefSize(380,60);
         nationalityBox.getChildren().addAll(nationalityLabel,nationalityField);
 
         HBox buttonBox = new HBox(10);
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
         cancelButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
                 "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;-fx-text-fill: black;");
         cancelButton.setPrefSize(180,50);
-        Button confirmButton = new Button("Confirm");
+        Button confirmButton = new Button(LanguageManager.getLanguageBasedString("Bestätigen","Confirm"));
         confirmButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
                 "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;-fx-text-fill: black;");
         confirmButton.setPrefSize(180,50);
@@ -915,7 +916,7 @@ public class AddShow {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            showAlert("Success","Director Added Succesfully");
+            showAlert(LanguageManager.getLanguageBasedString("Erfolg","Success"),LanguageManager.getLanguageBasedString("Regisseur erfolgreich hinzugefügt","Director Added Successfully"));
             popupStage.close();
         });
         HBox nameBox = new HBox(20);
@@ -930,7 +931,7 @@ public class AddShow {
         Scene popupScene = new Scene(popupVBox, 500, 600);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
         popupStage.setScene(popupScene);
-        popupStage.setTitle("Add New Director");
+        popupStage.setTitle(LanguageManager.getLanguageBasedString("Neuen Direktor hinzufügen","Add New Director"));
         popupStage.show();
     }
 
@@ -963,7 +964,7 @@ public class AddShow {
 
     private Button addActorButton()
     {
-        Button button = new Button("Add");
+        Button button = new Button(LanguageManager.getLanguageBasedString("Hinzufügen","Add"));
         button.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),14));
         button.setPrefHeight(50);
         button.setPrefWidth(80);
@@ -997,7 +998,7 @@ public class AddShow {
     public boolean directorExists(String fullname) throws IOException {
         if(hasSpace(fullname)==-1)
         {
-            showAlert("Wrong Director Name","Please Enter Fullname");
+            showAlert(LanguageManager.getLanguageBasedString("Falscher Regisseurname","Wrong Director Name"),LanguageManager.getLanguageBasedString("Bitte geben Sie den vollständigen Namen ein","Please Enter Fullname"));
         }
         else {
             fullname = fullname.toLowerCase();
@@ -1017,7 +1018,7 @@ public class AddShow {
     public boolean castExists(String fullname) throws IOException {
         if(hasSpace(fullname)==-1)
         {
-            showAlert("Wrong Cast Name","Please Enter Fullname");
+            showAlert(LanguageManager.getLanguageBasedString("Falscher Besetzungsname","Wrong Cast Name"),LanguageManager.getLanguageBasedString("Bitte geben Sie den vollständigen Namen ein","Please Enter Fullname"));
         }
         else {
             fullname = fullname.toLowerCase();

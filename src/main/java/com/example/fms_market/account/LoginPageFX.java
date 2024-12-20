@@ -53,11 +53,6 @@ public class LoginPageFX {
         // Initialize passwordStack
         passwordStack = new StackPane();
 
-        ComboBox<String> languageComboBox = new ComboBox<>();
-        languageComboBox.getItems().addAll("English", "German");
-        languageComboBox.setValue(LanguageManager.getLanguageBasedString("German", "English"));
-        languageComboBox.setTranslateY(20);
-        languageComboBox.setTranslateX(200);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double stageWidth = screenSize.getWidth();
@@ -76,7 +71,7 @@ public class LoginPageFX {
 
         loginButton.setOnAction(_ -> handleLogin(stage));
 
-        contentPane = new Pane(languageComboBox);
+        contentPane = new Pane();
 
         Pane leftPane = new Pane();
         leftPane.setStyle("-fx-background-color: #1c1c1c;");
@@ -123,7 +118,7 @@ public class LoginPageFX {
         ImageView cameraIconView = new ImageView(cameraIcon);
         cameraIconView.setFitWidth(30);
         cameraIconView.setFitHeight(30);
-        Text watchText = new Text("Watch Movies anytime");
+        Text watchText = new Text(LanguageManager.getLanguageBasedString("Schauen Sie sich jederzeit Filme an","Watch Movies anytime"));
         watchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         watchText.setStyle("-fx-fill: white;");
         HBox movie = new HBox(10);
@@ -133,7 +128,7 @@ public class LoginPageFX {
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitWidth(30);
         searchIconView.setFitHeight(30);
-        Text searchText = new Text("Search for any movie you want");
+        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten Film","Search for any movie you want"));
         searchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         searchText.setStyle("-fx-fill: white;");
         HBox search = new HBox(10);
@@ -143,7 +138,7 @@ public class LoginPageFX {
         ImageView listIconView = new ImageView(listIconImage);
         listIconView.setFitWidth(30);
         listIconView.setFitHeight(30);
-        Text watchedText = new Text("List your watched Movies");
+        Text watchedText = new Text(LanguageManager.getLanguageBasedString("Liste deine gesehenen Filme auf","List your watched Movies"));
         watchedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         watchedText.setStyle("-fx-fill: white;");
         HBox list = new HBox(10);
@@ -153,7 +148,7 @@ public class LoginPageFX {
         ImageView ratedIconView = new ImageView(ratedIconImage);
         ratedIconView.setFitWidth(30);
         ratedIconView.setFitHeight(30);
-        Text ratedText = new Text("Show the most rated movies");
+        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme anzeigen","Show the most rated movies"));
         ratedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         ratedText.setStyle("-fx-fill: white;");
         HBox rated = new HBox(10);
@@ -163,7 +158,7 @@ public class LoginPageFX {
         ImageView favoriteIconView = new ImageView(favoriteIconImage);
         favoriteIconView.setFitWidth(30);
         favoriteIconView.setFitHeight(30);
-        Text favoriteText = new Text("Add Shows to your Favourite List");
+        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste hinzufügen","Add Shows to your Favourite List"));
         favoriteText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         favoriteText.setStyle("-fx-fill: white;");
         HBox favourite = new HBox(10);
@@ -198,7 +193,7 @@ public class LoginPageFX {
         loginForm.setLayoutX(260);
         loginForm.setLayoutY(185);
 
-        Label usernameLabel = new Label("Username:");
+        Label usernameLabel = new Label(LanguageManager.getLanguageBasedString("Benutzername:","Username:"));
         usernameLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         usernameLabel.setStyle("-fx-text-fill: white;");
 
@@ -206,7 +201,7 @@ public class LoginPageFX {
         usernameBox.setAlignment(Pos.CENTER_LEFT);
 
         passwordBox = new VBox();
-        Label passwordLabel = new Label("Password:");
+        Label passwordLabel = new Label(LanguageManager.getLanguageBasedString("Passwort:","Password:"));
         passwordLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
         passwordLabel.setStyle("-fx-text-fill: white;");
         ImageView eyeIcon = createEyeIcon();
@@ -294,12 +289,12 @@ public class LoginPageFX {
         messageText.setText("");
 
         if (email.isEmpty()) {
-            emailErrorText.setText("User Name cannot be empty.");
+            emailErrorText.setText(LanguageManager.getLanguageBasedString("Der Benutzername darf nicht leer sein.","User Name cannot be empty."));
             EmailIsValid = false;
         }
 
         if (password.isEmpty()) {
-            passwordErrorText.setText("Password cannot be empty.");
+            passwordErrorText.setText(LanguageManager.getLanguageBasedString("Das Passwort darf nicht leer sein.","Password cannot be empty."));
             PasswordIsValid = false;
         }
 
@@ -312,7 +307,7 @@ public class LoginPageFX {
                 if (user != null) {
                     new HomePage(user, stage);
                 } else {
-                    messageText.setText("Invalid credentials!");
+                    messageText.setText(LanguageManager.getLanguageBasedString("Ungültige Anmeldeinformationen!","Invalid credentials!"));
                     messageText.setVisible(true);
                     playShakeTransition(messageText);
                 }
@@ -341,10 +336,10 @@ public class LoginPageFX {
 
 
     private HBox createSignUpText(Stage stage) {
-        Label noAccountLabel = new Label("You Don't Have an Account?");
+        Label noAccountLabel = new Label(LanguageManager.getLanguageBasedString("Sie haben noch kein Konto?","You Don't Have an Account?"));
         noAccountLabel.setTextFill(Color.WHITE);
 
-        Hyperlink signUpLink = new Hyperlink("Sign up");
+        Hyperlink signUpLink = new Hyperlink(LanguageManager.getLanguageBasedString("Melden Sie sich an","Sign up"));
         //signUpLink.setTextFill(Color.DEEPSKYBLUE);
         signUpLink.setStyle("-fx-font-weight: bold; -fx-text-fill: #1425BB;");
         signUpLink.setOnMouseClicked(_ -> new SignUpPage(stage));
@@ -365,7 +360,7 @@ public class LoginPageFX {
 
     private TextField createTextField() {
         TextField field = new TextField();
-        field.setPromptText("Username");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Benutzername","Username"));
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         DropShadow shadow = new DropShadow();
@@ -387,7 +382,7 @@ public class LoginPageFX {
 
     private PasswordField createPasswordField() {
         PasswordField field = new PasswordField();
-        field.setPromptText("Password");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Passwort","Password"));
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         DropShadow shadow = new DropShadow();
