@@ -1,7 +1,4 @@
 {
-  "static_data" : {
-    "current_year" : 2024
-  },
   "subscriptions" : [ {
     "plans" : "Standard",
     "user_id" : "userid",
@@ -13,5 +10,8 @@
     "price" : 15,
     "start_date" : "2024-12-15"
   } ],
+  "static_data" : {
+    "current_year" : 2024
+  },
   "freq_month" : [ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 2, 0 ] ]
 }
