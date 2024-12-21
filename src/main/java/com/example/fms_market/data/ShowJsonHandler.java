@@ -183,4 +183,23 @@ public class ShowJsonHandler {
         DataManager.saveData();
         UserJsonHandler.removeFavoriteShowFromAllUsers(id);
     }
+    public static void updateShow(Show updatedShow) throws IOException {
+        ObjectNode rootNode = DataManager.getShowsRootNode();
+        ArrayNode shows = (ArrayNode) rootNode.path("shows");
+
+        for (int i = 0; i < shows.size(); i++) {
+            JsonNode showNode = shows.get(i);
+            if (showNode.get("id").asInt() == updatedShow.getId()) {
+                ObjectNode updatedShowNode = objectMapper.valueToTree(updatedShow);
+                shows.set(i, updatedShowNode);
+                break;
+            }
+        }
+
+        rootNode.set("shows", shows);
+        DataManager.saveData();
+    }
+
+
+
 }

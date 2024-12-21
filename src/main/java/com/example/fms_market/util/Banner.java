@@ -78,7 +78,7 @@ public class Banner {
             try {
                 Banner.setCurrentUser(currentUser);
                 System.out.println("Search triggered for keyword: " + keyword);
-                new SearchForShow(null,currentUser, stage, keyword);
+                new SearchForShow(currentUser,stage, keyword);
             } catch (Exception e) {
                 e.printStackTrace();
             }

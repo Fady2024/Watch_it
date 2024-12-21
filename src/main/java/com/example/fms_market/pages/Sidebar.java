@@ -279,7 +279,7 @@ public class Sidebar extends VBox {
 
 
 
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
     }
 
