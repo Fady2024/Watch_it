@@ -24,6 +24,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.shape.Rectangle;
+import org.apache.poi.ss.formula.functions.T;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -292,6 +294,22 @@ public class SignUpPage {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        String phoneRegex = "^\\+?\\d{1,3}?[-.\\s]?\\(?\\d{1,4}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}$";
+        Pattern pattern = Pattern.compile(phoneRegex);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
+    private boolean isValidAge(String ageStr) {
+        try {
+            int age = Integer.parseInt(ageStr);
+            return age >= 18 && age <= 100;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
     private void handleSignUp(Stage primaryStage) {
         String email = emailField.getText().trim().toLowerCase();
         String password = passwordField.getText().trim();
@@ -329,6 +347,16 @@ public class SignUpPage {
         if (!isValidEmail(email)) {
             playShakeTransition(emailField);
             showAlert(Alert.AlertType.ERROR, "Invalid email ! Please enter a valid email address.");
+            return;
+        }
+        if (!isValidPhoneNumber(phone)) {
+            playShakeTransition(passwordField);
+            showAlert(Alert.AlertType.ERROR, "Invalid phone ! Please enter a valid phone.");
+            return;
+        }
+        if (!isValidAge(age)) {
+            playShakeTransition(emailField);
+            showAlert(Alert.AlertType.ERROR, "Invalid age ! Please enter a valid age.");
             return;
         }
 
@@ -396,7 +424,7 @@ public class SignUpPage {
     }
 
     private TextField createUserNameField() {
-        PasswordField field = new PasswordField();
+        TextField field = new TextField();
         field.setPromptText("User Name");
         field.setPrefWidth(270);
         field.setPrefHeight(55);
