@@ -300,6 +300,7 @@ public class SignUpPage {
         Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.matches();
     }
+
     private boolean isValidAge(String ageStr) {
         try {
             int age = Integer.parseInt(ageStr);
@@ -350,12 +351,12 @@ public class SignUpPage {
             return;
         }
         if (!isValidPhoneNumber(phone)) {
-            playShakeTransition(passwordField);
+            playShakeTransition(phoneField);
             showAlert(Alert.AlertType.ERROR, "Invalid phone ! Please enter a valid phone.");
             return;
         }
         if (!isValidAge(age)) {
-            playShakeTransition(emailField);
+            playShakeTransition(ageField);
             showAlert(Alert.AlertType.ERROR, "Invalid age ! Please enter a valid age.");
             return;
         }
