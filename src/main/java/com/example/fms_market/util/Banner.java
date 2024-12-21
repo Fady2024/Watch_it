@@ -66,12 +66,12 @@ public class Banner {
 
         // Search field
         TextField searchField = new TextField();
-        searchField.setPromptText("Series, Shows and Movies");
+       // searchField.setPromptText("Series, Shows and Movies");
         searchField.setPrefWidth(300);
         searchField.setPrefHeight(50);
         searchField.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;-fx-border-width: 1;" +
                 "-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
-        searchField.setPromptText(LanguageManager.getLanguageBasedString("\uD83D\uDD0D Suche nach Stichwort","\uD83D\uDD0D Search by keyword"));
+        searchField.setPromptText(LanguageManager.getLanguageBasedString("\uD83D\uDD0D Suche nach Stichwort","Series, Shows and Movies"));
         searchField.setFont(Font.font("Arial", 15));
         searchField.setOnAction(event -> {
             String keyword = searchField.getText();
