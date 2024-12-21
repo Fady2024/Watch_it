@@ -114,7 +114,7 @@ public class Revenue_page  {
         title.setTranslateX(stageWidth*0.1);
         title.setTranslateY(stageHeight*0.1);
         /////////////////////////////////////////////////////////////////////////////////////////
-        ImageView imageView = new ImageView("file:src/main/resources/image/boxes (2).png");
+        ImageView imageView = new ImageView(LanguageManager.getLanguageBasedString("file:src/main/resources/image/german_boxes-removebg-preview.png","file:src/main/resources/image/boxes (2).png"));
 
         Text basic = createStyledText(String.valueOf( Subscription.getFreq_month()[cuurent_index][0]), "30px", "white");
         Text Standard = createStyledText(String.valueOf( Subscription.getFreq_month()[cuurent_index][1]), "30px", "white");
@@ -209,7 +209,7 @@ public class Revenue_page  {
 
             createSimpleLineChart(chartContainer, stageWidth, stageHeight,currentMonth,selectedMonths);
 
-        ImageView image_box_max = new ImageView("file:src/main/resources/image/box_max.png");
+        ImageView image_box_max = new ImageView(LanguageManager.getLanguageBasedString("file:src/main/resources/image/max_box_german.png","file:src/main/resources/image/box_max.png"));
         image_box_max.setScaleX(0.15);
         image_box_max.setScaleY(0.15);
 

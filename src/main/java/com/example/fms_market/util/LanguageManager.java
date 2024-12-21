@@ -108,10 +108,8 @@ public class LanguageManager {
         return "German".equals(LanguageManager.getInstance().getLanguage()) ? g : e;
     }
     public static Button createLanguageButton(String g, String e, String fontSize, String color) {
-        // إنشاء خاصية للنص
         StringProperty buttonTextProperty = new SimpleStringProperty();
 
-        // إضافة مستمع لتغيير النص عند تغيير اللغة
         LanguageManager.getInstance().addActionListener(() -> {
             if ("German".equals(LanguageManager.getInstance().getLanguage())) {
                 buttonTextProperty.set(g);

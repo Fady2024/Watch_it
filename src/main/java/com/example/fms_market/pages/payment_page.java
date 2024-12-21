@@ -1,32 +1,45 @@
 package com.example.fms_market.pages;
 
+import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.data.SubscriptionManager;
+import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
+import javafx.stage.StageStyle;
 
 
 import java.awt.*;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public class payment_page {
     boolean valid=true;
+    boolean valid2=true;
+    boolean valid3=true;
 
-    public payment_page(Stage stage, String finalImagePath,String plane_name) {
+
+    public payment_page(Stage stage,User user, String finalImagePath,String plane_name) {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
@@ -44,7 +57,7 @@ public class payment_page {
 
 
         Image image = new Image(finalImagePath);
-       ImageView imageView = new ImageView(image);
+        ImageView imageView = new ImageView(image);
         imageView.setFitHeight(stageHeight * 0.5);
         imageView.setFitWidth(stageWidth * 0.25);
 
@@ -70,7 +83,7 @@ public class payment_page {
                 "\n" +
                 "Enter the 3 a 4 digit number on the card", "16px", "white");
 
-
+cvc.setTranslateY(33);
         TextField numberField_card = LanguageManager.languageTextField("Kartennummer","Card Number","14","black");
         numberField_card.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: #2B2D30;-fx-background-radius: 25;");
         TextField numberField_date = LanguageManager.languageTextField("MM/JJ","MM/YY","14","black");
@@ -78,13 +91,14 @@ public class payment_page {
 
         TextField numberField_cvc = LanguageManager.languageTextField("Kartenprüfziffer","cvc","14","black");
         numberField_cvc.setStyle("-fx-font-size: 14px; -fx-padding: 10px; -fx-prompt-text-fill: #2B2D30;-fx-background-radius: 25;");
-
+        numberField_cvc.setTranslateY(33);
         Label errorMessageLabel = new Label();
         errorMessageLabel.setStyle("-fx-text-fill: red;");
 
 
 
         UnaryOperator<TextFormatter.Change> cvcFilter = change -> {
+
             String newText = change.getControlNewText();
 
             if (newText.matches("\\d{0,4}")) {
@@ -104,7 +118,6 @@ public class payment_page {
         UnaryOperator<TextFormatter.Change> dateFilter = change -> {
             String newText = change.getControlNewText();
             if (newText.matches("\\d{0,2}/?\\d{0,2}")) {
-
                 return change;
             }
 
@@ -114,6 +127,20 @@ public class payment_page {
         TextFormatter<String> dateFormatter = new TextFormatter<>(dateFilter);
         numberField_date.setTextFormatter(dateFormatter);
 
+        Label errorLabel_card = new Label();
+        errorLabel_card.setStyle("-fx-text-fill: red; -fx-font-size: 12;");
+        errorLabel_card.setTranslateY(-165);
+        errorLabel_card.setTranslateX(-100);
+
+        Label errorLabel_cvc = new Label();
+        errorLabel_cvc.setStyle("-fx-text-fill: red; -fx-font-size: 12;");
+        errorLabel_cvc.setTranslateY(-40);
+        errorLabel_cvc.setTranslateX(-105);
+
+        Label errorLabel_date = new Label();
+        errorLabel_date.setStyle("-fx-text-fill: red; -fx-font-size: 12;");
+        errorLabel_date.setTranslateY(-220);
+        errorLabel_date.setTranslateX(-120);
         UnaryOperator<TextFormatter.Change> cardFilter = change -> {
             String newText = change.getControlNewText();
             if (newText.matches("\\d*") && newText.length() <= 16) {
@@ -122,6 +149,9 @@ public class payment_page {
 
             return null;
         };
+
+
+
 
         TextFormatter<String> cardFormatter = new TextFormatter<>(cardFilter);
         numberField_card.setTextFormatter(cardFormatter);
@@ -156,13 +186,62 @@ public class payment_page {
         proceedButton.setStyle("-fx-font-size: 12px; -fx-background-color: #8E5BDC; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 30px; -fx-border-color: transparent;");
         if(numberField_cvc.getText().length()<3||numberField_card.getText().length()<16){valid=false;}
         backButton.setOnAction(e -> {
-            new subscription_page(stage);
+            new subscription_page(stage,user);
         });
 
         proceedButton.setOnAction(e -> {
-Subscription add_new =new Subscription("userid",plane_name);
+            String expireDate = numberField_date.getText();
+            if (!expireDate.matches("\\d{2}/\\d{2}")) {
+                errorLabel_date.setText("Date must be in MM/YY format.");
+                valid = false;
+            } else {
+                String[] parts = expireDate.split("/");
+                int month = Integer.parseInt(parts[0]);
+                int year = Integer.parseInt(parts[1]) + 2000;
 
-SubscriptionManager.addSubscriptions(add_new);
+                LocalDate today = LocalDate.now();
+                YearMonth expire = YearMonth.of(year, month);
+
+                if (month < 1 || month > 12) {
+                    errorLabel_date.setText("The month must be between 01 and 12.");
+                    valid = false;
+                } else if (expire.isBefore(YearMonth.from(today))) {
+                    errorLabel_date.setText("Expiration date must be in the future.");
+                    valid = false;
+                }
+
+                else {
+                    errorLabel_date.setText("");
+                    valid=true;
+                }
+            }
+
+            if (numberField_card.getText().length() < 16 || !numberField_card.getText().matches("\\d+")) {
+                errorLabel_card.setText("The card number must contain 16 digits.");
+                valid2=false;
+
+            }
+            else {
+                errorLabel_card.setText("");
+                valid2=true;
+
+            }
+
+
+            if (numberField_cvc.getText().length() <3 || !numberField_cvc.getText().matches("\\d+")) {
+                errorLabel_cvc.setText("The CVC code must contain at least 3 digits.");
+                valid3 = false;
+            }
+
+            else
+            {
+                errorLabel_cvc.setText("");
+                valid3=true;
+
+            }
+
+
+            if(valid&&valid2&&valid3){ confirmPopup(stage,user,plane_name);}
 
 
 
@@ -181,18 +260,18 @@ SubscriptionManager.addSubscriptions(add_new);
         StackPane stackPane = new StackPane();
 
 
-        vbox.getChildren().addAll(title, text, cardnumber, numberField_card, Expiredate, numberField_date, cvc, numberField_cvc,buttonBox);
+        vbox.getChildren().addAll(title, text, cardnumber, numberField_card,errorLabel_card, Expiredate, numberField_date,cvc, numberField_cvc,errorLabel_cvc,errorLabel_date,buttonBox);
         vbox.setTranslateX(-300);
-       numberField_card.setPrefWidth(400);
-       numberField_date.setPrefWidth(400);
-       numberField_cvc.setPrefWidth(400);
+        numberField_card.setPrefWidth(400);
+        numberField_date.setPrefWidth(400);
+        numberField_cvc.setPrefWidth(400);
         vbox.setFillWidth(false);
 
         stackPane.getChildren().add(vbox);
 
         StackPane stackPane2 = new StackPane();
         innerRectangle.setTranslateX(stageWidth*0.2);
-imageView.setTranslateX(stageWidth*0.2);
+        imageView.setTranslateX(stageWidth*0.2);
         stackPane.getChildren().addAll(innerRectangle,imageView);
 
 
@@ -226,5 +305,60 @@ imageView.setTranslateX(stageWidth*0.2);
         return text;
     }
 
+    private void confirmPopup(Stage stage,User user, String plane_name) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(stage);
+        popupStage.initStyle(StageStyle.UNDECORATED);
 
+        VBox popupVBox = new VBox(50);
+        VBox texts = new VBox(10);
+        int price=0;
+if(plane_name=="basic"){price=Subscription.price_basic;}
+else if(plane_name=="standard"){price=Subscription.price_standard;}
+else{price=Subscription.price_permium;}
+        String str = String.valueOf(price);
+        Text addNewText = new Text(LanguageManager.getLanguageBasedString("Möchten Sie wirklich fortfahren?\n Hinweis: Wenn Sie fortfahren, zahlen Sie"+str+"$","Are You Sure You Want to Continue?\n Note: if you continue you will pay" +str +"$"));
+        addNewText.setFill(Paint.valueOf("white"));
+        addNewText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),20));
+        texts.getChildren().addAll(addNewText);
+        addNewText.setWrappingWidth(380);
+        HBox buttonBox = new HBox(10);
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
+        cancelButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
+                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: white;-fx-text-fill: black;");
+        cancelButton.setPrefSize(180,50);
+        Button confirmButton = new Button(LanguageManager.getLanguageBasedString("Bestätigen","Confirm"));
+        confirmButton.setStyle("-fx-background-radius: 15; -fx-border-radius: 15;-fx-border-width: 1;" +
+                "-fx-padding: 5px;-fx-font-size: 18px;-fx-background-color: #8D5BDC;-fx-text-fill: black;");
+        confirmButton.setPrefSize(180,50);
+        cancelButton.setOnAction(e -> {popupStage.close();});
+
+        confirmButton.setOnAction(e-> {
+            showAlert(LanguageManager.getLanguageBasedString("Erfolg","Success"), LanguageManager.getLanguageBasedString("Die Zahlung wurde erfolgreich durchgeführt","Payment has been made successfully"));
+            popupStage.close();
+            Subscription add_new =new Subscription(user.getId(),plane_name);
+            SubscriptionManager.addSubscriptions(add_new);
+            new HomePage(user,stage);
+
+        });
+        popupVBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(cancelButton, confirmButton);
+        popupVBox.getChildren().addAll(texts,buttonBox);
+        popupVBox.setPadding(new Insets(30,60,30,60));
+        popupVBox.setStyle("-fx-background-color: #2b2b2b; -fx-border-radius: 10; -fx-background-radius: 10;");
+
+        Scene popupScene = new Scene(popupVBox, 500, 250);
+        popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
+        popupStage.setScene(popupScene);
+        popupStage.setTitle(LanguageManager.getLanguageBasedString("Löschen bestätigen","Confirm Delete"));
+        popupStage.show();
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

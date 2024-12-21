@@ -1,8 +1,6 @@
 package com.example.fms_market.pages;
 
-import com.example.fms_market.account.SignUpPage;
 import com.example.fms_market.account.WelcomePage;
-import com.example.fms_market.pages.HomePage;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
 import javafx.geometry.Insets;
@@ -21,8 +19,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 
 public class subscription_page {
-
-    public subscription_page(Stage stage){
+    public subscription_page(Stage stage, User user ){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
@@ -67,9 +64,9 @@ public class subscription_page {
 
             String image_path;
             ImageView imageView = null;
-String plan_name;
+            String plan_name;
             if (i == 0) {
-                image_path = "file:src/main/resources/image/Basic plan.png";
+                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/hd_27db10d7dcdcbec2ab9f6de7ad9f36ae_67662a7137f6e (1)-remove-bg-io.png","file:src/main/resources/image/Basic plan.png");
                 plan_name="Basic";
                 Image image1 = new Image(image_path);
                 imageView = new ImageView(image1);
@@ -85,7 +82,7 @@ String plan_name;
             } else {
                 image_path = "file:src/main/resources/image/premium plan.png";
 
-                    plan_name="Premium";
+                plan_name="Premium";
 
                 Image image3 = new Image(image_path);
                 imageView = new ImageView(image3);
@@ -94,7 +91,7 @@ String plan_name;
 
             String finalImagePath = image_path;
             button1.setOnAction(_ -> {
-                new payment_page(stage,finalImagePath,plan_name);
+                new payment_page(stage,user,finalImagePath,plan_name);
             });
 
             Runnable onHover = () -> {
@@ -196,7 +193,7 @@ String plan_name;
     private Button createBackButton(Stage stage) {
         Button backButton = new Button();
 
-            backButton.setText(LanguageManager.getLanguageBasedString("← Zurück","← Back"));
+        backButton.setText(LanguageManager.getLanguageBasedString("← Zurück","← Back"));
 
         backButton.setStyle(
                 "-fx-background-color: transparent; " +
@@ -224,20 +221,22 @@ String plan_name;
         backButton.setOnMouseExited(_ -> {
 
 
-                // Night theme styles
-                backButton.setStyle(
-                        "-fx-background-color: transparent; " +
-                                "-fx-font-size: 16px; " +
-                                "-fx-text-fill: #992193; " +
-                                "-fx-font-weight: bold; " +
-                                "-fx-border-width: 2px; " +
-                                "-fx-border-color: #992193; " +
-                                "-fx-border-radius: 20px; " +
-                                "-fx-padding: 10px 20px;"
-                );
+            // Night theme styles
+            backButton.setStyle(
+                    "-fx-background-color: transparent; " +
+                            "-fx-font-size: 16px; " +
+                            "-fx-text-fill: #992193; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-border-width: 2px; " +
+                            "-fx-border-color: #992193; " +
+                            "-fx-border-radius: 20px; " +
+                            "-fx-padding: 10px 20px;"
+            );
+
         });
 
-        backButton.setOnAction(_ -> new SignUpPage(stage));
+        backButton.setOnAction(_ -> new WelcomePage(stage));
         return backButton;
     }
 }
+

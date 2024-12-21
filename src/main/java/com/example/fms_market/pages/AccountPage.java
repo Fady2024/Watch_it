@@ -105,7 +105,7 @@ public class AccountPage {
             }
         });
 
-        Label usernameLabel = new Label("Username:");
+        Label usernameLabel = new Label(LanguageManager.getLanguageBasedString("Benutzername:","Username:"));
         usernameLabel.setStyle("-fx-text-fill: white;");
         TextField usernameField = new TextField(currentUser.getUsername());
         usernameField.setMaxWidth(300);
@@ -147,7 +147,7 @@ public class AccountPage {
                     currentUser.setUser_photo_path(newPhotoPath);
                 }
                 UserJsonHandler.saveUser(currentUser);
-                showAlert("Success", "User details updated successfully.");
+                showAlert(LanguageManager.getLanguageBasedString("Erfolg","Success"), LanguageManager.getLanguageBasedString("Benutzerdetails erfolgreich aktualisiert.","User details updated successfully."));
                 initialEmail.set(currentUser.getEmail());
                 initialPhone.set(currentUser.getPhone());
                 initialAge.set(currentUser.getAge());
@@ -167,7 +167,7 @@ public class AccountPage {
             currentUser.setUser_photo_path(initialPhotoPath.get());
             selectedFileRef.set(null);
         });
-
+////////////////////////////////////////////////////////////////////////
         Button languageButton = new Button("🌐");
         languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: white;");
         Popup popup = new Popup();
@@ -221,13 +221,14 @@ public class AccountPage {
         }));
 
         englishLabel.setOnMouseClicked(_ -> {
-                LanguageManager.getInstance().toggleLanguage();
-
+if(!"English".equals(LanguageManager.getInstance().getLanguage())){
+    LanguageManager.getInstance().toggleLanguage();}
             popup.hide();
         });
 
         germanLabel.setOnMouseClicked(_ -> {
-                LanguageManager.getInstance().toggleLanguage();
+            if(!"German".equals(LanguageManager.getInstance().getLanguage())){
+                LanguageManager.getInstance().toggleLanguage();}
 
             popup.hide();
         });
@@ -271,17 +272,17 @@ public class AccountPage {
 
         VBox popupVBox = new VBox(10);
 
-        Label oldPasswordLabel = new Label("Old Password:");
+        Label oldPasswordLabel = new Label(LanguageManager.getLanguageBasedString("Altes Passwort:","Old Password:"));
         oldPasswordLabel.setStyle("-fx-text-fill: white;");
         PasswordField oldPasswordField = new PasswordField();
 
-        Label newPasswordLabel = new Label("New Password:");
+        Label newPasswordLabel = new Label(LanguageManager.getLanguageBasedString("Neues Passwort:","New Password:"));
         newPasswordLabel.setStyle("-fx-text-fill: white;");
         PasswordField newPasswordField = new PasswordField();
 
         HBox buttonBox = new HBox(10);
-        Button cancelButton = new Button("Cancel");
-        Button confirmButton = new Button("Confirm");
+        Button cancelButton = new Button(LanguageManager.getLanguageBasedString("Stornieren","Cancel"));
+        Button confirmButton = new Button(LanguageManager.getLanguageBasedString("Bestätigen","Confirm"));
 
         cancelButton.setOnAction(_ -> popupStage.close());
         confirmButton.setOnAction(_ -> {
@@ -291,13 +292,13 @@ public class AccountPage {
                 currentUser.setPassword(newPassword);
                 try {
                     UserJsonHandler.saveUser(currentUser);
-                    showAlert("Success", "Password changed successfully.");
+                    showAlert(LanguageManager.getLanguageBasedString("Erfolg","Success"), LanguageManager.getLanguageBasedString("Passwort erfolgreich geändert.","Password changed successfully."));
                     popupStage.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             } else {
-                showAlert("Error", "Old password is incorrect.");
+                showAlert(LanguageManager.getLanguageBasedString("Fehler","Error"), LanguageManager.getLanguageBasedString("Das alte Passwort ist falsch.","Old password is incorrect."));
             }
         });
 
@@ -308,7 +309,7 @@ public class AccountPage {
         Scene popupScene = new Scene(popupVBox, 300, 200);
         popupScene.setFill(javafx.scene.paint.Color.web("#1c1c1c"));
         popupStage.setScene(popupScene);
-        popupStage.setTitle("Change Password");
+        popupStage.setTitle(LanguageManager.getLanguageBasedString("Kennwort ändern","Change Password"));
         popupStage.show();
     }
 

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Subscription {
 
-    private String user_id;
+    private int user_id;
     private String plans;
     private int price=0;
     static final int price_basic=3;
@@ -25,7 +25,7 @@ private static String max_month;
     private static int current_year=2024;
     private static int current_month=12;
     @JsonCreator
-    public Subscription( @JsonProperty("id") String user_id,  @JsonProperty("plans") String plans) {
+    public Subscription( @JsonProperty("id") int user_id,  @JsonProperty("plans") String plans) {
         this.user_id = user_id;
         this.plans = plans;
 
@@ -58,11 +58,11 @@ int index_plan;
 
 
     // Getters and Setters
-    public String getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 

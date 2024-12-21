@@ -3,6 +3,7 @@ package com.example.fms_market.account;
 import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.User;
 import com.example.fms_market.pages.subscription_page;
+import com.example.fms_market.util.LanguageManager;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,8 +25,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.shape.Rectangle;
-import org.apache.poi.ss.formula.functions.T;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -52,25 +51,21 @@ public class SignUpPage {
     private final VBox strengthPanel = new VBox();
     private final ProgressBar strengthBar = new ProgressBar(0);
 
-    private TextField first_name = new TextField("First Name");
-    private TextField last_name = new TextField("Last Name");
+    private TextField first_name = new TextField(LanguageManager.getLanguageBasedString("Vorname","First Name"));
+    private TextField last_name = new TextField(LanguageManager.getLanguageBasedString("Nachname","Last Name"));
     Text signup_label;
-    private TextField usernsme = new TextField("User Name");
+    private TextField usernsme = new TextField(LanguageManager.getLanguageBasedString("Benutzername","User Name"));
     private TextField emailField = new TextField("Email");
-    private TextField phoneField = new TextField("Phone");
+    private TextField phoneField = new TextField(LanguageManager.getLanguageBasedString("Telefon","Phone"));
     private PasswordField passwordField = new PasswordField();
-    private TextField ageField = new TextField("Age");
+    private TextField ageField = new TextField(LanguageManager.getLanguageBasedString("Alter","Age"));
 
     public SignUpPage(Stage primaryStage) {
-        ComboBox<String> languageComboBox = new ComboBox<>();
-        languageComboBox.getItems().addAll("English", "German");
-        languageComboBox.setValue("English");
-        languageComboBox.setTranslateY(20);
-        languageComboBox.setTranslateX(200);
+
         signup = labelSignup();
         signUpButton = createButton();
         signUpButton.setOnAction(event -> handleSignUp(primaryStage));
-        contentPane = new Pane(languageComboBox);
+        contentPane = new Pane();
         maincontentpane();
 
         setupProfileImagePanel(primaryStage);
@@ -82,7 +77,7 @@ public class SignUpPage {
         phoneField = createPhoneField();
         ageField = createAgeField();
         passwordField = createPasswordField();
-        signup_label = new Text("Sign Up");
+        signup_label = new Text(LanguageManager.getLanguageBasedString("Melden Sie sich an","Sign Up"));
         signup_label.setFill(Color.WHITE);
         signup_label.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 44));
         strengthBar.setPrefWidth(200);
@@ -159,7 +154,7 @@ public class SignUpPage {
         ImageView cameraIconView = new ImageView(cameraIcon);
         cameraIconView.setFitWidth(30);
         cameraIconView.setFitHeight(30);
-        Text watchText = new Text("Watch Movies anytime");
+        Text watchText = new Text(LanguageManager.getLanguageBasedString("Schauen Sie sich jederzeit Filme an","Watch Movies anytime"));
         watchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         watchText.setStyle("-fx-fill: white;");
         HBox movie = new HBox(10);
@@ -169,7 +164,7 @@ public class SignUpPage {
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitWidth(30);
         searchIconView.setFitHeight(30);
-        Text searchText = new Text("Search for any movie you want");
+        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten Film","Search for any movie you want"));
         searchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         searchText.setStyle("-fx-fill: white;");
         HBox search = new HBox(10);
@@ -179,7 +174,7 @@ public class SignUpPage {
         ImageView listIconView = new ImageView(listIconImage);
         listIconView.setFitWidth(30);
         listIconView.setFitHeight(30);
-        Text watchedText = new Text("List your watched Movies");
+        Text watchedText = new Text(LanguageManager.getLanguageBasedString("Liste deine gesehenen Filme auf","List your watched Movies"));
         watchedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         watchedText.setStyle("-fx-fill: white;");
         HBox list = new HBox(10);
@@ -189,7 +184,7 @@ public class SignUpPage {
         ImageView ratedIconView = new ImageView(ratedIconImage);
         ratedIconView.setFitWidth(30);
         ratedIconView.setFitHeight(30);
-        Text ratedText = new Text("Show the most rated movies");
+        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme anzeigen","Show the most rated movies"));
         ratedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         ratedText.setStyle("-fx-fill: white;");
         HBox rated = new HBox(10);
@@ -199,7 +194,7 @@ public class SignUpPage {
         ImageView favoriteIconView = new ImageView(favoriteIconImage);
         favoriteIconView.setFitWidth(30);
         favoriteIconView.setFitHeight(30);
-        Text favoriteText = new Text("Add Shows to your Favourite List");
+        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste hinzufügen","Add Shows to your Favourite List"));
         favoriteText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         favoriteText.setStyle("-fx-fill: white;");
         HBox favourite = new HBox(10);
@@ -270,7 +265,7 @@ public class SignUpPage {
     }
 
     private HBox createLoginText(Stage stage) {
-        Text loginText = new Text("Alraedy have an account?");
+        Text loginText = new Text(LanguageManager.getLanguageBasedString("Hast du schon ein Konto?","Alraedy have an account?"));
         loginText.setFill(Color.WHITE);
         Hyperlink loginLink = new Hyperlink("Login");
         loginLink.setStyle("-fx-font-weight: bold; -fx-text-fill: #1425BB;");
@@ -283,7 +278,7 @@ public class SignUpPage {
     }
 
     private Label labelSignup() {
-        Label signupTitle = new Label("Sign Up");
+        Label signupTitle = new Label(LanguageManager.getLanguageBasedString("Melden Sie sich an","Sign Up"));
         signupTitle.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Lato-Bold.ttf")).toString(), 40));
         signupTitle.setStyle("-fx-text-fill: white;");
         return signupTitle;
@@ -292,12 +287,6 @@ public class SignUpPage {
         String emailRegex = "^[a-zA-Z0-9_+&-]+(?:\\.[a-zA-Z0-9_+&-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        String phoneRegex = "^\\+?\\d{1,3}?[-.\\s]?\\(?\\d{1,4}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}$";
-        Pattern pattern = Pattern.compile(phoneRegex);
-        Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.matches();
     }
 
@@ -309,8 +298,6 @@ public class SignUpPage {
             return false;
         }
     }
-
-
     private void handleSignUp(Stage primaryStage) {
         String email = emailField.getText().trim().toLowerCase();
         String password = passwordField.getText().trim();
@@ -342,22 +329,19 @@ public class SignUpPage {
             if (userName.isEmpty()) {
                 playShakeTransition(usernsme);
             }
-            showAlert(Alert.AlertType.ERROR, "Error! All fields are required!");
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler! Alle Felder sind erforderlich!","Error! All fields are required!"));
             return;
         }
         if (!isValidEmail(email)) {
             playShakeTransition(emailField);
-            showAlert(Alert.AlertType.ERROR, "Invalid email ! Please enter a valid email address.");
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Ungültige E-Mail! Bitte geben Sie eine gültige E-Mail-Adresse ein.","Invalid email ! Please enter a valid email address."));
             return;
         }
-        if (!isValidPhoneNumber(phone)) {
-            playShakeTransition(phoneField);
-            showAlert(Alert.AlertType.ERROR, "Invalid phone ! Please enter a valid phone.");
-            return;
-        }
+
+
         if (!isValidAge(age)) {
-            playShakeTransition(ageField);
-            showAlert(Alert.AlertType.ERROR, "Invalid age ! Please enter a valid age.");
+            playShakeTransition(emailField);
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Ungültiges Alter! Bitte geben Sie ein gültiges Alter ein.","Invalid age ! Please enter a valid age."));
             return;
         }
 
@@ -365,30 +349,32 @@ public class SignUpPage {
             try {
                 if (UserJsonHandler.emailExists(email)) {
                     playShakeTransition(emailField);
-                    showAlert(Alert.AlertType.ERROR, "Email already exists! Please use a different email.");
+                    showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Die E-Mail-Adresse ist bereits vorhanden. Bitte verwenden Sie eine andere E-Mail-Adresse.","Email already exists! Please use a different email."));
                     return;
                 }
 
                 if (profileImage != null) {
                     user_photo_path = profileImage.getAbsolutePath();
                 }
-
-                UserJsonHandler.saveUser(new User( username,email, password, "customer",phone, age, user_photo_path));
-                showAlert(Alert.AlertType.INFORMATION, "Sign Up Successful!");
-                new subscription_page(primaryStage);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                User user=new User( userName,email, password, "customer",phone, age, user_photo_path);
+                UserJsonHandler.saveUser(user);
+                showAlert(Alert.AlertType.INFORMATION, LanguageManager.getLanguageBasedString("Anmeldung erfolgreich!","Sign Up Successful!"));
+                new subscription_page(primaryStage,user);
             } catch (IOException ex) {
-                showAlert(Alert.AlertType.ERROR, "Error saving user: " + ex.getMessage());
+                showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler beim Speichern des Benutzers:","Error saving user: ") + ex.getMessage());
                 ex.printStackTrace();
             }
         } else {
-            showAlert(Alert.AlertType.ERROR, "Password does not meet the criteria!");
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Das Passwort erfüllt nicht die Kriterien!","Password does not meet the criteria!"));
             playShakeTransition(passwordField);
         }
     }
 
     private TextField createFirstNameField() {
         TextField field = new TextField();
-        field.setPromptText("First Name");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Vorname","First Name")
+        );
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         applyNameStyle(field);
@@ -397,7 +383,8 @@ public class SignUpPage {
 
     private TextField createLastNameField() {
         TextField field = new TextField();
-        field.setPromptText("Last Name");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Nachname","Last Name")
+        );
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         applyNameStyle(field);
@@ -426,7 +413,8 @@ public class SignUpPage {
 
     private TextField createUserNameField() {
         TextField field = new TextField();
-        field.setPromptText("User Name");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Benutzername","User Name")
+        );
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         applyTextFieldStyle(field);
@@ -435,7 +423,7 @@ public class SignUpPage {
 
     private PasswordField createPasswordField() {
         PasswordField field = new PasswordField();
-        field.setPromptText("Password");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Passwort","Password"));
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         applyTextFieldStyle(field);
@@ -453,7 +441,7 @@ public class SignUpPage {
 
     private TextField createAgeField() {
         TextField field = new TextField();
-        field.setPromptText("Age");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Alter","Age"));
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         applyTextFieldStyle(field);
@@ -462,7 +450,8 @@ public class SignUpPage {
 
     private TextField createPhoneField() {
         TextField field = new TextField();
-        field.setPromptText("Phone");
+        field.setPromptText(LanguageManager.getLanguageBasedString("Telefon","Phone")
+        );
         field.setPrefWidth(270);
         field.setPrefHeight(55);
         applyTextFieldStyle(field);
@@ -661,7 +650,7 @@ public class SignUpPage {
     }
 
     private boolean isValidPassword() {
-        return calculatePasswordStrength(passwordField.getText()) >= 70;
+        return calculatePasswordStrength(passwordField.getText()) >= 50;
     }
     private void playShakeTransition(Node node) {
         TranslateTransition transition = new TranslateTransition(Duration.millis(100), node);

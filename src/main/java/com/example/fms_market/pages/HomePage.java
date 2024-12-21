@@ -95,7 +95,7 @@ public class HomePage {
 
         //Edit Show Button
         Button editButton =LanguageManager.createLanguageButton("Show bearbeiten","Edit Show","18","black");
-        editButton.setPrefSize(150, 50); // Set button size
+
         editButton.setPadding(new Insets(5,10,10,10));
         editButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
         editButton.setStyle("-fx-background-color: #BBAAD2; -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;-fx-padding: 0px 5px;");
@@ -117,7 +117,6 @@ public class HomePage {
 
         //Add Show Button
         Button addButton =LanguageManager.createLanguageButton("Show hinzufügen","Add Show","18","black");
-        addButton.setPrefSize(150, 50); // Set button size
         addButton.setPadding(new Insets(5,10,10,10));
         addButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
         addButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #BBAAD2, #522193); -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;");
@@ -134,14 +133,25 @@ public class HomePage {
         roundedRectangle3.setArcWidth(40);
         roundedRectangle3.setArcHeight(40);
         addButton.setClip(roundedRectangle3);
-
+LanguageManager.getInstance().toggleLanguage();
         //Delete Show Button
         Button deleteButton =LanguageManager.createLanguageButton("Show löschen","Delete Show","18","black");
-        deleteButton.setPrefSize(150, 50); // Set button size
         deleteButton.setPadding(new Insets(5,10,10,10));
         deleteButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
         deleteButton.setStyle("-fx-background-color: linear-gradient(to bottom right, #522193, #9F1F93); -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;-fx-padding: 0px 5px;");
+        editButton.setPrefSize(150, 50); // Set button size
+        deleteButton.setPrefSize(150, 50); // Set button size
+        addButton.setPrefSize(150, 50); // Set button size
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+            editButton.setStyle("-fx-font-size: 16;-fx-background-color: #BBAAD2; -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;-fx-padding: 0px 5px;");
+            deleteButton.setStyle("-fx-font-size:16; -fx-background-color: linear-gradient(to bottom right, #522193, #9F1F93); -fx-text-fill: black; -fx-border-radius: 15px;-fx-background-radius:20px;-fx-padding: 0px 5px;");
+            addButton.setStyle("-fx-font-size: 16 ;-fx-background-color: linear-gradient(to bottom right, #BBAAD2, #522193); -fx-text-fill: black; -fx-border-radius: 20px;-fx-background-radius:20px;-fx-padding: 0px 5px;");
 
+            editButton.setMaxHeight(90);
+
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Rectangle roundedRectangle4 = new Rectangle(150,50);
         roundedRectangle4.setArcWidth(40);
         roundedRectangle4.setArcHeight(40);

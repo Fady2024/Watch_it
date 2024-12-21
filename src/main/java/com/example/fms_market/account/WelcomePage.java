@@ -1,13 +1,20 @@
 package com.example.fms_market.account;
 
+import com.example.fms_market.util.LanguageManager;
 import com.example.fms_market.util.TopPanel;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import javax.sound.sampled.*;
 import java.awt.*;
@@ -38,10 +45,99 @@ public class WelcomePage {
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
 
+        /*Button languageButton = new Button("🌐");
+        languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: white;");
+        Popup popup = new Popup();
+        VBox menuBox = new VBox(5);
+        menuBox.setStyle("-fx-background-color: #333333; -fx-padding: 10px; -fx-background-radius: 10;");
+
+        Label englishLabel = new Label("English");
+        englishLabel.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10; " +
+                "-fx-padding: 5px 10px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.5, 0, 1);");
+
+        Label germanLabel = new Label("German");
+        germanLabel.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10; " +
+                "-fx-padding: 5px 10px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.5, 0, 1);");
+
+        menuBox.getChildren().addAll(englishLabel, germanLabel);
+        popup.getContent().add(menuBox);
+
+        // Create the PauseTransition
+        PauseTransition hideTransition = new PauseTransition(Duration.seconds(2));
+        hideTransition.setOnFinished(_ -> popup.hide());
+
+        // Add mouse event handlers to reset the transition if the mouse hovers over the popup
+        menuBox.setOnMouseEntered(_ -> hideTransition.stop());
+        menuBox.setOnMouseExited(_ -> hideTransition.play());
+        if (popup.isShowing()) {
+            ScaleTransition hideScaleTransition = new ScaleTransition(Duration.millis(300), menuBox);
+            hideScaleTransition.setFromX(1.0);
+            hideScaleTransition.setFromY(1.0);
+            hideScaleTransition.setToX(0.1);
+            hideScaleTransition.setToY(0.1);
+            hideScaleTransition.setOnFinished(_ -> popup.hide());
+            hideScaleTransition.play();
+        }
+
+        languageButton.setOnAction(_ -> Platform.runLater(() -> {
+            double popupX = languageButton.localToScreen(languageButton.getBoundsInLocal()).getMaxX() - 70;
+            double popupY = languageButton.localToScreen(languageButton.getBoundsInLocal()).getMaxY() - 10;
+            if (popup.isShowing()) {
+                ScaleTransition hideScaleTransition = new ScaleTransition(Duration.millis(300), menuBox);
+                hideScaleTransition.setFromX(1.0);
+                hideScaleTransition.setFromY(1.0);
+                hideScaleTransition.setToX(0.1);
+                hideScaleTransition.setToY(0.1);
+                hideScaleTransition.setOnFinished(_ -> popup.hide());
+                hideScaleTransition.play();
+            } else {
+                menuBox.setScaleX(0.1);
+                menuBox.setScaleY(0.1);
+
+                ScaleTransition showTransition = new ScaleTransition(Duration.millis(300), menuBox);
+                showTransition.setFromX(0.1);
+                showTransition.setFromY(0.1);
+                showTransition.setToX(1.0);
+                showTransition.setToY(1.0);
+
+                popup.show(languageButton, popupX, popupY);
+                showTransition.play();
+                hideTransition.playFromStart(); // Start the hide transition
+            }
+        }));
+
+        englishLabel.setOnMouseClicked(_ -> {
+            if(!"English".equals(LanguageManager.getInstance().getLanguage())){
+                LanguageManager.getInstance().toggleLanguage();}
+            popup.hide();
+        });
+
+        germanLabel.setOnMouseClicked(_ -> {
+            if(!"German".equals(LanguageManager.getInstance().getLanguage())){
+                LanguageManager.getInstance().toggleLanguage();}
+
+            popup.hide();
+        });
+
+       // languageButton.setTranslateY(-620);
+        //languageButton.setTranslateX(640);
+*/
 
         welcomeLabel = createLabel();
         loginButton = createButton("Login", Color.rgb(0, 123, 255));
         signUpButton = createButton("Sign Up", Color.RED);
+        Runnable onHover = () -> {
+            loginButton.setStyle("-fx-background-color: linear-gradient(to top left, #5C0C5A, #9C0479); -fx-text-fill: white; -fx-background-radius: 80;");
+            signUpButton.setStyle("-fx-background-color: linear-gradient(to top left, #5C0C5A, #9C0479); -fx-text-fill: white; -fx-background-radius: 80;");
+
+        };
+
+
+        Runnable onExit = () -> {
+            loginButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 80;");
+            signUpButton.setStyle("-fx-background-color: linear-gradient(to top left, #5C0C5A, #9C0479); -fx-text-fill: white; -fx-background-radius: 80;");
+
+        };
 
         loginButton.setOnAction(_ -> new LoginPageFX(stage));
         signUpButton.setOnAction(_ -> new SignUpPage(stage));
