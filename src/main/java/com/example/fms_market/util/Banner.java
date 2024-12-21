@@ -1,6 +1,7 @@
 package com.example.fms_market.util;
 
 import com.example.fms_market.admin.Revenue_page;
+import com.example.fms_market.model.SearchForShow;
 import com.example.fms_market.model.User;
 import com.example.fms_market.pages.*;
 import javafx.scene.Node;
@@ -65,13 +66,23 @@ public class Banner {
 
         // Search field
         TextField searchField = new TextField();
+        searchField.setPromptText("Series, Shows and Movies");
         searchField.setPrefWidth(300);
         searchField.setPrefHeight(50);
         searchField.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;-fx-border-width: 1;" +
                 "-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
         searchField.setPromptText(LanguageManager.getLanguageBasedString("\uD83D\uDD0D Suche nach Stichwort","\uD83D\uDD0D Search by keyword"));
         searchField.setFont(Font.font("Arial", 15));
-
+        searchField.setOnAction(event -> {
+            String keyword = searchField.getText();
+            try {
+                Banner.setCurrentUser(currentUser);
+                System.out.println("Search triggered for keyword: " + keyword);
+                new SearchForShow(null,currentUser, stage, keyword);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
 //        ComboBox<String> languageComboBox = new ComboBox<>();
 //        languageComboBox.getItems().addAll("English", "German"); // قائمة اللغات
