@@ -35,18 +35,18 @@ public class WelcomePage {
     private final Label welcomeLabel;
     private final Button loginButton;
     private final Button signUpButton;
+    private final Button languageButton;
 
     private int loginButtonX = -200;
     private int signUpButtonX = 1800;
 
     public WelcomePage(Stage stage) {
-        // Get screen dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
 
-        /*Button languageButton = new Button("🌐");
-        languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: white;");
+        languageButton = new Button("🌐"); // Use the class member
+        languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: black;");
         Popup popup = new Popup();
         VBox menuBox = new VBox(5);
         menuBox.setStyle("-fx-background-color: #333333; -fx-padding: 10px; -fx-background-radius: 10;");
@@ -102,7 +102,7 @@ public class WelcomePage {
 
                 popup.show(languageButton, popupX, popupY);
                 showTransition.play();
-                hideTransition.playFromStart(); // Start the hide transition
+                hideTransition.playFromStart();
             }
         }));
 
@@ -118,10 +118,6 @@ public class WelcomePage {
 
             popup.hide();
         });
-
-       // languageButton.setTranslateY(-620);
-        //languageButton.setTranslateX(640);
-*/
 
         welcomeLabel = createLabel();
         loginButton = createButton("Login", Color.rgb(0, 123, 255));
@@ -168,13 +164,13 @@ public class WelcomePage {
 
     private Button createButton(String text, Color backgroundColor) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: " + toRgbString(backgroundColor) + "; -fx-text-fill: white; -fx-font-size: 16px; -fx-effect: dropshadow(gaussian, gray, 10, 0.5, 2, 2);");
+        button.setStyle(STR."-fx-background-color: \{toRgbString(backgroundColor)}; -fx-text-fill: white; -fx-font-size: 16px; -fx-effect: dropshadow(gaussian, gray, 10, 0.5, 2, 2);");
 
         // Add hover effect
         button.setOnMouseEntered(_ -> {
             button.setScaleX(1.1);
             button.setScaleY(1.1);
-            button.setStyle(button.getStyle() + "; -fx-cursor: hand;");
+            button.setStyle(STR."\{button.getStyle()}; -fx-cursor: hand;");
         });
         button.setOnMouseExited(_ -> {
             button.setScaleX(1.0);
@@ -185,7 +181,7 @@ public class WelcomePage {
     }
 
     private void setupContentPane(TopPanel dayNightSwitch) {
-        contentPane.getChildren().addAll(dayNightSwitch.getCanvas(), welcomeLabel, loginButton, signUpButton);
+        contentPane.getChildren().addAll(dayNightSwitch.getCanvas(), languageButton, welcomeLabel, loginButton, signUpButton);
 
         // Initial layout (before resize)
         updateLayout(contentPane.getWidth(), contentPane.getHeight());
@@ -198,7 +194,8 @@ public class WelcomePage {
         // Center the elements based on new window size
         double centerX = width / 2.0;
         double centerY = height / 2.0;
-
+        languageButton.setLayoutX(width-100);
+        languageButton.setLayoutY(15);
         welcomeLabel.setLayoutX(centerX - 150);
         welcomeLabel.setLayoutY(centerY - 150);
 
@@ -234,7 +231,7 @@ public class WelcomePage {
         try {
             URL audioFileURL = getClass().getResource(AUDIO_FILE_PATH);
             if (audioFileURL == null) {
-                System.err.println("Audio file not found: " + AUDIO_FILE_PATH);
+                System.err.println(STR."Audio file not found: \{AUDIO_FILE_PATH}");
                 return;
             }
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFileURL);
