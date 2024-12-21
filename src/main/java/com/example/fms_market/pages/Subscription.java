@@ -10,20 +10,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Subscription {
 
     private String user_id;
-
-
     private String plans;
-
-
     private int price=0;
-
     static final int price_basic=3;
     static final int price_standard=15;
-
     static final int price_permium=30;
-
     private String start_date;
-
 
 private static int freq_month[][]=new int[12][3];
 private static int arr_revenue[]= new int[12];

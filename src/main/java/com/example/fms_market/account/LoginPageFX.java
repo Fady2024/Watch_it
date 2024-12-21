@@ -58,7 +58,6 @@ public class LoginPageFX {
         double stageWidth = screenSize.getWidth();
         double stageHeight = screenSize.getHeight() / 1.1;
 
-        TopPanel dayNightSwitch = new TopPanel();
 
         signUpText = createSignUpText(stage);
 
@@ -223,9 +222,6 @@ public class LoginPageFX {
         scene.heightProperty().addListener((_, _, newHeight) -> updateLayout(scene.getWidth(), newHeight.doubleValue(), true,true));
         stage.setScene(scene);
         stage.show();
-
-        dayNightSwitch.addActionListener(this::updateColors);
-        updateColors();
     }
 
 
@@ -278,19 +274,19 @@ public class LoginPageFX {
     }
 
     private void handleLogin(Stage stage) {
-        String email = usernameField.getText().trim().toLowerCase();
+        String username = usernameField.getText().trim().toLowerCase();
         String password = passwordField.getText().trim();
 
-        boolean EmailIsValid = true;
+        boolean UsernameIsValid = true;
         boolean PasswordIsValid = true;
 
         emailErrorText.setText("");
         passwordErrorText.setText("");
         messageText.setText("");
 
-        if (email.isEmpty()) {
+        if (username.isEmpty()) {
             emailErrorText.setText(LanguageManager.getLanguageBasedString("Der Benutzername darf nicht leer sein.","User Name cannot be empty."));
-            EmailIsValid = false;
+            UsernameIsValid = false;
         }
 
         if (password.isEmpty()) {
@@ -298,12 +294,12 @@ public class LoginPageFX {
             PasswordIsValid = false;
         }
 
-        if (EmailIsValid && PasswordIsValid) {
+        if (UsernameIsValid && PasswordIsValid) {
             emailErrorText.setVisible(false);
             passwordErrorText.setVisible(false);
 
             try {
-                User user = UserJsonHandler.getUserByEmailAndPassword(email, password);
+                User user = UserJsonHandler.getUserByEmailAndPassword(username, password);
                 if (user != null) {
                     new HomePage(user, stage);
                 } else {
@@ -321,7 +317,7 @@ public class LoginPageFX {
             playShakeTransition(loginForm);
         }
 
-        updateLayout(stage.getWidth(), stage.getHeight(), EmailIsValid, PasswordIsValid);
+        updateLayout(stage.getWidth(), stage.getHeight(), UsernameIsValid, PasswordIsValid);
         contentPane.requestLayout();
     }
 
@@ -440,6 +436,7 @@ public class LoginPageFX {
     private Button createButton() {
         Button button = new Button("Login");
         String colorHex = colorToHex();
+        String darkencolor=darkenColor();
 
         button.setPrefWidth(170);
         button.setPrefHeight(45);
@@ -457,7 +454,7 @@ public class LoginPageFX {
         button.setOnMouseEntered(_ ->
                 button.setStyle(String.format(
                         "-fx-background-color: linear-gradient(to bottom, #c9068d, #641271); -fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; " +
-                                "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", darkenColor())));
+                                "-fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;", darkencolor)));
 
         button.setOnMouseExited(_ ->
                 button.setStyle(String.format(
@@ -475,7 +472,7 @@ public class LoginPageFX {
     }
 
     private String darkenColor() {
-        double factor = 0.8;
+        double factor = 2;
         return String.format("#%02X%02X%02X",
                 (int) (Color.PURPLE.getRed() * 255 * factor),
                 (int) (Color.PURPLE.getGreen() * 255 * factor),
@@ -490,14 +487,5 @@ public class LoginPageFX {
         return errorText;
     }
 
-    private void updateColors() {
-        if (TopPanel.isDayValue()) {
-            contentPane.setStyle("-fx-background-color: white;");
-            login.setTextFill(Color.BLACK);
-        } else {
-            contentPane.setStyle("-fx-background-color: #333;");
-            login.setTextFill(Color.WHITE);
-        }
-    }
 }
 

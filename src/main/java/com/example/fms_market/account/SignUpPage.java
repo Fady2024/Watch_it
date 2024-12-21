@@ -632,7 +632,7 @@ public class SignUpPage {
     }
 
     private boolean isValidPassword() {
-        return calculatePasswordStrength(passwordField.getText()) >= 50;
+        return calculatePasswordStrength(passwordField.getText()) >= 70;
     }
     private void playShakeTransition(Node node) {
         TranslateTransition transition = new TranslateTransition(Duration.millis(100), node);
