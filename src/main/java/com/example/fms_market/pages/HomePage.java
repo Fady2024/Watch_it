@@ -1,6 +1,8 @@
 package com.example.fms_market.pages;
 
 import com.example.fms_market.admin.AddShow;
+import com.example.fms_market.admin.RemoveShowPage;
+import com.example.fms_market.admin.UpdateShowPage;
 import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.Movie;
 import com.example.fms_market.model.Series;
@@ -103,6 +105,16 @@ public class HomePage {
         roundedRectangle2.setArcHeight(40);
         editButton.setClip(roundedRectangle2);
 
+        editButton.setOnAction(e -> {
+
+            try {
+                new UpdateShowPage(user,stage);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+
         //Add Show Button
         Button addButton =LanguageManager.createLanguageButton("Show hinzufügen","Add Show","18","black");
         addButton.setPrefSize(150, 50); // Set button size
@@ -134,6 +146,15 @@ public class HomePage {
         roundedRectangle4.setArcWidth(40);
         roundedRectangle4.setArcHeight(40);
         deleteButton.setClip(roundedRectangle4);
+        deleteButton.setOnMouseClicked( e-> {
+            try {
+                new RemoveShowPage(user,stage);
+
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
 
         adminBox.setAlignment(Pos.TOP_RIGHT);
         adminBox.getChildren().addAll(editButton,addButton,deleteButton);
