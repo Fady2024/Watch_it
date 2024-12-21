@@ -133,8 +133,7 @@ public class HomePage {
         roundedRectangle3.setArcWidth(40);
         roundedRectangle3.setArcHeight(40);
         addButton.setClip(roundedRectangle3);
-LanguageManager.getInstance().toggleLanguage();
-        //Delete Show Button
+
         Button deleteButton =LanguageManager.createLanguageButton("Show löschen","Delete Show","18","black");
         deleteButton.setPadding(new Insets(5,10,10,10));
         deleteButton.setFont(Font.loadFont(Objects.requireNonNull(HomePage.class.getResource("/Kufam-VariableFont_wght.ttf")).toString(),18));
