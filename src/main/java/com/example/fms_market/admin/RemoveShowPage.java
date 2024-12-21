@@ -19,9 +19,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -60,6 +62,11 @@ public class RemoveShowPage {
         showContainer.setVgap(20);
         showContainer.setAlignment(Pos.TOP_LEFT);
         showContainer.setStyle("-fx-background-color: #1c1c1c;");
+        ScrollPane scrollPane = new ScrollPane(showContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: #1c1c1c;");
+        BorderPane layout = new BorderPane();
+        layout.setCenter(scrollPane);
 
         List<Movie> allMovies;
         try {
