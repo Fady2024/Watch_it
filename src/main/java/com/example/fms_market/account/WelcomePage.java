@@ -1,49 +1,33 @@
 package com.example.fms_market.account;
 
 import com.example.fms_market.util.LanguageManager;
-import com.example.fms_market.util.TopPanel;
-import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
 import javafx.util.Duration;
 
-import javax.sound.sampled.*;
-import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.scene.text.Font;
 
+import javafx.scene.effect.DropShadow;
+
+import java.awt.*;
 public class WelcomePage {
 
-    private static final String WELCOME_MESSAGE = "Welcome to WATCH IT!";
-    private static final String AUDIO_FILE_PATH = "/FMS.wav";
-    private static final int ANIMATION_SPEED = 10;
-    private static final int TYPING_SPEED = 70;
-    private static final int TIMER_DELAY = 15;
-
-    private final Pane contentPane;
-    private final Label welcomeLabel;
-    private final Button loginButton;
-    private final Button signUpButton;
     private final Button languageButton;
 
-    private int loginButtonX = -200;
-    private int signUpButtonX = 1800;
-
     public WelcomePage(Stage stage) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int stageWidth = (int) screenSize.getWidth();
-        int stageHeight = (int) (screenSize.getHeight() / 1.1);
 
         languageButton = new Button("🌐"); // Use the class member
         languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: black;");
@@ -119,171 +103,48 @@ public class WelcomePage {
             popup.hide();
         });
 
-        welcomeLabel = createLabel();
-        loginButton = createButton("Login", Color.rgb(0, 123, 255));
-        signUpButton = createButton("Sign Up", Color.RED);
-        Runnable onHover = () -> {
-            loginButton.setStyle("-fx-background-color: linear-gradient(to top left, #5C0C5A, #9C0479); -fx-text-fill: white; -fx-background-radius: 80;");
-            signUpButton.setStyle("-fx-background-color: linear-gradient(to top left, #5C0C5A, #9C0479); -fx-text-fill: white; -fx-background-radius: 80;");
 
-        };
+        Image gifImage = new Image(LanguageManager.getLanguageBasedString("file:src/main/resources/image/ff.gif","file:src/main/resources/image/final.gif"));
+        ImageView imageView = new ImageView(gifImage);
+        imageView.setPreserveRatio(false);
+        imageView.fitWidthProperty().bind(stage.widthProperty());
+        imageView.fitHeightProperty().bind(stage.heightProperty());
 
+        Button signInButton = new Button(LanguageManager.getLanguageBasedString("anmelden","Sign in"));
+        Button loginButton = new Button(LanguageManager.getLanguageBasedString("einloggen","Login"));
 
-        Runnable onExit = () -> {
-            loginButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 80;");
-            signUpButton.setStyle("-fx-background-color: linear-gradient(to top left, #5C0C5A, #9C0479); -fx-text-fill: white; -fx-background-radius: 80;");
+        styleButton(signInButton);
+        styleButton(loginButton);
 
-        };
+        signInButton.setOnMouseEntered(e -> signInButton.setScaleX(1.1));
+        signInButton.setOnMouseExited(e -> signInButton.setScaleX(1));
+        signInButton.setOnAction(e -> new SignUpPage(stage));
+        loginButton.setOnMouseEntered(e -> loginButton.setScaleX(1.1));
+        loginButton.setOnMouseExited(e -> loginButton.setScaleX(1));
+loginButton.setOnAction(e -> new LoginPageFX(stage));
 
-        loginButton.setOnAction(_ -> new LoginPageFX(stage));
-        signUpButton.setOnAction(_ -> new SignUpPage(stage));
-        TopPanel dayNightSwitch = new TopPanel();
+signInButton.setTranslateY(185);
+loginButton.setTranslateY(185);
+signInButton.setTranslateX(250);
+loginButton.setTranslateX(-300);
+        HBox hbox = new HBox(20, signInButton, loginButton);
 
-        dayNightSwitch.addActionListener(this::updateColors);
+        hbox.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+languageButton.setTranslateX(500);
+languageButton.setTranslateY(-350);
+        StackPane root = new StackPane(imageView,hbox,languageButton);
+        Scene scene = new Scene(root);
 
-        contentPane = new Pane();
-        setupContentPane(dayNightSwitch);
-
-        Scene scene = new Scene(contentPane, stageWidth, stageHeight);
-        scene.widthProperty().addListener((_, _, newWidth) -> updateLayout(newWidth.doubleValue(), scene.getHeight()));
-        scene.heightProperty().addListener((_, _, newHeight) -> updateLayout(scene.getWidth(), newHeight.doubleValue()));
-
+        stage.setTitle("GIF");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
 
-        startAnimation();
-        updateColors();
-    }
-
-    private Label createLabel() {
-        Label label = new Label("");
-        label.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, gray, 5, 0.5, 2, 2);");
-        label.setTextFill(Color.BLACK);
-        return label;
-    }
-
-    private Button createButton(String text, Color backgroundColor) {
-        Button button = new Button(text);
-        button.setStyle(STR."-fx-background-color: \{toRgbString(backgroundColor)}; -fx-text-fill: white; -fx-font-size: 16px; -fx-effect: dropshadow(gaussian, gray, 10, 0.5, 2, 2);");
-
-        // Add hover effect
-        button.setOnMouseEntered(_ -> {
-            button.setScaleX(1.1);
-            button.setScaleY(1.1);
-            button.setStyle(STR."\{button.getStyle()}; -fx-cursor: hand;");
-        });
-        button.setOnMouseExited(_ -> {
-            button.setScaleX(1.0);
-            button.setScaleY(1.0);
-        });
-
-        return button;
-    }
-
-    private void setupContentPane(TopPanel dayNightSwitch) {
-        contentPane.getChildren().addAll(dayNightSwitch.getCanvas(), languageButton, welcomeLabel, loginButton, signUpButton);
-
-        // Initial layout (before resize)
-        updateLayout(contentPane.getWidth(), contentPane.getHeight());
-
-        dayNightSwitch.getCanvas().setLayoutX(10);
-        dayNightSwitch.getCanvas().setLayoutY(10);
-    }
-
-    private void updateLayout(double width, double height) {
-        // Center the elements based on new window size
-        double centerX = width / 2.0;
-        double centerY = height / 2.0;
-        languageButton.setLayoutX(width-100);
-        languageButton.setLayoutY(15);
-        welcomeLabel.setLayoutX(centerX - 150);
-        welcomeLabel.setLayoutY(centerY - 150);
-
-        loginButton.setLayoutX(centerX - 75);
-        loginButton.setLayoutY(centerY - 50);
-
-        signUpButton.setLayoutX(centerX - 75);
-        signUpButton.setLayoutY(centerY + 50);
-    }
-
-    private void startTypingAnimation() {
-        StringBuilder currentText = new StringBuilder();
-        AnimationTimer typingTimer = new AnimationTimer() {
-            private long lastUpdate = 0;
-
-            @Override
-            public void handle(long now) {
-                if (now - lastUpdate >= TYPING_SPEED * 1_000_000) {
-                    if (currentText.length() < WELCOME_MESSAGE.length()) {
-                        currentText.append(WELCOME_MESSAGE.charAt(currentText.length()));
-                        welcomeLabel.setText(currentText.toString());
-                    } else {
-                        stop();
-                    }
-                    lastUpdate = now;
-                }
-            }
-        };
-        typingTimer.start();
-    }
-
-    private void playAudio() {
-        try {
-            URL audioFileURL = getClass().getResource(AUDIO_FILE_PATH);
-            if (audioFileURL == null) {
-                System.err.println(STR."Audio file not found: \{AUDIO_FILE_PATH}");
-                return;
-            }
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFileURL);
-
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
-
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            Logger.getLogger(WelcomePage.class.getName()).log(Level.SEVERE, null, e);
-        }
-    }
-
-    private void startAnimation() {
-        playAudio();
-        startTypingAnimation();
-        AnimationTimer animationTimer = new AnimationTimer() {
-            private long lastUpdate = 0;
-
-            @Override
-            public void handle(long now) {
-                if (now - lastUpdate >= TIMER_DELAY * 1_000_000) {
-                    int centerX = (int) (contentPane.getWidth() / 2);
-
-                    if (loginButtonX < centerX - 5) {
-                        loginButtonX += ANIMATION_SPEED;
-                        loginButton.setLayoutX(loginButtonX);
-                    }
-
-                    if (signUpButtonX > centerX) {
-                        signUpButtonX -= ANIMATION_SPEED;
-                        signUpButton.setLayoutX(signUpButtonX);
-                    }
-
-                    lastUpdate = now;
-                }
-            }
-        };
-        animationTimer.start();
-    }
-
-    private void updateColors() {
-        if (TopPanel.isDayValue()) {
-            contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #f5f7fa, #c3cfe2);");
-            welcomeLabel.setTextFill(Color.BLACK);
-        } else {
-            contentPane.setStyle("-fx-background-color: linear-gradient(to bottom, #232526, #414345);");
-            welcomeLabel.setTextFill(Color.WHITE);
-        }
-    }
-
-    private String toRgbString(Color color) {
-        return String.format("rgb(%d, %d, %d)", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255));
-    }
 }
+    private void styleButton(Button button) {
+        button.setStyle("-fx-background-color: #3c3737; -fx-text-fill: white;");
+        button.setFont(Font.font(16));
+
+        button.setEffect(new DropShadow());
+    }
+  }

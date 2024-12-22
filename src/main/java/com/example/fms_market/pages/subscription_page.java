@@ -66,7 +66,7 @@ public class subscription_page {
             ImageView imageView = null;
             String plan_name;
             if (i == 0) {
-                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/hd_27db10d7dcdcbec2ab9f6de7ad9f36ae_67662a7137f6e (1)-remove-bg-io.png","file:src/main/resources/image/Basic plan.png");
+                image_path = "file:src/main/resources/image/Basic plan.png";
                 plan_name="Basic";
                 Image image1 = new Image(image_path);
                 imageView = new ImageView(image1);
