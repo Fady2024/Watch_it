@@ -33,7 +33,7 @@ public class subscription_page {
         hbox.setPrefWidth(stageWidth * 0.6);
         hbox.setPrefHeight(stageHeight * 0.6);
 
-
+        LanguageManager.getInstance().toggleLanguage();
 
         StackPane root = new StackPane();
         root.setPadding(new Insets(10));
@@ -58,29 +58,25 @@ public class subscription_page {
             button1.setPrefWidth(stageWidth * 0.1);
             button1.setPrefHeight(stageHeight * 0.05);
 
-
-
-
-
             String image_path;
             ImageView imageView = null;
             String plan_name;
             if (i == 0) {
-                image_path = "file:src/main/resources/image/Basic plan.png";
+                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/1 german.png","file:src/main/resources/image/Basic plan.png");
                 plan_name="Basic";
                 Image image1 = new Image(image_path);
                 imageView = new ImageView(image1);
                 imageView.setFitWidth(400);
                 imageView.setFitHeight(400);
             } else if (i == 1) {
-                image_path = "file:src/main/resources/image/Standard plan.png";
+                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/2 german.png","file:src/main/resources/image/Standard plan.png");
                 plan_name="Standard";
                 Image image2 = new Image(image_path);
                 imageView = new ImageView(image2);
                 imageView.setFitWidth(400);
                 imageView.setFitHeight(400);
             } else {
-                image_path = "file:src/main/resources/image/premium plan.png";
+                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/3 german.png","file:src/main/resources/image/premium plan.png");
 
                 plan_name="Premium";
 
@@ -118,8 +114,18 @@ public class subscription_page {
 
             imageView.setOnMouseEntered(e -> onHover.run());
             imageView.setOnMouseExited(e -> onExit.run());
+            StackPane stack;
 
-            StackPane stack = new StackPane(outerRectangle, innerRectangle, button1, imageView);
+            if ("German".equals(LanguageManager.getInstance().getLanguage())) {
+                imageView.setFitWidth(350); // حجم ثابت
+                imageView.setFitHeight(550);
+                stack = new StackPane(outerRectangle,imageView,button1);
+                button1.setTranslateY(150);
+                button1.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 80;");
+
+            } else {
+                stack = new StackPane(outerRectangle, innerRectangle, button1, imageView);
+            }
 
             hbox.getChildren().add(stack);
         }

@@ -164,7 +164,7 @@ public class SignUpPage {
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitWidth(30);
         searchIconView.setFitHeight(30);
-        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten Film","Search for any movie you want"));
+        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten \n Film","Search for any movie you want"));
         searchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         searchText.setStyle("-fx-fill: white;");
         HBox search = new HBox(10);
@@ -184,7 +184,7 @@ public class SignUpPage {
         ImageView ratedIconView = new ImageView(ratedIconImage);
         ratedIconView.setFitWidth(30);
         ratedIconView.setFitHeight(30);
-        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme anzeigen","Show the most rated movies"));
+        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme \n anzeigen","Show the most rated movies"));
         ratedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         ratedText.setStyle("-fx-fill: white;");
         HBox rated = new HBox(10);
@@ -194,7 +194,7 @@ public class SignUpPage {
         ImageView favoriteIconView = new ImageView(favoriteIconImage);
         favoriteIconView.setFitWidth(30);
         favoriteIconView.setFitHeight(30);
-        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste hinzufügen","Add Shows to your Favourite List"));
+        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste \n hinzufügen","Add Shows to your Favourite List"));
         favoriteText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         favoriteText.setStyle("-fx-fill: white;");
         HBox favourite = new HBox(10);

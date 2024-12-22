@@ -16,7 +16,6 @@ public class LanguageManager {
     private StringProperty language = new SimpleStringProperty("English");
     private final List<Runnable> actionListeners = new ArrayList<>();
 
-    private LanguageManager() {}
 
     public static LanguageManager getInstance() {
         return instance;

@@ -12,18 +12,11 @@ public class Subscription {
     private int user_id;
     private String plans;
     private int price = 0;
-
-
     private int watched_movies_number = 0;
     //private MovieViewingHistory viewingHistory;
-
     static final int price_basic=3;
     static final int price_standard=15;
     static final int price_permium=30;
-
-
-
-
 
     private String start_date;
     private String endDate;
@@ -32,19 +25,11 @@ public class Subscription {
     static final int maxMovies_premium = 30;
 
     int available_movies;
-
-
-
-
     private static int freq_month[][]=new int[12][3];
     private static int arr_revenue[]= new int[12];
     private static String max_month;
-
-
     private static int current_year=2024;
     private static int current_month=12;
-
-
 
     @JsonCreator
     public Subscription( @JsonProperty("id") int user_id,  @JsonProperty("plans") String plans) {
@@ -54,10 +39,13 @@ public class Subscription {
         //date of subscription starts from this day when the user starts his subscription
         // this.start_date = LocalDate.now();
         this.watched_movies_number = 0;
-        // this.endDate=this.start_date.plusDays(30);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate parsedStartDate  = LocalDate.parse(start_date, formatter);
-        LocalDate endDate = parsedStartDate.plusDays(30);
+        this.start_date = LocalDate.now().format(formatter);
+
+        LocalDate parsedStartDate = LocalDate.parse(start_date, formatter);
+        LocalDate parsedEndDate = parsedStartDate.plusMonths(1);
+        this.endDate = parsedEndDate.format(formatter);
+
         if (current_year != parsedStartDate.getYear()) {
             current_year = parsedStartDate.getYear();
             Arrays.fill(freq_month, 0);
@@ -146,8 +134,13 @@ public class Subscription {
         return plans;
     }
 
+    public String getEndDate() {
+        return endDate;
+    }
 
-
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
     public void setPlans(String plans) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -237,8 +230,8 @@ public class Subscription {
         }
         return arr_revenue;
     }
-
-    public static int getMax_revenue() {
+/////////////////////////////////////////////////////////////////////////////////////
+    public static String getMax_revenue() {
         int max_revenue=-1;
         String[] months = {
                 "January", "February", "March", "April", "May", "June",
@@ -256,8 +249,8 @@ public class Subscription {
             }
 
         }
-        return INDEX;
+        return max_month;
     }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

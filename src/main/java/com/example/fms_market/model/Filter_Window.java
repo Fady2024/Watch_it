@@ -1,6 +1,7 @@
 package com.example.fms_market.model;
 
 import com.example.fms_market.model.User_Filter;
+import com.example.fms_market.util.LanguageManager;
 import javafx.animation.FadeTransition;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,10 +37,11 @@ public class Filter_Window {
         HBox genresBox = new HBox(10);
         genresLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),18));
         genresLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
-        CheckBox actionCheckBox = new CheckBox("Action");
-        CheckBox dramaCheckBox = new CheckBox("Drama");
-        CheckBox comedyCheckBox = new CheckBox("Comedy");
-        CheckBox horrorCheckBox = new CheckBox("Horror");
+        CheckBox actionCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Aktion", "Action"));
+        CheckBox dramaCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Drama", "Drama"));
+        CheckBox comedyCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Komödie", "Comedy"));
+        CheckBox horrorCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Horror", "Horror"));
+
         styleCheckBoxes(actionCheckBox, dramaCheckBox, comedyCheckBox, horrorCheckBox);
         genresBox.getChildren().addAll(actionCheckBox, dramaCheckBox, comedyCheckBox, horrorCheckBox);
 
@@ -48,9 +50,10 @@ public class Filter_Window {
         languageLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),18));
         languageLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
         HBox languageBox = new HBox(10);
-        CheckBox englishCheckBox = new CheckBox("English");
-        CheckBox arabicCheckBox = new CheckBox("Arabic");
-        CheckBox italianCheckBox = new CheckBox("Italian");
+        CheckBox englishCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Englisch", "English"));
+        CheckBox arabicCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Arabisch", "Arabic"));
+        CheckBox italianCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Italienisch", "Italian"));
+
         styleCheckBoxes(englishCheckBox, arabicCheckBox, italianCheckBox);
         languageBox.getChildren().addAll(englishCheckBox, arabicCheckBox, italianCheckBox);
 
@@ -71,13 +74,13 @@ public class Filter_Window {
         HBox imdbBox = new HBox(10, imdbLabel, imdbSlider, imdbValue);
 
         // Country Section
-        Label countryLabel = new Label("Country:");
+        Label countryLabel = new Label(LanguageManager.getLanguageBasedString("Land:", "Country"));
         countryLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),18));
         countryLabel.setStyle(" -fx-font-weight: bold; -fx-text-fill: white;");
         HBox countryBox = new HBox(10);
         CheckBox usaCheckBox = new CheckBox("USA");
         CheckBox englandCheckBox = new CheckBox("England");
-        CheckBox egyptCheckBox = new CheckBox("Egypt");
+        CheckBox egyptCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Ägypten", "Egypt"));
         styleCheckBoxes(usaCheckBox, englandCheckBox, egyptCheckBox);
         countryBox.getChildren().addAll(usaCheckBox, englandCheckBox, egyptCheckBox);
 
@@ -86,24 +89,26 @@ public class Filter_Window {
         typeLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),18));
         typeLabel.setStyle(" -fx-font-weight: bold; -fx-text-fill: white;");
         HBox typeBox = new HBox(10);
-        CheckBox movieCheckBox = new CheckBox("Movie");
-        CheckBox seriesCheckBox = new CheckBox("Series");
+        CheckBox movieCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Film", "Movie"));
+        CheckBox seriesCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Serie", "Series"));
+
         styleCheckBoxes(movieCheckBox, seriesCheckBox);
         typeBox.getChildren().addAll(movieCheckBox, seriesCheckBox);
 
         // Year Section
-        Label yearLabel = new Label("Year:");
+        Label yearLabel = new Label(LanguageManager.getLanguageBasedString("Jahr", "Year"));
         yearLabel.setStyle("-fx-font-family: 'Roboto', sans-serif; -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
         HBox yearBox = new HBox(10);
         CheckBox year2024CheckBox = new CheckBox("2024");
         CheckBox year2023CheckBox = new CheckBox("2023");
         CheckBox year2022CheckBox = new CheckBox("2022");
-        CheckBox olderCheckBox = new CheckBox("older");
+        CheckBox olderCheckBox = new CheckBox(LanguageManager.getLanguageBasedString("Älter", "Older"));
+
         styleCheckBoxes(year2024CheckBox, year2023CheckBox, year2022CheckBox, olderCheckBox);
         yearBox.getChildren().addAll(year2024CheckBox, year2023CheckBox, year2022CheckBox, olderCheckBox);
 
         // Apply Button
-        Button applyButton = new Button("Apply");
+        Button applyButton = new Button(LanguageManager.getLanguageBasedString("Anwenden", "Apply"));
         applyButton.setStyle("-fx-background-color: #40046a; -fx-text-fill: #FFFFFF; -fx-font-family: 'Roboto', sans-serif; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 8px; -fx-cursor: hand;");
         applyButton.setOnAction(event -> {
             user_filter.setGenres(getSelectedValues(actionCheckBox, dramaCheckBox, comedyCheckBox, horrorCheckBox));

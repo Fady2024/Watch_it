@@ -4,6 +4,7 @@ import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.*;
 import com.example.fms_market.pages.Sidebar;
 import com.example.fms_market.util.Banner;
+import com.example.fms_market.util.LanguageManager;
 import com.example.fms_market.util.ShowCardUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.geometry.Insets;
@@ -114,7 +115,7 @@ public class SearchForShow {
             e.printStackTrace();
         }
         // HBox banner = Banner.getBanner(stage, keyword!=null ? "Search Results for: " + keyword : "Filtered Results");
-        Label searchedForLabel = new Label("You searched for: \"" + keyword + "\"");
+        Label searchedForLabel = new Label(LanguageManager.getLanguageBasedString("Sie haben nach: \"" + keyword + "\" gesucht", "You searched for: \"" + keyword + "\""));
         searchedForLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
         searchedForLabel.setVisible(false); // Initially hidden
 
@@ -170,19 +171,29 @@ public class SearchForShow {
 
 // Add all components to the mainSection
         mainSection.getChildren().addAll(
-                Banner.getBanner(stage, keyword != null ? "Search Results for: " + keyword : "Filtered Results"), // Banner
+                Banner.getBanner(stage, LanguageManager.getLanguageBasedString(
+                        "Suchergebnisse für: " + (keyword != null ? keyword : ""),
+                        "Search Results for: " + (keyword != null ? keyword : "")
+                ))
+, // Banner
                 filterBox, // Filter section
                 contentBox // Movie/Series content
         );
 
         if (Movie_results.isEmpty() && seriesResults.isEmpty()) {
-            Label notFoundLabel = new Label("No movies or series found");
+            Label notFoundLabel = new Label(LanguageManager.getLanguageBasedString(
+                    "Keine Filme oder Serien gefunden",
+                    "No movies or series found"
+            ));
             notFoundLabel.setTextFill(Color.WHITE);
             notFoundLabel.setFont(Font.font("Arial", 20));
             movieGrid.add(notFoundLabel, 0, 0);
         } else if (seriesResults.isEmpty()) {
 
-            Label movieLabel = new Label("Movies");
+            Label movieLabel = new Label(LanguageManager.getLanguageBasedString(
+                    "Filme",
+                    "Movies"
+            ));
             movieLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
 
             mainSection.getChildren().addAll(movieLabel, movieGrid);
@@ -190,7 +201,10 @@ public class SearchForShow {
 
         }
         else if(Movie_results.isEmpty()) {
-            Label seriesLabel = new Label("Series");
+            Label seriesLabel = new Label(LanguageManager.getLanguageBasedString(
+                    "Serien",
+                    "Series"
+            ));
             seriesLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
 
             mainSection.getChildren().addAll(seriesLabel, seriesGrid);
@@ -198,9 +212,16 @@ public class SearchForShow {
         }
         else
         {
-            Label movieLabel = new Label("Movies");
+            Label movieLabel = new Label(LanguageManager.getLanguageBasedString(
+                    "Filme",
+                    "Movies"
+            ));
+
             movieLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
-            Label seriesLabel = new Label("Series");
+            Label seriesLabel = new Label(LanguageManager.getLanguageBasedString(
+                    "Serien",
+                    "Series"
+            ));
             seriesLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
 
             mainSection.getChildren().addAll(movieLabel, movieGrid, seriesLabel, seriesGrid);
@@ -225,7 +246,10 @@ public class SearchForShow {
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle(keyword != null ? "Search Results for: " + keyword : "Filtered Results");
+        stage.setTitle(LanguageManager.getLanguageBasedString(
+                "Suchergebnisse für: " + (keyword != null ? keyword : "Gefilterte Ergebnisse"),
+                "Search Results for: " + (keyword != null ? keyword : "Filtered Results")
+        ));
         stage.show();
     }
 
