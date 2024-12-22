@@ -64,6 +64,7 @@ public class User_Filter {
     public List<Movie> filterMovies(List<Show> allShows) {
         return allShows.stream()
                 .filter(show -> show instanceof Movie)
+                .filter(show -> types.isEmpty() || types.contains("movie"))
                 .map(show -> (Movie) show)
                 .filter(movie -> genres.isEmpty() || genres.stream().anyMatch(genre -> movie.getGenres().contains(genre)))
                 .filter(movie -> languages.isEmpty() || languages.stream().anyMatch(language -> movie.getLanguage().contains(language)))
@@ -77,6 +78,7 @@ public class User_Filter {
     public List<Series> filterSeries(List<Show> allShows) {
         return allShows.stream()
                 .filter(show -> show instanceof Series)
+                .filter(show -> types.isEmpty() || types.contains("series"))
                 .map(show -> (Series) show)
                 .filter(series -> genres.isEmpty() || genres.stream().anyMatch(genre -> series.getGenres().contains(genre)))
                 .filter(series -> languages.isEmpty() || languages.stream().anyMatch(language -> series.getLanguage().contains(language)))
@@ -87,5 +89,8 @@ public class User_Filter {
                 .collect(Collectors.toList());
     }
 }
+
+
+
 
 
