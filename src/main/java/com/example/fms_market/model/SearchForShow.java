@@ -65,15 +65,15 @@ public class SearchForShow {
       // Call the non-static method on the instance
 
 
-        List<Show> allShows = ShowJsonHandler.readShows(); //3shan fel filter
+        List<Show> allShows = ShowJsonHandler.readShows(); 
         List<Movie> Movie_results=ShowJsonHandler.readMovies();
         List<Series> seriesResults=ShowJsonHandler.readSeries();
 
-        try {
+     try {
             if (keyword != null) {
-                Movie_results = searchMoviesByKeyword(ShowJsonHandler.readMovies(), keyword.toLowerCase());
-                seriesResults = searchSeriesByKeyword(ShowJsonHandler.readSeries(), keyword.toLowerCase());
-            } else {
+                Movie_results = searchMoviesByKeyword(Movie_results, keyword.toLowerCase(),user,stage);
+                seriesResults = searchSeriesByKeyword(seriesResults, keyword.toLowerCase(),user,stage);
+            } if(user_filter!=null){
                 Movie_results = user_filter.filterMovies(allShows);
                 seriesResults = user_filter.filterSeries(allShows);
             }
