@@ -2,9 +2,9 @@ package com.example.fms_market.model;
 
 import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.*;
+import com.example.fms_market.pages.DetailsPageFX;
 import com.example.fms_market.pages.Sidebar;
 import com.example.fms_market.util.Banner;
-import com.example.fms_market.util.LanguageManager;
 import com.example.fms_market.util.ShowCardUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.geometry.Insets;
@@ -16,13 +16,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.shape.Rectangle;
 import animatefx.animation.SlideInDown;
 import animatefx.animation.SlideOutUp;
 
@@ -32,6 +30,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.stream.Collectors;
+
+
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -46,31 +46,35 @@ public class SearchForShow {
     private static VBox filterPane;
     private static VBox mainSection;
 
+    public static final double SHOW_CARD_WIDTH = 200;
+    private static final double SHOW_CARD_HEIGHT = 282.94;
+    private static final double STAR_SIZE = 100;  // Increased size for the circle
+    private static final double RADIUS = 40;
+
+
+
     public SearchForShow(User user, Stage stage, String keyword) throws Exception {
-        this.user_filter = null; // No user filter in this constructor
+        this.user_filter = null; // No user filter in this constructor(for filtering show )
         this.keyword = keyword;
         this.mainSection = new VBox();
-        MovieSearch( stage,user);
+        MovieSearch(stage,user);
     }
 
     // Constructor for invoking from user_filter
     public SearchForShow(User_Filter userFilter, Stage stage) throws Exception {
         this.user_filter = userFilter;
-        this.keyword = null; // No keyword in this constructor
+        this.keyword = null; // No keyword in this constructor(for searching using keyword)
         this.mainSection = new VBox();
         MovieSearch(stage, Banner.currentUser);
     }
 
     public void MovieSearch(Stage stage,User user) throws Exception {
-       // Sidebar sidebar = new Sidebar(Sidebar.SidebarState.HOME, stage, null); // Create an instance of Sidebar
-      // Call the non-static method on the instance
 
-
-        List<Show> allShows = ShowJsonHandler.readShows(); 
+        List<Show> allShows = ShowJsonHandler.readShows(); //3shan fel filter
         List<Movie> Movie_results=ShowJsonHandler.readMovies();
         List<Series> seriesResults=ShowJsonHandler.readSeries();
 
-     try {
+        try {
             if (keyword != null) {
                 Movie_results = searchMoviesByKeyword(Movie_results, keyword.toLowerCase(),user,stage);
                 seriesResults = searchSeriesByKeyword(seriesResults, keyword.toLowerCase(),user,stage);
@@ -84,6 +88,9 @@ public class SearchForShow {
             // Set to empty list if no movies found
             seriesResults = List.of(); // Set to empty list if no series found
         }
+
+
+
 
         GridPane movieGrid = new GridPane();
         movieGrid.setPadding(new Insets(20));
@@ -115,7 +122,7 @@ public class SearchForShow {
             e.printStackTrace();
         }
         // HBox banner = Banner.getBanner(stage, keyword!=null ? "Search Results for: " + keyword : "Filtered Results");
-        Label searchedForLabel = new Label(LanguageManager.getLanguageBasedString("Sie haben nach: \"" + keyword + "\" gesucht", "You searched for: \"" + keyword + "\""));
+        Label searchedForLabel = new Label("You searched for: \"" + keyword + "\"");
         searchedForLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
         searchedForLabel.setVisible(false); // Initially hidden
 
@@ -171,29 +178,19 @@ public class SearchForShow {
 
 // Add all components to the mainSection
         mainSection.getChildren().addAll(
-                Banner.getBanner(stage, LanguageManager.getLanguageBasedString(
-                        "Suchergebnisse für: " + (keyword != null ? keyword : ""),
-                        "Search Results for: " + (keyword != null ? keyword : "")
-                ))
-, // Banner
+                Banner.getBanner(stage, keyword != null ? "Search Results for: " + keyword : "Filtered Results"), // Banner
                 filterBox, // Filter section
                 contentBox // Movie/Series content
         );
 
         if (Movie_results.isEmpty() && seriesResults.isEmpty()) {
-            Label notFoundLabel = new Label(LanguageManager.getLanguageBasedString(
-                    "Keine Filme oder Serien gefunden",
-                    "No movies or series found"
-            ));
+            Label notFoundLabel = new Label("No movies or series found");
             notFoundLabel.setTextFill(Color.WHITE);
             notFoundLabel.setFont(Font.font("Arial", 20));
             movieGrid.add(notFoundLabel, 0, 0);
         } else if (seriesResults.isEmpty()) {
 
-            Label movieLabel = new Label(LanguageManager.getLanguageBasedString(
-                    "Filme",
-                    "Movies"
-            ));
+            Label movieLabel = new Label("Movies");
             movieLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
 
             mainSection.getChildren().addAll(movieLabel, movieGrid);
@@ -201,10 +198,7 @@ public class SearchForShow {
 
         }
         else if(Movie_results.isEmpty()) {
-            Label seriesLabel = new Label(LanguageManager.getLanguageBasedString(
-                    "Serien",
-                    "Series"
-            ));
+            Label seriesLabel = new Label("Series");
             seriesLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
 
             mainSection.getChildren().addAll(seriesLabel, seriesGrid);
@@ -212,16 +206,9 @@ public class SearchForShow {
         }
         else
         {
-            Label movieLabel = new Label(LanguageManager.getLanguageBasedString(
-                    "Filme",
-                    "Movies"
-            ));
-
+            Label movieLabel = new Label("Movies");
             movieLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
-            Label seriesLabel = new Label(LanguageManager.getLanguageBasedString(
-                    "Serien",
-                    "Series"
-            ));
+            Label seriesLabel = new Label("Series");
             seriesLabel.setStyle("-fx-font-size: 22px; -fx-text-fill: #FAF8F5; -fx-font-weight: bold;");
 
             mainSection.getChildren().addAll(movieLabel, movieGrid, seriesLabel, seriesGrid);
@@ -246,54 +233,174 @@ public class SearchForShow {
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle(LanguageManager.getLanguageBasedString(
-                "Suchergebnisse für: " + (keyword != null ? keyword : "Gefilterte Ergebnisse"),
-                "Search Results for: " + (keyword != null ? keyword : "Filtered Results")
-        ));
+        stage.setTitle(keyword != null ? "Search Results for: " + keyword : "Filtered Results");
         stage.show();
     }
 
-    private List<Movie> searchMoviesByKeyword(List<Movie> movies, String keyword) throws Exception {
+    public static VBox createDirectorCard(Director director, User user, Stage stage) {
+        VBox directorCard = new VBox(5);
+        directorCard.setAlignment(Pos.TOP_CENTER);
+        String imagePath = Objects.requireNonNull(Banner.class.getResource("/Acount/user.png")).toString();
+        javafx.scene.image.Image userImage = new Image(imagePath);
+        ImageView profileView = new ImageView(userImage);
+        Label name = new Label(director.getFirstName() + " " + director.getLastName());
+        name.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
+        name.setTextFill(Color.WHITE);
+        name.setAlignment(Pos.CENTER);
+        name.setWrapText(true);
+        name.setMaxWidth(SHOW_CARD_WIDTH);
+
+        Rectangle rectangle = new Rectangle(SHOW_CARD_WIDTH, SHOW_CARD_HEIGHT - 30);
+        rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setArcWidth(20);
+        rectangle.setArcHeight(20);
+        StackPane profileContainer = new StackPane(profileView, rectangle);
+        profileContainer.setAlignment(Pos.TOP_LEFT);
+        StackPane.setAlignment(rectangle, Pos.BOTTOM_CENTER);
+        directorCard.getChildren().addAll(profileContainer, name);
+
+        profileContainer.setOnMouseEntered(_ -> profileContainer.setStyle("-fx-background-color: #333333; -fx-border-color: #6A1B9A; -fx-border-width: 3; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        profileContainer.setOnMouseExited(_ -> profileContainer.setStyle(""));
+
+        rectangle.setOnMouseReleased(_ -> {
+            directorCard.setStyle("");
+            new DetailsPageFX(user, director.getFirstName() + " " + director.getLastName(), stage, null);
+        });
+
+        return directorCard;
+    }
+
+    public static VBox createCastCard(Cast cast, User user, Stage stage) {
+        VBox castCard = new VBox(5);
+        castCard.setAlignment(Pos.TOP_CENTER);
+        String imagePath = Objects.requireNonNull(Banner.class.getResource("/Account/user.png")).toString();
+        javafx.scene.image.Image userImage = new Image(imagePath);
+        ImageView profileView = new ImageView(userImage);
+        Label name = new Label(cast.getFirst_name() + " " + cast.getLast_name());
+        name.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
+        name.setTextFill(Color.WHITE);
+        name.setAlignment(Pos.CENTER);
+        name.setWrapText(true);
+        name.setMaxWidth(SHOW_CARD_WIDTH);
+
+        Rectangle rectangle = new Rectangle(SHOW_CARD_WIDTH, SHOW_CARD_HEIGHT - 30);
+        rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setArcWidth(20);
+        rectangle.setArcHeight(20);
+        StackPane profileContainer = new StackPane(profileView, rectangle);
+        profileContainer.setAlignment(Pos.TOP_LEFT);
+        StackPane.setAlignment(rectangle, Pos.BOTTOM_CENTER);
+        castCard.getChildren().addAll(profileContainer, name);
+
+        profileContainer.setOnMouseEntered(_ -> profileContainer.setStyle("-fx-background-color: #333333; -fx-border-color: #6A1B9A; -fx-border-width: 3; -fx-border-radius: 15; -fx-background-radius: 15;"));
+
+        profileContainer.setOnMouseExited(_ -> profileContainer.setStyle(""));
+
+        rectangle.setOnMouseReleased(_ -> {
+            castCard.setStyle("");
+            new DetailsPageFX(user, cast.getFirst_name() + " " + cast.getLast_name(), stage, null);
+        });
+
+        return castCard;
+    }
+
+    private List<Movie> searchMoviesByKeyword(List<Movie> movies, String keyword, User user, Stage stage) throws Exception {
         List<Movie> results = movies.stream()
-                .filter(movie -> movie.getTitle().toLowerCase().startsWith(keyword))
+                .filter(movie -> movie.getTitle() != null && movie.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
                 .collect(Collectors.toList());
 
         if (results.isEmpty()) {
             results = movies.stream()
                     .filter(movie -> {
                         try {
-                            return movie.getDirector().getFirstName().toLowerCase().startsWith(keyword) ||
-                                    movie.getDirector().getLastName().toLowerCase().startsWith(keyword) ||
-                                    movie.getCast().stream().anyMatch(cast -> cast.toLowerCase().startsWith(keyword));
+                            return (movie.getDirector() != null && (
+                                    movie.getDirector().getFirstName().toLowerCase().startsWith(keyword.toLowerCase()) ||
+                                            movie.getDirector().getLastName().toLowerCase().startsWith(keyword.toLowerCase())
+                            )) ||
+                                    (movie.getCast() != null && movie.getCast().stream().anyMatch(castName ->
+                                            castName.toLowerCase().startsWith(keyword.toLowerCase())
+                                    ));
                         } catch (Exception e) {
                             return false;
                         }
                     })
                     .collect(Collectors.toList());
+
+            if (results.isEmpty()) {
+                for (Movie movie : movies) {
+                    if (movie.getDirector() != null && (
+                            movie.getDirector().getFirstName().toLowerCase().startsWith(keyword.toLowerCase()) ||
+                                    movie.getDirector().getLastName().toLowerCase().startsWith(keyword.toLowerCase())
+                    )) {
+                        VBox directorCard = createDirectorCard(movie.getDirector(), user, stage);
+                        mainSection.getChildren().add(directorCard);
+                        return List.of(); // Stop further processing
+                    }
+
+                    if (movie.getCast() != null) {
+                        for (String castName : movie.getCast()) {
+                            if (castName.toLowerCase().startsWith(keyword.toLowerCase())) {
+                                VBox castCard = createCastCard(new Cast(castName.split(" ")[0], castName.split(" ")[1], null, null, 0, null), user, stage);
+                                mainSection.getChildren().add(castCard);
+                                return List.of(); // Stop further processing
+                            }
+                        }
+                    }
+                }
+            }
         }
         return results;
     }
-
-    private List<Series> searchSeriesByKeyword(List<Series> seriesList, String keyword) throws Exception {
+    private List<Series> searchSeriesByKeyword(List<Series> seriesList, String keyword, User user, Stage stage) throws Exception {
         List<Series> results = seriesList.stream()
-                .filter(series -> series.getTitle().toLowerCase().startsWith(keyword))
+                .filter(series -> series.getTitle() != null && series.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
                 .collect(Collectors.toList());
 
         if (results.isEmpty()) {
             results = seriesList.stream()
                     .filter(series -> {
                         try {
-                            return series.getDirector().getFirstName().toLowerCase().startsWith(keyword) ||
-                                    series.getDirector().getLastName().toLowerCase().startsWith(keyword) ||
-                                    series.getCast().stream().anyMatch(cast -> cast.toLowerCase().startsWith(keyword));
+                            return (series.getDirector() != null && (
+                                    series.getDirector().getFirstName().toLowerCase().startsWith(keyword.toLowerCase()) ||
+                                            series.getDirector().getLastName().toLowerCase().startsWith(keyword.toLowerCase())
+                            )) ||
+                                    (series.getCast() != null && series.getCast().stream().anyMatch(castName ->
+                                            castName.toLowerCase().startsWith(keyword.toLowerCase())
+                                    ));
                         } catch (Exception e) {
                             return false;
                         }
                     })
                     .collect(Collectors.toList());
+
+            if (results.isEmpty()) {
+                for (Series series : seriesList) {
+                    if (series.getDirector() != null && (
+                            series.getDirector().getFirstName().toLowerCase().startsWith(keyword.toLowerCase()) ||
+                                    series.getDirector().getLastName().toLowerCase().startsWith(keyword.toLowerCase())
+                    )) {
+                        VBox directorCard = createDirectorCard(series.getDirector(), user, stage);
+                        mainSection.getChildren().add(directorCard);
+                        return List.of(); // Stop further processing
+                    }
+
+                    if (series.getCast() != null) {
+                        for (String castName : series.getCast()) {
+                            if (castName.toLowerCase().startsWith(keyword.toLowerCase())) {
+                                VBox castCard = createCastCard(new Cast(castName.split(" ")[0], castName.split(" ")[1], null, null, 0, null), user, stage);
+                                mainSection.getChildren().add(castCard);
+                                return List.of(); // Stop further processing
+                            }
+                        }
+                    }
+                }
+            }
         }
         return results;
     }
+
+
 
     private void displayMovies(List<Movie> movies, GridPane movieGrid, User user , Stage stage) {
         int column = 0, row = 0;
