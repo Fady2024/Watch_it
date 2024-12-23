@@ -69,7 +69,7 @@ public class DetailsPageFX {
 
         ScrollPane scrollPane = new ScrollPane(contentBox);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: transparent;");
+        scrollPane.setStyle("-fx-background: #1c1c1c; -fx-background-color: #1c1c1c; -fx-border-color: transparent;");
 
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
         root.getChildren().add(scrollPane);

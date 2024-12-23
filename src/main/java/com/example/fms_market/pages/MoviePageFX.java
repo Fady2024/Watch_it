@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.example.fms_market.data.CastJsonHandler;
-import com.example.fms_market.data.DirectorJsonHandler;
-import com.example.fms_market.data.ShowJsonHandler;
-import com.example.fms_market.data.UserJsonHandler;
+import com.example.fms_market.data.*;
 import com.example.fms_market.model.*;
 import com.example.fms_market.util.Banner;
 import com.example.fms_market.util.Calculate_Rating;
@@ -28,7 +25,9 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import java.awt.Dimension;
@@ -209,8 +208,16 @@ public class MoviePageFX {
                         "-fx-background-radius: 20;" +
                         "-fx-font-size: 35px;"
         );
-        playButton.setOnAction(_ -> new VideoPlayerFX(show.getVideo(),show.getId(), stage,user));
-
+        playButton.setOnAction(_ -> {
+            SubscriptionManager subscriptionManager = new SubscriptionManager();
+            Subscription subscription = subscriptionManager.getSubscriptionByUserId(user.getId());
+            if (subscription != null && subscription.canWatchMovie()) {
+                subscription.watchMovie(show.getTitle());
+                new VideoPlayerFX(show.getVideo(), show.getId(), stage, user);
+            } else {
+                showSubscriptionExpiredPopup(stage, user);
+            }
+        });
         Button addButton = new Button(LanguageManager.getLanguageBasedString("Hinzufügen","♥ Add"));
         addButton.setPrefWidth(120);
         addButton.setPrefHeight(50);
@@ -476,7 +483,45 @@ public class MoviePageFX {
         box.getChildren().addAll(titleBox, contentBox);
         return box;
     }
+    private void showSubscriptionExpiredPopup(Stage stage, User user) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initStyle(StageStyle.UNDECORATED);
+        popupStage.initOwner(stage);
 
+        VBox popupContent = new VBox(10);
+        popupContent.setPadding(new Insets(20));
+        popupContent.setAlignment(Pos.CENTER);
+        popupContent.setStyle("-fx-background-color: #333;");
+
+        Label messageLabel = new Label("Your subscription has expired. Please renew your subscription to continue watching movies.");
+        messageLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        messageLabel.setTextFill(Color.WHITE);
+        messageLabel.setWrapText(true);
+        messageLabel.setAlignment(Pos.CENTER);
+
+        Button renewButton = new Button("Renew Subscription");
+        renewButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        renewButton.setStyle("-fx-background-color: #c9068d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;");
+        renewButton.setOnAction(_ -> {
+            new subscription_page(stage,user);
+            popupStage.close();
+        });
+        Button cancelButton=new Button("Cancel");
+        cancelButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        cancelButton.setStyle("-fx-background-color: #c9068d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;");
+
+        cancelButton.setOnAction(_ -> {
+            popupStage.close();
+        });
+
+        popupContent.getChildren().addAll(messageLabel, renewButton,cancelButton);
+
+        Scene popupScene = new Scene(popupContent, 400, 150);
+        popupScene.setFill(Color.TRANSPARENT);
+        popupStage.setScene(popupScene);
+        popupStage.show();
+    }
     private void navigateToDetailsPage(String name, Stage stage) {
         new DetailsPageFX(user,name, stage,show);
     }

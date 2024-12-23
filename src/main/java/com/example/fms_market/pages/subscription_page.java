@@ -24,10 +24,6 @@ public class subscription_page {
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
 
-        Button backButton = createBackButton(stage);
-        backButton.setTranslateX(-stageWidth*0.45);
-        backButton.setTranslateY(-stageHeight*0.45);
-
         HBox hbox = new HBox(30);
         hbox.setAlignment(Pos.CENTER);
         hbox.setPrefWidth(stageWidth * 0.6);
@@ -131,7 +127,7 @@ public class subscription_page {
         }
 
         hbox.setStyle("-fx-background-color: black; -fx-background-radius: 20;");
-        root.getChildren().addAll(hbox,backButton);
+        root.getChildren().addAll(hbox);
         Scene scene = new Scene(root,stageWidth,stageHeight);
 
         scene.widthProperty().addListener((_, _, newValue) ->
@@ -196,53 +192,6 @@ public class subscription_page {
         text.setStyle("-fx-font-size: " + fontSize + "; -fx-fill: " + color + ";");
         return text;
     }
-    private Button createBackButton(Stage stage) {
-        Button backButton = new Button();
 
-        backButton.setText(LanguageManager.getLanguageBasedString("← Zurück","← Back"));
-
-        backButton.setStyle(
-                "-fx-background-color: transparent; " +
-                        "-fx-font-size: 16px; " +
-                        "-fx-text-fill:#992193; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-color:#992193; " +
-                        "-fx-border-radius: 20px; " +
-                        "-fx-padding: 10px 20px;"
-        );
-
-        backButton.setOnMouseEntered(_ -> backButton.setStyle(
-                "-fx-background-color: transparent; " +
-                        "-fx-font-size: 16px; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-border-width: 2px; " +
-                        "-fx-border-color: white; " +
-                        "-fx-border-radius: 20px; " +
-                        "-fx-padding: 10px 20px;"
-        ));
-
-        // Updated setOnMouseExited handler
-        backButton.setOnMouseExited(_ -> {
-
-
-            // Night theme styles
-            backButton.setStyle(
-                    "-fx-background-color: transparent; " +
-                            "-fx-font-size: 16px; " +
-                            "-fx-text-fill: #992193; " +
-                            "-fx-font-weight: bold; " +
-                            "-fx-border-width: 2px; " +
-                            "-fx-border-color: #992193; " +
-                            "-fx-border-radius: 20px; " +
-                            "-fx-padding: 10px 20px;"
-            );
-
-        });
-
-        backButton.setOnAction(_ -> new WelcomePage(stage));
-        return backButton;
-    }
 }
 

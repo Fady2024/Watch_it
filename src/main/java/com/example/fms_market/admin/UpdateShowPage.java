@@ -321,7 +321,7 @@ public class UpdateShowPage {
         TextField dateField = new TextField(show.getDate().toString());
         TextField durationField = new TextField(String.valueOf(show.getDuration()));
         TextField genresField = new TextField(String.join(", ", show.getGenres()));
-        TextField directorField = new TextField(show.getDirector().getFirstName() + " " + show.getDirector().getLastName());
+        TextField directorField = new TextField(STR."\{show.getDirector().getFirstName()} \{show.getDirector().getLastName()}");
         TextField languageField = new TextField(String.join(", ", show.getLanguage()));
         TextField imdbField = new TextField(String.valueOf(show.getImdb_score()));
         TextField countryField = new TextField(show.getCountry());

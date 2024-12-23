@@ -2,23 +2,17 @@
 
 package com.example.fms_market.admin;
 
-import com.example.fms_market.data.DirectorJsonHandler;
 import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.*;
 import com.example.fms_market.pages.HomePage;
 import com.example.fms_market.util.LanguageManager;
 import com.example.fms_market.util.ShowCardUtil;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -28,13 +22,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 import java.awt.*;
 import java.io.IOException;

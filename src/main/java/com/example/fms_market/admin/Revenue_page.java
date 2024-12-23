@@ -1,6 +1,6 @@
 package com.example.fms_market.admin;
 
-import com.example.fms_market.pages.Subscription;
+import com.example.fms_market.model.Subscription;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.Banner;
 import com.example.fms_market.util.LanguageManager;

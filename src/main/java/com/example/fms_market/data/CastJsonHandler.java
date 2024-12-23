@@ -1,3 +1,5 @@
+// src/main/java/com/example/fms_market/data/CastJsonHandler.java
+
 package com.example.fms_market.data;
 
 import com.example.fms_market.model.Cast;
@@ -31,6 +33,7 @@ public class CastJsonHandler {
         rootNode.set("cast", objectMapper.valueToTree(cast));
         DataManager.saveData();
     }
+
     public static List<Cast> readCast() throws IOException {
         ObjectNode rootNode = DataManager.getCastRootNode();
         JsonNode castNode = rootNode.path("cast");

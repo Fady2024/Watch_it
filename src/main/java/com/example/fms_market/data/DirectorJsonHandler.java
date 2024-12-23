@@ -31,6 +31,7 @@ public class DirectorJsonHandler {
         rootNode.set("directors", objectMapper.valueToTree(directors));
         DataManager.saveData();
     }
+
     public static List<Director> readDirectors() throws IOException {
         ObjectNode rootNode = DataManager.getDirectorsRootNode();
         JsonNode directorNode = rootNode.path("directors");

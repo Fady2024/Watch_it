@@ -28,6 +28,9 @@ import javafx.scene.shape.Rectangle;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,7 +80,9 @@ public class SignUpPage {
         phoneField = createPhoneField();
         ageField = createAgeField();
         passwordField = createPasswordField();
-        signup_label = new Text(LanguageManager.getLanguageBasedString("Melden Sie sich an","Sign Up"));
+        signup_label = new Text(LanguageManager.getLanguageBasedString("Melden Sie  sich an","Sign Up"));
+        if("German".equals(LanguageManager.getInstance().getLanguage())){signup_label.setScaleX(0.5);
+            signup_label.setTranslateX(-100);}
         signup_label.setFill(Color.WHITE);
         signup_label.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 44));
         strengthBar.setPrefWidth(200);
@@ -164,7 +169,7 @@ public class SignUpPage {
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitWidth(30);
         searchIconView.setFitHeight(30);
-        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten \n Film","Search for any movie you want"));
+        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten \nFilm","Search for any movie you want"));
         searchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         searchText.setStyle("-fx-fill: white;");
         HBox search = new HBox(10);
@@ -184,7 +189,7 @@ public class SignUpPage {
         ImageView ratedIconView = new ImageView(ratedIconImage);
         ratedIconView.setFitWidth(30);
         ratedIconView.setFitHeight(30);
-        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme \n anzeigen","Show the most rated movies"));
+        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme \nanzeigen","Show the most rated movies"));
         ratedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         ratedText.setStyle("-fx-fill: white;");
         HBox rated = new HBox(10);
@@ -194,7 +199,7 @@ public class SignUpPage {
         ImageView favoriteIconView = new ImageView(favoriteIconImage);
         favoriteIconView.setFitWidth(30);
         favoriteIconView.setFitHeight(30);
-        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste \n hinzufügen","Add Shows to your Favourite List"));
+        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste \nhinzufügen","Add Shows to your Favourite List"));
         favoriteText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(), 16));
         favoriteText.setStyle("-fx-fill: white;");
         HBox favourite = new HBox(10);
@@ -307,7 +312,7 @@ public class SignUpPage {
         String lastName = last_name.getText().trim();
         String userName = usernsme.getText().trim();
 
-        if (email.isEmpty() || password.isEmpty() || phone.isEmpty() || age.isEmpty()|| firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty() || phone.isEmpty() || age.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty()) {
             if (email.isEmpty()) {
                 playShakeTransition(emailField);
             }
@@ -329,19 +334,18 @@ public class SignUpPage {
             if (userName.isEmpty()) {
                 playShakeTransition(usernsme);
             }
-            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler! Alle Felder sind erforderlich!","Error! All fields are required!"));
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler! Alle Felder sind erforderlich!", "Error! All fields are required!"));
             return;
         }
         if (!isValidEmail(email)) {
             playShakeTransition(emailField);
-            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Ungültige E-Mail! Bitte geben Sie eine gültige E-Mail-Adresse ein.","Invalid email ! Please enter a valid email address."));
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Ungültige E-Mail! Bitte geben Sie eine gültige E-Mail-Adresse ein.", "Invalid email! Please enter a valid email address."));
             return;
         }
 
-
         if (!isValidAge(age)) {
             playShakeTransition(emailField);
-            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Ungültiges Alter! Bitte geben Sie ein gültiges Alter ein.","Invalid age ! Please enter a valid age."));
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Ungültiges Alter! Bitte geben Sie ein gültiges Alter ein.", "Invalid age! Please enter a valid age."));
             return;
         }
 
@@ -349,24 +353,20 @@ public class SignUpPage {
             try {
                 if (UserJsonHandler.emailExists(email)) {
                     playShakeTransition(emailField);
-                    showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Die E-Mail-Adresse ist bereits vorhanden. Bitte verwenden Sie eine andere E-Mail-Adresse.","Email already exists! Please use a different email."));
+                    showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Die E-Mail-Adresse ist bereits vorhanden. Bitte verwenden Sie eine andere E-Mail-Adresse.", "Email already exists! Please use a different email."));
                     return;
                 }
 
-                if (profileImage != null) {
-                    user_photo_path = profileImage.getAbsolutePath();
-                }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                User user=new User( userName,email, password, "customer",phone, age, user_photo_path);
+                User user = new User(firstName, lastName, userName, email, password, "customer", phone, age, user_photo_path);
                 UserJsonHandler.saveUser(user);
-                showAlert(Alert.AlertType.INFORMATION, LanguageManager.getLanguageBasedString("Anmeldung erfolgreich!","Sign Up Successful!"));
-                new subscription_page(primaryStage,user);
+                showAlert(Alert.AlertType.INFORMATION, LanguageManager.getLanguageBasedString("Anmeldung erfolgreich!", "Sign Up Successful!"));
+                new subscription_page(primaryStage, user);
             } catch (IOException ex) {
-                showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler beim Speichern des Benutzers:","Error saving user: ") + ex.getMessage());
+                showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Fehler beim Speichern des Benutzers:", "Error saving user: ") + ex.getMessage());
                 ex.printStackTrace();
             }
         } else {
-            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Das Passwort erfüllt nicht die Kriterien!","Password does not meet the criteria!"));
+            showAlert(Alert.AlertType.ERROR, LanguageManager.getLanguageBasedString("Das Passwort erfüllt nicht die Kriterien!", "Password does not meet the criteria!"));
             playShakeTransition(passwordField);
         }
     }
@@ -545,37 +545,64 @@ public class SignUpPage {
         profileImagePanel.setOnMouseClicked(_ -> selectProfileImage(primaryStage));
         profileImagePanel.getChildren().add(stackPane);
     }
+
+    private String copyPhotoToResources(File selectedFile) throws IOException {
+        Path resourcesDir = Path.of("src/main/resources/UserImages");
+        if (!Files.exists(resourcesDir)) {
+            Files.createDirectories(resourcesDir);
+        }
+
+        String fileName = selectedFile.getName();
+        Path destinationPath = resourcesDir.resolve(fileName);
+        int count = 1;
+
+        while (Files.exists(destinationPath)) {
+            String newFileName = fileName.replaceFirst("(\\.[^.]+)$", STR."_\{count}$1");
+            destinationPath = resourcesDir.resolve(newFileName);
+            count++;
+        }
+
+        Files.copy(selectedFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        return destinationPath.toString();
+    }
+
     private void selectProfileImage(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-        File profileImage = fileChooser.showOpenDialog(primaryStage);
+        profileImage = fileChooser.showOpenDialog(primaryStage);
 
         profileImagePanel.getChildren().clear();
 
         if (profileImage != null) {
-            Image img = new Image(profileImage.toURI().toString());
-            ImageView imageView = new ImageView(img);
+            try {
+                user_photo_path = copyPhotoToResources(profileImage); // Use the new method to copy the photo
 
-            double frameWidth = profileImagePanel.getWidth();
-            double frameHeight = profileImagePanel.getHeight();
-            double imgWidth = img.getWidth();
-            double imgHeight = img.getHeight();
-            double scaleFactor = Math.max(frameWidth / imgWidth, frameHeight / imgHeight);
+                Image img = new Image(profileImage.toURI().toString());
+                ImageView imageView = new ImageView(img);
 
-            imageView.setFitWidth(imgWidth * scaleFactor);
-            imageView.setFitHeight(imgHeight * scaleFactor);
+                double frameWidth = profileImagePanel.getWidth();
+                double frameHeight = profileImagePanel.getHeight();
+                double imgWidth = img.getWidth();
+                double imgHeight = img.getHeight();
+                double scaleFactor = Math.max(frameWidth / imgWidth, frameHeight / imgHeight);
 
-            imageView.setPreserveRatio(true);
+                imageView.setFitWidth(imgWidth * scaleFactor);
+                imageView.setFitHeight(imgHeight * scaleFactor);
 
-            Circle clip = new Circle(frameWidth / 2);
-            clip.setCenterX(frameWidth / 2);
-            clip.setCenterY(frameHeight / 2);
-            imageView.setClip(clip);
+                imageView.setPreserveRatio(true);
 
-            StackPane centeredPane = new StackPane(imageView);
-            profileImagePanel.getChildren().add(centeredPane);
+                Circle clip = new Circle(frameWidth / 2);
+                clip.setCenterX(frameWidth / 2);
+                clip.setCenterY(frameHeight / 2);
+                imageView.setClip(clip);
 
-            profileImagePanel.setStyle("-fx-background-color: transparent;");
+                StackPane centeredPane = new StackPane(imageView);
+                profileImagePanel.getChildren().add(centeredPane);
+
+                profileImagePanel.setStyle("-fx-background-color: transparent;");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             profileImagePanel.setStyle("-fx-background-color: #636363;" +
                     "-fx-border-color: white;" +

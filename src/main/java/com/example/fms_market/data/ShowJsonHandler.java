@@ -1,5 +1,7 @@
 package com.example.fms_market.data;
 
+import com.example.fms_market.data.DataManager;
+import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.Movie;
 import com.example.fms_market.model.Series;
 import com.example.fms_market.model.Show;
@@ -54,8 +56,7 @@ public class ShowJsonHandler {
                 return;
             }
         }
-
-        // If no existing rating is found, add a new one
+        List<Integer> emptyList = new ArrayList<>();
         User_Watch_record newRecord = new User_Watch_record(userId, showId, dateOfWatched, rating);
         ratingsNode.add(objectMapper.valueToTree(newRecord));
         DataManager.saveData();
@@ -80,13 +81,16 @@ public class ShowJsonHandler {
 
         for (JsonNode node : ratingsNode) {
             User_Watch_record record = objectMapper.treeToValue(node, User_Watch_record.class);
-            if (record.getUser_id() == userId && record.getUser_id() == showId) {
+            if (record.getUser_id() == userId && record.getShow_id() == showId) {
                 ((ObjectNode) node).put("rating", rating);
-                ((ObjectNode) node).put("dateOfWatched", dateOfWatched.getTime());
                 DataManager.saveData();
                 return;
             }
         }
+        List<Integer> emptyList = new ArrayList<>();
+        User_Watch_record newRecord = new User_Watch_record(userId, showId, dateOfWatched, rating);
+        ratingsNode.add(objectMapper.valueToTree(newRecord));
+        DataManager.saveData();
     }
 
     public static List<User_Watch_record> getRatings() throws IOException {
@@ -144,10 +148,29 @@ public class ShowJsonHandler {
 
     public static void deleteShow(int id) throws IOException {
         ObjectNode rootNode = DataManager.getShowsRootNode();
-        //ObjectNode rootNode1 = DataManager.getCommentsRootNode();
+        ObjectNode rootNode1 = DataManager.getCastRootNode();
+        ObjectNode rootNode2 = DataManager.getDirectorsRootNode();
+        ObjectNode rootNode3 = DataManager.getCommentsRootNode();
         ArrayNode shows = (ArrayNode) rootNode.path("shows");
         ArrayNode ratings = (ArrayNode) rootNode.path("ratings");
-        //ArrayNode comments = (ArrayNode) rootNode1.path("comments");
+        ArrayNode cast = (ArrayNode) rootNode1.path("cast");
+
+        String title = searchForShow(id);
+
+        for (JsonNode castElement : cast) {
+            JsonNode showsNode = castElement.path("shows");
+
+                ArrayNode showsArrayNode = (ArrayNode) showsNode;
+
+                for (int i = 0; i < showsArrayNode.size(); i++) {
+                    JsonNode show = showsArrayNode.get(i);
+                    if (show.asText().equals(title)) {
+                        showsArrayNode.remove(i);
+                        break;
+                    }
+                }
+        }
+
 
         for (int i = 0; i < shows.size(); i++) {
             JsonNode show = shows.get(i);
@@ -170,19 +193,28 @@ public class ShowJsonHandler {
             }
         }
 
-//        for (int i = 0; i < comments.size(); i++) {
-//            JsonNode comment = comments.get(i);
-//            if (comment.get("show_id").asInt() == id) {
-//                comments.remove(i);
-//                i--;
-//            }
-//        }
 
         rootNode.set("shows", shows);
         rootNode.set("ratings", ratings);
         DataManager.saveData();
         UserJsonHandler.removeFavoriteShowFromAllUsers(id);
     }
+
+    private static String searchForShow(int id)
+    {
+        ObjectNode rootNode = DataManager.getShowsRootNode();
+        ArrayNode shows = (ArrayNode) rootNode.path("shows");
+        String name = null;
+        for (int i = 0; i < shows.size(); i++) {
+            JsonNode show = shows.get(i);
+            if (show.get("id").asInt() == id) {
+                name = show.get("title").asText();
+                break;
+            }
+        }
+        return name;
+    }
+
     public static void updateShow(Show updatedShow) throws IOException {
         ObjectNode rootNode = DataManager.getShowsRootNode();
         ArrayNode shows = (ArrayNode) rootNode.path("shows");

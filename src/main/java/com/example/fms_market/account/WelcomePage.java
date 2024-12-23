@@ -23,12 +23,19 @@ import javafx.scene.text.Font;
 import javafx.scene.effect.DropShadow;
 
 import java.awt.*;
+import java.util.Objects;
+
 public class WelcomePage {
 
+    private final Button languageButton;
 
     public WelcomePage(Stage stage) {
 
+        languageButton = new Button("🌐"); // Use the class member
+        languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: black;");
         Popup popup = new Popup();
+        VBox menuBox = new VBox(5);
+        menuBox.setStyle("-fx-background-color: #333333; -fx-padding: 10px; -fx-background-radius: 10;");
 
         Label englishLabel = new Label("English");
         englishLabel.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10; " +
@@ -38,22 +45,52 @@ public class WelcomePage {
         germanLabel.setStyle("-fx-background-color: #51209d; -fx-text-fill: white; -fx-background-radius: 10; " +
                 "-fx-padding: 5px 10px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.5, 0, 1);");
 
-
+        menuBox.getChildren().addAll(englishLabel, germanLabel);
+        popup.getContent().add(menuBox);
 
         // Create the PauseTransition
         PauseTransition hideTransition = new PauseTransition(Duration.seconds(2));
         hideTransition.setOnFinished(_ -> popup.hide());
 
         // Add mouse event handlers to reset the transition if the mouse hovers over the popup
+        menuBox.setOnMouseEntered(_ -> hideTransition.stop());
+        menuBox.setOnMouseExited(_ -> hideTransition.play());
         if (popup.isShowing()) {
-            ScaleTransition hideScaleTransition = new ScaleTransition(Duration.millis(300));
+            ScaleTransition hideScaleTransition = new ScaleTransition(Duration.millis(300), menuBox);
             hideScaleTransition.setFromX(1.0);
             hideScaleTransition.setFromY(1.0);
             hideScaleTransition.setToX(0.1);
             hideScaleTransition.setToY(0.1);
             hideScaleTransition.setOnFinished(_ -> popup.hide());
             hideScaleTransition.play();
-        };
+        }
+
+        languageButton.setOnAction(_ -> Platform.runLater(() -> {
+            double popupX = languageButton.localToScreen(languageButton.getBoundsInLocal()).getMaxX() - 70;
+            double popupY = languageButton.localToScreen(languageButton.getBoundsInLocal()).getMaxY() - 10;
+            if (popup.isShowing()) {
+                ScaleTransition hideScaleTransition = new ScaleTransition(Duration.millis(300), menuBox);
+                hideScaleTransition.setFromX(1.0);
+                hideScaleTransition.setFromY(1.0);
+                hideScaleTransition.setToX(0.1);
+                hideScaleTransition.setToY(0.1);
+                hideScaleTransition.setOnFinished(_ -> popup.hide());
+                hideScaleTransition.play();
+            } else {
+                menuBox.setScaleX(0.1);
+                menuBox.setScaleY(0.1);
+
+                ScaleTransition showTransition = new ScaleTransition(Duration.millis(300), menuBox);
+                showTransition.setFromX(0.1);
+                showTransition.setFromY(0.1);
+                showTransition.setToX(1.0);
+                showTransition.setToY(1.0);
+
+                popup.show(languageButton, popupX, popupY);
+                showTransition.play();
+                hideTransition.playFromStart();
+            }
+        }));
 
         englishLabel.setOnMouseClicked(_ -> {
             if(!"English".equals(LanguageManager.getInstance().getLanguage())){
@@ -68,8 +105,7 @@ public class WelcomePage {
             popup.hide();
         });
 
-
-        Image gifImage = new Image(LanguageManager.getLanguageBasedString("file:src/main/resources/image/ff.gif","file:src/main/resources/image/final.gif"));
+        Image gifImage = new Image(Objects.requireNonNull(getClass().getResource("/image/ff.gif")).toExternalForm());
         ImageView imageView = new ImageView(gifImage);
         imageView.setPreserveRatio(false);
         imageView.fitWidthProperty().bind(stage.widthProperty());
@@ -88,13 +124,16 @@ public class WelcomePage {
         loginButton.setOnMouseExited(e -> loginButton.setScaleX(1));
         loginButton.setOnAction(e -> new LoginPageFX(stage));
 
-        signInButton.setTranslateY(175);
-        loginButton.setTranslateY(175);
-
-        signInButton.setTranslateX(150);
+        signInButton.setTranslateY(185);
+        loginButton.setTranslateY(185);
+        signInButton.setTranslateX(250);
         loginButton.setTranslateX(-300);
+        HBox hbox = new HBox(20, signInButton, loginButton);
 
-        StackPane root = new StackPane(imageView,signInButton,loginButton);
+        hbox.setStyle("-fx-alignment: center; -fx-padding: 20px;");
+        languageButton.setTranslateX(500);
+        languageButton.setTranslateY(-350);
+        StackPane root = new StackPane(imageView,hbox,languageButton);
         Scene scene = new Scene(root);
 
         stage.setTitle("GIF");

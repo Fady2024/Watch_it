@@ -1,5 +1,7 @@
 package com.example.fms_market.model;
 
+import com.example.fms_market.data.CastJsonHandler;
+import com.example.fms_market.data.DirectorJsonHandler;
 import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.*;
 import com.example.fms_market.pages.DetailsPageFX;
@@ -112,7 +114,7 @@ public class SearchForShow {
         filterButton.setVisible(false); // Initially hidden
         try {
             String imagePath = Objects.requireNonNull(SearchForShow.class.getResource("/filter.png")).toExternalForm();
-            javafx.scene.image.Image filterImage = new Image(imagePath);
+            Image filterImage = new Image(imagePath);
             ImageView filterIcon = new ImageView(filterImage);
             filterIcon.setFitWidth(20);
             filterIcon.setFitHeight(20);
@@ -241,7 +243,7 @@ public class SearchForShow {
         VBox directorCard = new VBox(5);
         directorCard.setAlignment(Pos.TOP_CENTER);
         String imagePath = Objects.requireNonNull(Banner.class.getResource("/Acount/user.png")).toString();
-        javafx.scene.image.Image userImage = new Image(imagePath);
+        Image userImage = new Image(imagePath);
         ImageView profileView = new ImageView(userImage);
         Label name = new Label(director.getFirstName() + " " + director.getLastName());
         name.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
@@ -268,14 +270,21 @@ public class SearchForShow {
             new DetailsPageFX(user, director.getFirstName() + " " + director.getLastName(), stage, null);
         });
 
+        mainSection.getChildren().add(directorCard); // Add the card to the main section
+        mainSection.requestLayout(); // Request layout update
+
         return directorCard;
     }
 
     public static VBox createCastCard(Cast cast, User user, Stage stage) {
+        Objects.requireNonNull(cast, "Cast object cannot be null");
+        Objects.requireNonNull(cast.getFirst_name(), "Cast first name cannot be null");
+        Objects.requireNonNull(cast.getLast_name(), "Cast last name cannot be null");
+
         VBox castCard = new VBox(5);
         castCard.setAlignment(Pos.TOP_CENTER);
         String imagePath = Objects.requireNonNull(Banner.class.getResource("/Account/user.png")).toString();
-        javafx.scene.image.Image userImage = new Image(imagePath);
+        Image userImage = new Image(imagePath);
         ImageView profileView = new ImageView(userImage);
         Label name = new Label(cast.getFirst_name() + " " + cast.getLast_name());
         name.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
@@ -302,10 +311,16 @@ public class SearchForShow {
             new DetailsPageFX(user, cast.getFirst_name() + " " + cast.getLast_name(), stage, null);
         });
 
+        mainSection.getChildren().add(5, castCard); // Add the card below the banner and filter box
+        mainSection.requestLayout();
+
         return castCard;
     }
 
     private List<Movie> searchMoviesByKeyword(List<Movie> movies, String keyword, User user, Stage stage) throws Exception {
+        List<Director> directors = DirectorJsonHandler.readDirectors();
+        List<Cast> castList = CastJsonHandler.readCast();
+
         List<Movie> results = movies.stream()
                 .filter(movie -> movie.getTitle() != null && movie.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
                 .collect(Collectors.toList());
@@ -328,30 +343,37 @@ public class SearchForShow {
                     .collect(Collectors.toList());
 
             if (results.isEmpty()) {
-                for (Movie movie : movies) {
-                    if (movie.getDirector() != null && (
-                            movie.getDirector().getFirstName().toLowerCase().startsWith(keyword.toLowerCase()) ||
-                                    movie.getDirector().getLastName().toLowerCase().startsWith(keyword.toLowerCase())
-                    )) {
-                        VBox directorCard = createDirectorCard(movie.getDirector(), user, stage);
-                        mainSection.getChildren().add(directorCard);
-                        return List.of(); // Stop further processing
-                    }
-
-                    if (movie.getCast() != null) {
-                        for (String castName : movie.getCast()) {
-                            if (castName.toLowerCase().startsWith(keyword.toLowerCase())) {
-                                VBox castCard = createCastCard(new Cast(castName.split(" ")[0], castName.split(" ")[1], null, null, 0, null), user, stage);
-                                mainSection.getChildren().add(castCard);
-                                return List.of(); // Stop further processing
-                            }
+                boolean cardAdded = false;
+                for (Director director : directors) {
+                    if (director.getFirstName().toLowerCase().startsWith(keyword.toLowerCase()) ||
+                            director.getLastName().toLowerCase().startsWith(keyword.toLowerCase())) {
+                        VBox directorCard = createDirectorCard(director, user, stage);
+                        if (!mainSection.getChildren().contains(directorCard)) {
+                            mainSection.getChildren().add(directorCard);
+                            cardAdded = true;
                         }
                     }
+                }
+
+                for (Cast cast : castList) {
+                    if (cast.getFirst_name().toLowerCase().startsWith(keyword.toLowerCase()) ||
+                            cast.getLast_name().toLowerCase().startsWith(keyword.toLowerCase())) {
+                        VBox castCard = createCastCard(cast, user, stage);
+                        if (!mainSection.getChildren().contains(castCard)) {
+                            mainSection.getChildren().add(castCard);
+                            cardAdded = true;
+                        }
+                    }
+                }
+
+                if (cardAdded) {
+                    return List.of(); // Stop further processing if any card is added
                 }
             }
         }
         return results;
     }
+
     private List<Series> searchSeriesByKeyword(List<Series> seriesList, String keyword, User user, Stage stage) throws Exception {
         List<Series> results = seriesList.stream()
                 .filter(series -> series.getTitle() != null && series.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
@@ -399,8 +421,6 @@ public class SearchForShow {
         }
         return results;
     }
-
-
 
     private void displayMovies(List<Movie> movies, GridPane movieGrid, User user , Stage stage) {
         int column = 0, row = 0;

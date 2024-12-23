@@ -1,6 +1,9 @@
 package com.example.fms_market.account;
 
+import com.example.fms_market.data.SubscriptionManager;
+import com.example.fms_market.model.Subscription;
 import com.example.fms_market.pages.HomePage;
+import com.example.fms_market.pages.subscription_page;
 import com.example.fms_market.util.TopPanel;
 import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.User;
@@ -14,6 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.animation.TranslateTransition;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.control.*;
 import javafx.geometry.Insets;
@@ -127,7 +132,7 @@ public class LoginPageFX {
         ImageView searchIconView = new ImageView(searchIcon);
         searchIconView.setFitWidth(30);
         searchIconView.setFitHeight(30);
-        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten  \n Film","Search for any movie you want"));
+        Text searchText = new Text(LanguageManager.getLanguageBasedString("Suchen Sie nach jedem gewünschten \nFilm","Search for any movie you want"));
         searchText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         searchText.setStyle("-fx-fill: white;");
         HBox search = new HBox(10);
@@ -147,7 +152,7 @@ public class LoginPageFX {
         ImageView ratedIconView = new ImageView(ratedIconImage);
         ratedIconView.setFitWidth(30);
         ratedIconView.setFitHeight(30);
-        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme \n anzeigen","Show the most rated movies"));
+        Text ratedText = new Text(LanguageManager.getLanguageBasedString("Die am besten bewerteten Filme \nanzeigen","Show the most rated movies"));
         ratedText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         ratedText.setStyle("-fx-fill: white;");
         HBox rated = new HBox(10);
@@ -157,7 +162,7 @@ public class LoginPageFX {
         ImageView favoriteIconView = new ImageView(favoriteIconImage);
         favoriteIconView.setFitWidth(30);
         favoriteIconView.setFitHeight(30);
-        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste \n hinzufügen","Add Shows to your Favourite List"));
+        Text favoriteText = new Text(LanguageManager.getLanguageBasedString("Sendungen zu Ihrer Favoritenliste \nhinzufügen","Add Shows to your Favourite List"));
         favoriteText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/Kufam-VariableFont_wght.ttf")).toString(),16));
         favoriteText.setStyle("-fx-fill: white;");
         HBox favourite = new HBox(10);
@@ -301,14 +306,19 @@ public class LoginPageFX {
             try {
                 User user = UserJsonHandler.getUserByEmailAndPassword(username, password);
                 if (user != null) {
-                    new HomePage(user, stage);
+                    Subscription subscription = SubscriptionManager.getSubscriptionByUserId(user.getId());
+                    if (subscription != null && subscription.isExpired()) {
+                        showSubscriptionExpiredPopup(stage, user);
+                    } else {
+                        new HomePage(user, stage);
+                    }
                 } else {
                     messageText.setText(LanguageManager.getLanguageBasedString("Ungültige Anmeldeinformationen!","Invalid credentials!"));
                     messageText.setVisible(true);
                     playShakeTransition(messageText);
                 }
             } catch (IOException ex) {
-                messageText.setText(STR."Error reading user data: \{ex.getMessage()}");
+                messageText.setText("Error reading user data: " + ex.getMessage());
                 playShakeTransition(loginForm);
             }
         } else {
@@ -320,7 +330,46 @@ public class LoginPageFX {
         updateLayout(stage.getWidth(), stage.getHeight(), UsernameIsValid, PasswordIsValid);
         contentPane.requestLayout();
     }
+    private void showSubscriptionExpiredPopup(Stage stage, User user) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initStyle(StageStyle.UNDECORATED);
+        popupStage.initOwner(stage);
 
+        VBox popupContent = new VBox(10);
+        popupContent.setPadding(new Insets(20));
+        popupContent.setAlignment(Pos.CENTER);
+        popupContent.setStyle("-fx-background-color: #333;");
+
+        Label messageLabel = new Label("Your subscription has expired. Please renew your subscription to continue watching movies.");
+        messageLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        messageLabel.setTextFill(Color.WHITE);
+        messageLabel.setWrapText(true);
+        messageLabel.setAlignment(Pos.CENTER);
+
+        Button renewButton = new Button("Renew Subscription");
+        renewButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        renewButton.setStyle("-fx-background-color: #c9068d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;");
+        renewButton.setOnAction(_ -> {
+            new subscription_page(stage,user);
+            popupStage.close();
+        });
+        Button cancelButton=new Button("Cancel");
+        cancelButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        cancelButton.setStyle("-fx-background-color: #c9068d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;");
+
+        cancelButton.setOnAction(_ -> {
+            popupStage.close();
+        });
+
+
+        popupContent.getChildren().addAll(messageLabel, renewButton,cancelButton);
+
+        Scene popupScene = new Scene(popupContent, 400, 150);
+        popupScene.setFill(Color.TRANSPARENT);
+        popupStage.setScene(popupScene);
+        popupStage.show();
+    }
     private void playShakeTransition(Node node) {
         TranslateTransition transition = new TranslateTransition(Duration.millis(100), node);
         transition.setFromX(0);

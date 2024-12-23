@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@JsonPropertyOrder({"id", "username", "email", "password", "role", "phone", "age", "user_photo_path", "favoriteShowIds"})
+@JsonPropertyOrder({"id", "firstName", "lastName", "username", "email", "password", "role", "phone", "age", "user_photo_path", "favoriteShowIds"})
 public class User {
     private int id;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private final String role;
@@ -20,6 +23,8 @@ public class User {
 
     @JsonCreator
     public User(
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
             @JsonProperty("username") String username,
             @JsonProperty("email") String email,
             @JsonProperty("password") String password,
@@ -27,6 +32,8 @@ public class User {
             @JsonProperty("phone") String phone,
             @JsonProperty("age") String age,
             @JsonProperty("user_photo_path") String userPhotoPath) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -34,6 +41,25 @@ public class User {
         this.phone = phone;
         this.age = age;
         this.user_photo_path = userPhotoPath;
+        this.favoriteShowIds = new ArrayList<>(); // Initialize favoriteShowIds as an empty list
+    }
+
+    // Getters and setters...
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setId(int id) {

@@ -43,7 +43,6 @@ public class Developer_page {
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
 
-        // Sidebar listener setup
         sidebar.setSidebarListener(new Sidebar.SidebarListener() {
             @Override
             public void onUserDetailsSelected() {

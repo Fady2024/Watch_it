@@ -86,16 +86,14 @@ public class Sidebar extends VBox {
         addLogoutButton();
 
         // Toggle button
-        toggleButton = new Button("⏩"); // Set initial button text to indicate expansion
+        toggleButton = new Button("⏩");
         toggleButton.setFont(Font.font(16));
         toggleButton.setStyle("-fx-background-color: #555; -fx-text-fill: white; -fx-cursor: hand;");
         toggleButton.setOnAction(_ -> toggleSidebar());
         toggleButton.setAlignment(Pos.BOTTOM_CENTER);
 
-        // Add menu container and toggle button to the sidebar
         this.getChildren().addAll(menuContainer, toggleButton);
 
-        // Apply initial selection style
         updateMenuStyles();
     }
 
@@ -114,13 +112,11 @@ public class Sidebar extends VBox {
         menuItem.setAlignment(isExpanded ? Pos.CENTER_LEFT : Pos.CENTER);
         menuItem.setStyle(isExpanded ? "-fx-padding: 0px;" : "-fx-padding: 5px;");
 
-        // Apply selected style if this item is the selected state
         if (state == selectedState) {
             applySelectedStyle(iconLabel, textLabel);
         }
 
         menuItem.setOnMouseClicked(_ -> {
-            // Set the selected state on click
             selectedState = state;
             updateMenuStyles();
             triggerListener(state);
@@ -129,7 +125,6 @@ public class Sidebar extends VBox {
                 toggleSidebar();
             }
 
-            // Handle navigation for the new HOME state
             if (state == SidebarState.HOME) {
                 navigateToHomePage();
             }
@@ -140,16 +135,13 @@ public class Sidebar extends VBox {
     }
 
     private void toggleSidebar() {
-        // Toggle between expanded and minimized states
         isExpanded = !isExpanded;
-        // Timeline to smoothly animate the transition between states
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(300), _ -> {
                     double targetWidth = isExpanded ? 200 : 80;
                     this.setPrefWidth(targetWidth);
                     toggleButton.setText(isExpanded ? "⏪" : "⏩");
 
-                    // Handle visibility of text labels and alignment for the menu items
                     menuContainer.getChildren().forEach(node -> {
                         if (node instanceof HBox menuItem) {
                             Label textLabel = (Label) menuItem.getChildren().get(1);
@@ -161,7 +153,6 @@ public class Sidebar extends VBox {
                         }
                     });
 
-                    // Ensure the LOGOUT button maintains its style
                     VBox logoutVBox = (VBox) menuContainer.getChildren().getLast();
                     HBox logoutButton = (HBox) logoutVBox.getChildren().getFirst();
                     logoutButton.setStyle("-fx-padding: 5px; -fx-background-color: red; -fx-background-radius: 5;");
@@ -187,7 +178,6 @@ public class Sidebar extends VBox {
 
                 resetStyle(iconLabel, textLabel);
 
-                // Highlight the selected item
                 if (textLabel.getText().equals(selectedState.getText())) {
                     applySelectedStyle(iconLabel, textLabel);
                 }

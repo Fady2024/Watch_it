@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User_Watch_record {
     private int user_id;
     private int show_id;
+    private List<Integer> show_ids;
     private Date date_of_watched;
     private Integer rating;
 
@@ -34,5 +36,5 @@ public class User_Watch_record {
     public void setDate_of_watched(Date date_of_watched) { this.date_of_watched = date_of_watched; }
 
     public Integer getRating() { return rating; }
-
+    public void setRating(Integer rating) { this.rating = rating; }
 }
