@@ -233,7 +233,4 @@ We would like to extend our heartfelt thanks to the following:
 3. **Team Members**  
    Thank you for your collaboration, dedication, and contributions to the success of the WATCH IT system.
 
-4. **Peers and Testers**  
-   Thank you for your valuable insights and constructive feedback during the testing phase.
-
 Thank you to everyone who supported us in making this project a success!
