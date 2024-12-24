@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public class SearchForShow {
 
     private final User_Filter user_filter; //to call functions in user_filter
-   // private final User user;
+    // private final User user;
 
     private final String keyword;
     private final BorderPane layout = new BorderPane(); // to organize UI components
