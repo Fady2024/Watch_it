@@ -6,7 +6,7 @@
     "start_date" : "2024-12-22",
     "endDate" : "2025-01-22",
     "cardDetails" : [ ],
-    "moviesWatched" : 0,
+    "moviesWatched" : 2,
     "userId" : 0,
     "expired" : false
   }, {
@@ -36,7 +36,7 @@
     "start_date" : "2024-12-22",
     "endDate" : "2025-01-22",
     "cardDetails" : [ "3242342342342342", "02/28", "2342" ],
-    "moviesWatched" : 29,
+    "moviesWatched" : 30,
     "userId" : 3,
     "expired" : false
   }, {

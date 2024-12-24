@@ -210,7 +210,7 @@ public class MoviePageFX {
         );
         playButton.setOnAction(_ -> {
             SubscriptionManager subscriptionManager = new SubscriptionManager();
-            Subscription subscription = subscriptionManager.getSubscriptionByUserId(user.getId());
+            Subscription subscription = SubscriptionManager.getSubscriptionByUserId(user.getId());
             if (subscription != null && subscription.canWatchMovie()) {
                 subscription.watchMovie(show.getTitle());
                 new VideoPlayerFX(show.getVideo(), show.getId(), stage, user);
@@ -315,7 +315,7 @@ public class MoviePageFX {
         VBox posterAndRating = new VBox(10, poster, typeAndRatingRow, averageRatingBar, ratingBarWithButton, firstRateLabel, updateRateLabel, buttons);
         titleDescriptionDetails.getChildren().addAll(title, description, details);
         centerSection.getChildren().addAll(posterAndRating, titleDescriptionDetails);
-        centerSection.setPadding(new Insets(50, 30, 0, 50)); // top, right, bottom, left
+        centerSection.setPadding(new Insets(50, 30, 0, 50));
         root.setCenter(centerSection);
         Scene scene = new Scene(root, stageWidth, stageHeight);
 
@@ -483,45 +483,49 @@ public class MoviePageFX {
         box.getChildren().addAll(titleBox, contentBox);
         return box;
     }
+
     private void showSubscriptionExpiredPopup(Stage stage, User user) {
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.initStyle(StageStyle.UNDECORATED);
+        popupStage.initStyle(StageStyle.TRANSPARENT);
         popupStage.initOwner(stage);
 
-        VBox popupContent = new VBox(10);
+        VBox popupContent = new VBox(20);
         popupContent.setPadding(new Insets(20));
         popupContent.setAlignment(Pos.CENTER);
-        popupContent.setStyle("-fx-background-color: #333;");
+        popupContent.setStyle("-fx-background-color: rgba(51, 51, 51, 0.8); -fx-background-radius: 20;"); // Rounded corners
 
+        // Centered Label with all text visible
         Label messageLabel = new Label("Your subscription has expired. Please renew your subscription to continue watching movies.");
-        messageLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        messageLabel.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(), 16));
         messageLabel.setTextFill(Color.WHITE);
         messageLabel.setWrapText(true);
+        messageLabel.setMaxWidth(350);
         messageLabel.setAlignment(Pos.CENTER);
 
+        VBox messageContainer = new VBox(messageLabel);
+        messageContainer.setAlignment(Pos.CENTER);
+
         Button renewButton = new Button("Renew Subscription");
-        renewButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+        renewButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(), 16));
         renewButton.setStyle("-fx-background-color: #c9068d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;");
         renewButton.setOnAction(_ -> {
-            new subscription_page(stage,user);
+            new subscription_page(stage, user);
             popupStage.close();
         });
-        Button cancelButton=new Button("Cancel");
-        cancelButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(),16));
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(), 16));
         cancelButton.setStyle("-fx-background-color: #c9068d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 15px; -fx-border-radius: 15px; -fx-cursor: hand;");
+        cancelButton.setOnAction(_ -> popupStage.close());
 
-        cancelButton.setOnAction(_ -> {
-            popupStage.close();
-        });
-
-        popupContent.getChildren().addAll(messageLabel, renewButton,cancelButton);
-
-        Scene popupScene = new Scene(popupContent, 400, 150);
+        popupContent.getChildren().addAll(messageContainer, renewButton, cancelButton);
+        Scene popupScene = new Scene(popupContent, 400, 250);
         popupScene.setFill(Color.TRANSPARENT);
         popupStage.setScene(popupScene);
         popupStage.show();
     }
+
     private void navigateToDetailsPage(String name, Stage stage) {
         new DetailsPageFX(user,name, stage,show);
     }

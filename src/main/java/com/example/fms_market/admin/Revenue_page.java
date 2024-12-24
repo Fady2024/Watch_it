@@ -215,7 +215,7 @@ public class Revenue_page  {
 
         image_box_max.setTranslateY(stageHeight*0.1);
         image_box_max.setTranslateX(stageWidth*0.05);
-        Text max_month=createStyledText(Subscription.getMax_revenue(),"35px","white");
+        Text max_month=createStyledText(String.valueOf(Subscription.getMax_revenue()),"35px","white");
         max_month.setTranslateY(stageHeight*0.04);
         max_month.setTranslateX(stageWidth*0.04);
         StackPane stack_max_month = new StackPane();
