@@ -105,7 +105,7 @@ public class WelcomePage {
             popup.hide();
         });
 
-        Image gifImage = new Image(Objects.requireNonNull(getClass().getResource("/image/ff.gif")).toExternalForm());
+        Image gifImage = new Image(LanguageManager.getLanguageBasedString("file:src/main/resources/image/ff.gif","file:src/main/resources/image/final.gif"));
         ImageView imageView = new ImageView(gifImage);
         imageView.setPreserveRatio(false);
         imageView.fitWidthProperty().bind(stage.widthProperty());
@@ -136,7 +136,6 @@ public class WelcomePage {
         StackPane root = new StackPane(imageView,hbox,languageButton);
         Scene scene = new Scene(root);
 
-        stage.setTitle("GIF");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();

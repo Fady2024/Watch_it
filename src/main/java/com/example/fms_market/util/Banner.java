@@ -37,13 +37,13 @@ public class Banner {
         title.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(), 40));
         title.setStyle("-fx-fill: white;");
 
-        Text homeLabel = createNavLabel(LanguageManager.getLanguageBasedString("Heim", "Home"), currentPage.equals("Home"), () -> new HomePage(currentUser, stage));
+        Text homeLabel = createNavLabel(LanguageManager.getLanguageBasedString("Heim", "Home"), currentPage.equals("HomePage"), () -> new HomePage(currentUser, stage));
 
         // Top Watched label
-        Text topWatchedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Meistgesehen", "Top Watched"), currentPage.equals("Top Watched"), () -> new TopWatchedPage(currentUser, stage));
+        Text topWatchedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Meistgesehen", "Top Watched"), currentPage.equals("TopWatchedPage"), () -> new TopWatchedPage(currentUser, stage));
 
         // Top Rated label
-        Text topRatedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Top-Bewertungen", "Top Rated"), currentPage.equals("Top Rated"), () -> {
+        Text topRatedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Top-Bewertungen", "Top Rated"), currentPage.equals("TopRatedPage"), () -> {
             try {
                 new Top_Rated(currentUser, stage);
             } catch (IOException ex) {
@@ -92,7 +92,7 @@ public class Banner {
                 }
         });
 
-        Text revenue_admin = createNavLabel(LanguageManager.getLanguageBasedString("Bedienfeld", "Panel"), currentPage.equals("Panel"), () -> new Revenue_page(stage, currentUser));
+        Text revenue_admin = createNavLabel(LanguageManager.getLanguageBasedString("Bedienfeld", "Panel"), currentPage.equals("RevenuePage"), () -> new Revenue_page(stage, currentUser));
         List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel, topRatedLabel, searchField, profileIconView));
 
         if (currentUser.getRole().equals("admin")) {

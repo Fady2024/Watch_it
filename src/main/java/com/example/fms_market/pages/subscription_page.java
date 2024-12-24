@@ -1,6 +1,5 @@
 package com.example.fms_market.pages;
 
-import com.example.fms_market.account.WelcomePage;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
 import javafx.geometry.Insets;
@@ -15,11 +14,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-
 import java.awt.*;
 
 public class subscription_page {
-    public subscription_page(Stage stage, User user ){
+    public subscription_page(Stage stage, User user) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int stageWidth = (int) screenSize.getWidth();
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
@@ -29,11 +27,8 @@ public class subscription_page {
         hbox.setPrefWidth(stageWidth * 0.6);
         hbox.setPrefHeight(stageHeight * 0.6);
 
-        LanguageManager.getInstance().toggleLanguage();
-
         StackPane root = new StackPane();
         root.setPadding(new Insets(10));
-
 
         for (int i = 0; i < 3; i++) {
             Rectangle outerRectangle = new Rectangle();
@@ -47,10 +42,7 @@ public class subscription_page {
             innerRectangle.setArcWidth(20);
             innerRectangle.setArcHeight(20);
 
-
-            Button button1 = LanguageManager.createLanguageButton("Abonnieren","Subscribe","20","black");
-
-
+            Button button1 = LanguageManager.createLanguageButton("Abonnieren", "Subscribe", "20", "black");
             button1.setPrefWidth(stageWidth * 0.1);
             button1.setPrefHeight(stageHeight * 0.05);
 
@@ -58,32 +50,29 @@ public class subscription_page {
             ImageView imageView = null;
             String plan_name;
             if (i == 0) {
-                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/1 german.png","file:src/main/resources/image/Basic plan.png");
-                plan_name="Basic";
+                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/1 german.png", "file:src/main/resources/image/Basic plan.png");
+                plan_name = "Basic";
                 Image image1 = new Image(image_path);
                 imageView = new ImageView(image1);
                 imageView.setFitWidth(400);
                 imageView.setFitHeight(400);
             } else if (i == 1) {
-                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/2 german.png","file:src/main/resources/image/Standard plan.png");
-                plan_name="Standard";
+                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/2 german.png", "file:src/main/resources/image/Standard plan.png");
+                plan_name = "Standard";
                 Image image2 = new Image(image_path);
                 imageView = new ImageView(image2);
                 imageView.setFitWidth(400);
                 imageView.setFitHeight(400);
             } else {
-                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/3 german.png","file:src/main/resources/image/premium plan.png");
-
-                plan_name="Premium";
-
+                image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/3 german.png", "file:src/main/resources/image/premium plan.png");
+                plan_name = "Premium";
                 Image image3 = new Image(image_path);
                 imageView = new ImageView(image3);
-
             }
 
             String finalImagePath = image_path;
             button1.setOnAction(_ -> {
-                new payment_page(stage,user,finalImagePath,plan_name);
+                new payment_page(stage, user, finalImagePath, plan_name);
             });
 
             Runnable onHover = () -> {
@@ -91,34 +80,27 @@ public class subscription_page {
                 outerRectangle.setOpacity(1.0);
             };
 
-
             Runnable onExit = () -> {
                 button1.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 80;");
                 outerRectangle.setOpacity(0.0);
             };
 
-
             innerRectangle.setOnMouseEntered(e -> onHover.run());
             innerRectangle.setOnMouseExited(e -> onExit.run());
 
-
-
             button1.setOnMouseEntered(e -> onHover.run());
             button1.setOnMouseExited(e -> onExit.run());
-
-
 
             imageView.setOnMouseEntered(e -> onHover.run());
             imageView.setOnMouseExited(e -> onExit.run());
             StackPane stack;
 
             if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-                imageView.setFitWidth(350); // حجم ثابت
+                imageView.setFitWidth(350); // fixed size
                 imageView.setFitHeight(550);
-                stack = new StackPane(outerRectangle,imageView,button1);
+                stack = new StackPane(outerRectangle, imageView, button1);
                 button1.setTranslateY(150);
                 button1.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 80;");
-
             } else {
                 stack = new StackPane(outerRectangle, innerRectangle, button1, imageView);
             }
@@ -128,11 +110,10 @@ public class subscription_page {
 
         hbox.setStyle("-fx-background-color: black; -fx-background-radius: 20;");
         root.getChildren().addAll(hbox);
-        Scene scene = new Scene(root,stageWidth,stageHeight);
+        Scene scene = new Scene(root, stageWidth, stageHeight);
 
         scene.widthProperty().addListener((_, _, newValue) ->
                 updateLayout(hbox, newValue.doubleValue(), scene.getHeight())
-
         );
         scene.heightProperty().addListener((_, _, newValue) ->
                 updateLayout(hbox, scene.getWidth(), newValue.doubleValue())
@@ -141,7 +122,15 @@ public class subscription_page {
         stage.setScene(scene);
         stage.setTitle("Improved JavaFX App");
         stage.setMaximized(true);
-        stage.show();}
+        stage.show();
+
+        // Add listener for language changes
+        LanguageManager.getInstance().addActionListener(() -> {
+            // Update UI elements based on the new language
+            updateUI(hbox);
+        });
+    }
+
     private void updateLayout(HBox hbox, double width, double height) {
         hbox.getChildren().forEach(node -> {
             StackPane stack = (StackPane) node;
@@ -172,26 +161,29 @@ public class subscription_page {
                 imageView.setFitHeight(height * 0.40);
                 imageView.setFitWidth(width * 0.25);
                 StackPane.setMargin(imageView, new Insets(0, 0, height * 0.2, 0));
-
-
-
             } else {
                 imageView.setFitHeight(height * 0.5);
-
                 StackPane.setAlignment(imageView, Pos.BOTTOM_CENTER);
-
                 StackPane.setMargin(imageView, new Insets(0, 0, height * 0.3, 0));
-
             }
-
         });
     }
 
-    public static javafx.scene.text.Text createStyledText(String content, String fontSize, String color) {
-        javafx.scene.text.Text text = new javafx.scene.text.Text(content);
-        text.setStyle("-fx-font-size: " + fontSize + "; -fx-fill: " + color + ";");
-        return text;
+    private void updateUI(HBox hbox) {
+        hbox.getChildren().forEach(node -> {
+            StackPane stack = (StackPane) node;
+            Button button = (Button) stack.getChildren().get(2);
+            ImageView imageView = (ImageView) stack.getChildren().get(3);
+
+            // Update button text
+            button.setText(LanguageManager.getInstance().getLanguageBasedString("Abonnieren", "Subscribe"));
+
+            // Update image based on the language
+            String imagePath = LanguageManager.getInstance().getLanguageBasedString(
+                    "file:src/main/resources/image/1 german.png",
+                    "file:src/main/resources/image/Basic plan.png"
+            );
+            imageView.setImage(new Image(imagePath));
+        });
     }
-
 }
-

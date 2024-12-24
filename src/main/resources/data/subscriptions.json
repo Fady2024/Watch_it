@@ -1,4 +1,8 @@
 {
+  "freq_month" : [ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 3, 12, 5 ] ],
+  "static_data" : {
+    "current_year" : 2024
+  },
   "subscriptions" : [ {
     "user_id" : 0,
     "plans" : "Basic",
@@ -59,9 +63,15 @@
     "moviesWatched" : 0,
     "userId" : 8,
     "expired" : false
-  } ],
-  "freq_month" : [ [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 0, 0, 0 ], [ 3, 12, 4 ] ],
-  "static_data" : {
-    "current_year" : 2024
-  }
+  }, {
+    "user_id" : 10,
+    "plans" : "Premium",
+    "price" : 30,
+    "start_date" : "2024-12-24",
+    "endDate" : "2025-01-24",
+    "cardDetails" : [ "1216548945644656", "06/29", "2342" ],
+    "moviesWatched" : 0,
+    "userId" : 10,
+    "expired" : false
+  } ]
 }

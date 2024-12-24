@@ -218,24 +218,31 @@ public class MoviePageFX {
                 showSubscriptionExpiredPopup(stage, user);
             }
         });
+        final boolean[] isFavorite = {ShowCardUtil.isShowFavorite(user.getId(), show.getId())};
         Button addButton = new Button(LanguageManager.getLanguageBasedString("Hinzufügen","♥ Add"));
         addButton.setPrefWidth(120);
         addButton.setPrefHeight(50);
-        addButton.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 18px; -fx-font-weight: bold;");
+        addButton.setStyle(isFavorite[0] ?
+                "-fx-background-color: white; -fx-text-fill: red; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 18px; -fx-font-weight: bold;" :
+                "-fx-background-color: white; -fx-text-fill: black; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-font-size: 18px; -fx-font-weight: bold;"
+        );
+
         addButton.setOnAction(_ -> {
             try {
-                if (ShowCardUtil.isShowFavorite(user.getId(), show.getId())) {
+                if (isFavorite[0]) {
                     // Remove favorite
                     UserJsonHandler.removeFavoriteShow(user.getId(), show.getId());
                     addButton.setStyle("-fx-background-color: white; -fx-text-fill: black; " +
                             "-fx-padding: 10px 20px; -fx-background-radius: 20; " +
                             "-fx-font-size: 18px; -fx-font-weight: bold;");
+                    isFavorite[0] = false;
                 } else {
                     // Add to favorite
                     UserJsonHandler.addFavoriteShow(user.getId(), show.getId());
                     addButton.setStyle("-fx-background-color: white; -fx-text-fill: red; " +
                             "-fx-padding: 10px 20px; -fx-background-radius: 20; " +
                             "-fx-font-size: 18px; -fx-font-weight: bold;");
+                    isFavorite[0] = true;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
