@@ -208,11 +208,11 @@ The WATCH IT system was developed by a dedicated team of students from **Ain Sha
 | **Name**                  | **Seat Number** | **Academic Level** | **Department** |
 |---------------------------|-----------------|--------------------|----------------|
 | **Fady Gerges Kodsy**      | 2023170415      | 2                  | General        |
+| **Mahmoud Ahmed Abdel Sadeq** | 5462023170   | 2                  | General        |
 | **Salma Fawzy Ahmed Rezq** | 2023170262      | 2                  | General        |
-| **Sarah Emad Atta**        | 2023170254      | 2                  | General        |
+| **Sara Emad Atta**        | 2023170254      | 2                  | General        |
 | **Sandra Hany Samir Gabra**| 2023170256      | 2                  | General        |
 | **Marwan Waleed Saleh**    | 2023170574      | 2                  | General        |
-| **Mahmoud Ahmed Abdel Sadeq** | 5462023170   | 2                  | General        |
 
 **Under Supervision:**
 - **TA**: Hossam Sherif  
