@@ -180,7 +180,7 @@ public class SearchForShow {
 
 // Add all components to the mainSection
         mainSection.getChildren().addAll(
-                Banner.getBanner(stage, keyword != null ? "Search Results for: " + keyword : "Filtered Results"), // Banner
+                Banner.getBanner(stage, keyword != null ? "Search Results for: " + keyword : "SearchForShow", "SearchForShow"), // Banner
                 filterBox, // Filter section
                 contentBox // Movie/Series content
         );
@@ -277,15 +277,27 @@ public class SearchForShow {
     }
 
     public static VBox createCastCard(Cast cast, User user, Stage stage) {
-        Objects.requireNonNull(cast, "Cast object cannot be null");
-        Objects.requireNonNull(cast.getFirst_name(), "Cast first name cannot be null");
-        Objects.requireNonNull(cast.getLast_name(), "Cast last name cannot be null");
+        // Ensure the cast object and its fields are not null
+        if (cast == null) {
+            throw new IllegalArgumentException("Cast object cannot be null");
+        }
+        if (cast.getFirst_name() == null) {
+            throw new IllegalArgumentException("Cast first name cannot be null");
+        }
+        if (cast.getLast_name() == null) {
+            throw new IllegalArgumentException("Cast last name cannot be null");
+        }
 
+        // Create a vertical box for the cast card with spacing
         VBox castCard = new VBox(5);
         castCard.setAlignment(Pos.TOP_CENTER);
-        String imagePath = Objects.requireNonNull(Banner.class.getResource("/Account/user.png")).toString();
+
+        // Load a default user image for the cast card
+        String imagePath = "file:src/main/java/com/example/fms_market/single-person.png";
         Image userImage = new Image(imagePath);
         ImageView profileView = new ImageView(userImage);
+
+        // Create a label for the cast's name and configure its appearance
         Label name = new Label(cast.getFirst_name() + " " + cast.getLast_name());
         name.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
         name.setTextFill(Color.WHITE);
@@ -293,28 +305,39 @@ public class SearchForShow {
         name.setWrapText(true);
         name.setMaxWidth(SHOW_CARD_WIDTH);
 
+        // Create a rectangle to add styling and effects to the profile image
         Rectangle rectangle = new Rectangle(SHOW_CARD_WIDTH, SHOW_CARD_HEIGHT - 30);
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setArcWidth(20);
         rectangle.setArcHeight(20);
+
+        // Create a stack pane to contain the profile image and rectangle
         StackPane profileContainer = new StackPane(profileView, rectangle);
         profileContainer.setAlignment(Pos.TOP_LEFT);
         StackPane.setAlignment(rectangle, Pos.BOTTOM_CENTER);
+
+        // Add the profile container and name label to the cast card
         castCard.getChildren().addAll(profileContainer, name);
 
-        profileContainer.setOnMouseEntered(_ -> profileContainer.setStyle("-fx-background-color: #333333; -fx-border-color: #6A1B9A; -fx-border-width: 3; -fx-border-radius: 15; -fx-background-radius: 15;"));
+        // Add hover effects for the profile container
+        profileContainer.setOnMouseEntered(_ -> profileContainer.setStyle(
+                "-fx-background-color: #333333; -fx-border-color: #6A1B9A; " +
+                        "-fx-border-width: 3; -fx-border-radius: 15; -fx-background-radius: 15;"));
 
         profileContainer.setOnMouseExited(_ -> profileContainer.setStyle(""));
 
+        // Add a click listener to the rectangle for showing details
         rectangle.setOnMouseReleased(_ -> {
             castCard.setStyle("");
             new DetailsPageFX(user, cast.getFirst_name() + " " + cast.getLast_name(), stage, null);
         });
 
-        mainSection.getChildren().add(5, castCard); // Add the card below the banner and filter box
-        mainSection.requestLayout();
+        // Ensure the index is within bounds before adding the cast card
+        int index = Math.min(5, mainSection.getChildren().size());
+        mainSection.getChildren().add(index, castCard); // Add below the banner and filter box
+        mainSection.requestLayout(); // Request layout update
 
-        return castCard;
+        return castCard; // Return the created cast card
     }
 
     private List<Movie> searchMoviesByKeyword(List<Movie> movies, String keyword, User user, Stage stage) throws Exception {

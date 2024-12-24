@@ -25,8 +25,8 @@ public class HelloApplication extends Application {
     public void start(Stage stage) {
         try {
             DataManager.loadData();
-            new LoginPageFX(stage);
-          // new HomePage(new User("ouio","feew","fwef","fwefw","fwef","Wefwe","fwefw","28",""),stage);
+         //   new LoginPageFX(stage);
+           new HomePage(new User("ouio","feew","fwef","fwefw","fwef","Wefwe","fwefw","28",""),stage);
 
      //      new payment_page(stage,"file:src/main/resources/image/premium plan.png","basic");
          //   new WelcomePage(stage);

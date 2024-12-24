@@ -70,27 +70,10 @@ import java.util.List;
 
         public void setNationality(String nationality) {this.nationality = nationality;}
 
-        public static List<Cast>SearchCast(List<Cast>casts, String keyword)
-{
-    if (keyword == null || keyword.trim().isEmpty()) {
-        throw new IllegalArgumentException("Search keyword cannot be null or empty.");
-    }
-    List<Cast> Matched_casts = new ArrayList<>();
-    for (Cast cast : casts) {
-        if (cast.getFirst_name().toLowerCase().contains(keyword.toLowerCase())||cast.getLast_name().toLowerCase().contains(keyword.toLowerCase())) {
-            Matched_casts.add(cast);
-        }
-    }
-    // Handle no matches
-    if (Matched_casts.isEmpty()) {
-        throw new IllegalArgumentException("No cast found with the name: " + keyword);
-    }
-
-    return Matched_casts;
 }
 
 
 
-    }
+
 
 

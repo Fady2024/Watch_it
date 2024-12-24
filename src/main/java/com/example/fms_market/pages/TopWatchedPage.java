@@ -49,7 +49,7 @@ public class TopWatchedPage {
             scrollPane.setStyle("-fx-background: #1c1c1c; -fx-background-color: #1c1c1c; -fx-border-color: transparent;");
 
             BorderPane layout = new BorderPane();
-            layout.setTop(Banner.getBanner(stage, "Top Watched"));
+            layout.setTop(Banner.getBanner(stage, "Top Watched", "TopWatchedPage"));
             layout.setCenter(scrollPane);
             layout.setStyle("-fx-background-color: #1c1c1c;");
 

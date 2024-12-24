@@ -43,7 +43,7 @@ public class Top_Rated {
         scrollPane.setStyle("-fx-background: #1c1c1c; -fx-background-color: #1c1c1c; -fx-border-color: transparent;");
 
         BorderPane layout = new BorderPane();
-        layout.setTop(Banner.getBanner(stage, "Top Rated"));
+        layout.setTop(Banner.getBanner(stage, "Top Rated", "TopRatedPage"));
         layout.setCenter(scrollPane);
         layout.setStyle("-fx-background-color: #1c1c1c;");
 

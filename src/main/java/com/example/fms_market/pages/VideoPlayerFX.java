@@ -77,8 +77,7 @@ public class VideoPlayerFX {
         webView.setScaleY(0.7);
 
         BorderPane root = new BorderPane();
-        root.setTop(Banner.getBanner(stage, "Video Player"));
-
+        root.setTop(Banner.getBanner(stage, "Video Player", "VideoPlayerPage"));
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background: #252525;");

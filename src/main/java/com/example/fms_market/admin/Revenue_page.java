@@ -43,8 +43,7 @@ public class Revenue_page  {
 
         GridPane showContainer =createShowContainer();
         BorderPane layout = new BorderPane();
-        layout.setTop(Banner.getBanner(stage, "revenue"));
-
+        layout.setTop(Banner.getBanner(stage, "revenue", "RevenuePage"));
 
 
         String[] monthsGerman = {

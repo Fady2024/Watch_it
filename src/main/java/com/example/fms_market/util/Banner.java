@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+// In Banner.java
 public class Banner {
     public static User currentUser;
     private static Sidebar.SidebarListener sidebarListener;
@@ -26,24 +27,23 @@ public class Banner {
         currentUser = user;
     }
 
-    public static HBox getBanner(Stage stage, String currentPage) {
+    public static HBox getBanner(Stage stage, String currentPageTitle, String currentPage) {
         HBox banner = new HBox(36);
         banner.setStyle("-fx-background-color: #451952; -fx-padding: 40px;");
         banner.setAlignment(Pos.CENTER_LEFT);
 
         // Title
         Text title = new Text("WATCH IT");
-        title.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(),40));
+        title.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(), 40));
         title.setStyle("-fx-fill: white;");
 
-        // Home label
-        Text homeLabel = createNavLabel(LanguageManager.getLanguageBasedString("Heim","Home"), currentPage.equals(LanguageManager.getLanguageBasedString("Heim","Home")), () -> new HomePage(currentUser, stage));
+        Text homeLabel = createNavLabel(LanguageManager.getLanguageBasedString("Heim", "Home"), currentPage.equals("Home"), () -> new HomePage(currentUser, stage));
 
         // Top Watched label
-        Text topWatchedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Meistgesehen","Top Watched"), currentPage.equals(LanguageManager.getLanguageBasedString("Meistgesehen","Top Watched")), () -> new TopWatchedPage(currentUser, stage));
+        Text topWatchedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Meistgesehen", "Top Watched"), currentPage.equals("Top Watched"), () -> new TopWatchedPage(currentUser, stage));
 
         // Top Rated label
-        Text topRatedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Top-Bewertungen","Top Rated"), currentPage.equals(LanguageManager.getLanguageBasedString("Top-Bewertungen","Top Rated")), () -> {
+        Text topRatedLabel = createNavLabel(LanguageManager.getLanguageBasedString("Top-Bewertungen", "Top Rated"), currentPage.equals("Top Rated"), () -> {
             try {
                 new Top_Rated(currentUser, stage);
             } catch (IOException ex) {
@@ -51,7 +51,7 @@ public class Banner {
             }
         });
 
-        //Profile icon with emoji
+        // Profile icon with emoji
         Image profileIcon = new Image("Acount/iconamoon_profile-circle-fill.png");
         ImageView profileIconView = new ImageView(profileIcon);
         profileIconView.setFitWidth(40);
@@ -66,42 +66,34 @@ public class Banner {
 
         // Search field
         TextField searchField = new TextField();
-       // searchField.setPromptText("Series, Shows and Movies");
         searchField.setPrefWidth(300);
         searchField.setPrefHeight(50);
         searchField.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;-fx-border-width: 1;" +
                 "-fx-padding: 5px; -fx-prompt-text-fill: gray; -fx-font-size: 14px;");
-        searchField.setPromptText(LanguageManager.getLanguageBasedString("\uD83D\uDD0D Suche nach Stichwort","Series, Shows and Movies"));
+        searchField.setPromptText(LanguageManager.getLanguageBasedString("\uD83D\uDD0D Suche nach Stichwort", "Series, Shows and Movies"));
         searchField.setFont(Font.font("Arial", 15));
-        searchField.setOnAction(event -> {
-            String keyword = searchField.getText();
-            try {
-                Banner.setCurrentUser(currentUser);
-                System.out.println("Search triggered for keyword: " + keyword);
-                new SearchForShow(currentUser,stage, keyword);
-            } catch (Exception e) {
-                e.printStackTrace();
+        searchField.setOnMouseClicked(event -> {
+            if (!currentPage.equals("SearchForShow")) {
+                try {
+                    new SearchForShow(currentUser, stage, searchField.getText());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-//        ComboBox<String> languageComboBox = new ComboBox<>();
-//        languageComboBox.getItems().addAll("English", "German"); // قائمة اللغات
-//        if ("German".equals(LanguageManager.getInstance().getLanguage())) {
-//            languageComboBox.setValue("German");
-//        } else {
-//            languageComboBox.setValue("English");
-//        }
-//        languageComboBox.valueProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-//                LanguageManager.getInstance().toggleLanguage();
-//            }
-//        });
-     //   LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
-        Text revenue_admin = createNavLabel(        LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
-                , currentPage.equals(        LanguageManager.getLanguageBasedString("Bedienfeld","Panel")
-                ), () -> new Revenue_page(stage,currentUser));
-        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel,topRatedLabel, searchField, profileIconView));
+        searchField.setOnAction(event -> {
+            String keyword = searchField.getText();
+                try {
+                    System.out.println("Search triggered for keyword: " + keyword);
+                    new SearchForShow(currentUser, stage, keyword);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        });
+
+        Text revenue_admin = createNavLabel(LanguageManager.getLanguageBasedString("Bedienfeld", "Panel"), currentPage.equals("Panel"), () -> new Revenue_page(stage, currentUser));
+        List<Node> commonComponents = new java.util.ArrayList<>(List.of(title, homeLabel, topWatchedLabel, topRatedLabel, searchField, profileIconView));
 
         if (currentUser.getRole().equals("admin")) {
             commonComponents.add(revenue_admin); // Admin-specific component
@@ -113,8 +105,8 @@ public class Banner {
 
     private static Text createNavLabel(String text, boolean isCurrentPage, Runnable action) {
         Text label = new Text(text);
-        label.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(),20));
-        label.setStyle(STR."-fx-fill: \{isCurrentPage ? "white" : "#888888"}; -fx-cursor: hand;");
+        label.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(), 20));
+        label.setStyle("-fx-fill: " + (isCurrentPage ? "white" : "#888888") + "; -fx-cursor: hand;");
         label.addEventHandler(MouseEvent.MOUSE_ENTERED, _ -> {
             if (!isCurrentPage) label.setStyle("-fx-fill: lightgrey; -fx-cursor: hand; -fx-font-weight: bold;");
         });
@@ -124,8 +116,6 @@ public class Banner {
 
         label.setOnMouseClicked(_ -> action.run());
 
-
         return label;
     }
-
 }

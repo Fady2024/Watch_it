@@ -73,8 +73,7 @@ public class HomePage {
         scrollPane.setStyle("-fx-background: #1c1c1c; -fx-background-color: #1c1c1c; -fx-border-color: transparent;");
 
         BorderPane layout = new BorderPane();
-        layout.setTop(Banner.getBanner(stage, LanguageManager.getLanguageBasedString("Heim","Home")));
-        layout.setCenter(scrollPane);
+        layout.setTop(Banner.getBanner(stage, LanguageManager.getLanguageBasedString("Heim", "Home"), "HomePage"));        layout.setCenter(scrollPane);
         layout.setStyle("-fx-background-color: #1c1c1c;");
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -1,5 +1,3 @@
-// src/main/java/com/example/fms_market/data/CastJsonHandler.java
-
 package com.example.fms_market.data;
 
 import com.example.fms_market.model.Cast;

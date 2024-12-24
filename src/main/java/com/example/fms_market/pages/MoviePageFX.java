@@ -53,7 +53,7 @@ public class MoviePageFX {
         root.setStyle("-fx-background-color: #252525;");
 
         // Add Banner to the top
-        HBox banner = Banner.getBanner(stage, LanguageManager.getLanguageBasedString("Filmseite","MoviePage"));
+        HBox banner = Banner.getBanner(stage, LanguageManager.getLanguageBasedString("Filmseite", "MoviePage"), "MoviePage");
         root.setTop(banner);
 
         // Create a new VBox for title, description, and details

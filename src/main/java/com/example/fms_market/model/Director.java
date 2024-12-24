@@ -73,28 +73,4 @@ public class Director {
 
     public void setNationality(String nationality) {this.nationality = nationality;}
 
-    public static List<String> searchDirectorByName(String keyword, List<Director> directors) throws Exception {
-        List<String> results = new ArrayList<>();
-
-        // Validate input
-        if (keyword == null || keyword.trim().isEmpty()) {
-            throw new IllegalArgumentException("Search keyword cannot be null or empty.");
-        }
-
-        // Search through directors
-        for (Director director : directors) {
-            if (director.getFirstName().toLowerCase().contains(keyword.toLowerCase())|| director.getLastName().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add("Director: " + director.getFirstName() +" "+ director.getLastName() + " | Age:" +director.getAge() + " | List of movies:"+director.getShows());
-            }
-
-        }
-
-        // Handle no matches
-        if (results.isEmpty()) {
-            throw new Exception("No director found with the name: " + keyword);
-        }
-
-        return results;
-    }
-
 }

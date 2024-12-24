@@ -38,8 +38,7 @@ public class DetailsPageFX {
         VBox root = new VBox();
         root.setStyle("-fx-background-color: #252525;");
 
-        // Top banner
-        HBox banner = Banner.getBanner(stage, "DetailsPage");
+        HBox banner = Banner.getBanner(stage, "DetailsPage", "DetailsPage");
         root.getChildren().add(banner);
 
         // Details section
