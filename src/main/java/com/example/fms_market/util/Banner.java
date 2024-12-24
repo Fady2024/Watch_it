@@ -52,7 +52,7 @@ public class Banner {
         });
 
         // Profile icon with emoji
-        Image profileIcon = new Image("Account/iconamoon_profile-circle-fill.png");
+        Image profileIcon = new Image("Acount/iconamoon_profile-circle-fill.png");
         ImageView profileIconView = new ImageView(profileIcon);
         profileIconView.setFitWidth(40);
         profileIconView.setFitHeight(40);
