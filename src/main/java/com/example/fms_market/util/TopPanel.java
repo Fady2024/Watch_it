@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TopPanel extends Application {
+public class TopPanel {
 
     private static boolean isDay = true;
     private final int width = 200;
@@ -141,18 +141,6 @@ public class TopPanel extends Application {
 
     public Canvas getCanvas() {
         return canvas;
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        Pane root = new Pane(canvas);
-        Scene scene = new Scene(root, width, height);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     public static boolean isDayValue() {

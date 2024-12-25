@@ -7,8 +7,8 @@
     "endDate" : "2025-01-22",
     "cardDetails" : [ ],
     "moviesWatched" : 2,
-    "userId" : 0,
-    "expired" : false
+    "expired" : false,
+    "userId" : 0
   }, {
     "user_id" : 1,
     "plans" : "Basic",
@@ -17,8 +17,8 @@
     "endDate" : "2025-01-22",
     "cardDetails" : [ "2315321342315323", "02/25", "4353" ],
     "moviesWatched" : 1,
-    "userId" : 1,
-    "expired" : false
+    "expired" : false,
+    "userId" : 1
   }, {
     "user_id" : 2,
     "plans" : "Premium",
@@ -27,8 +27,8 @@
     "endDate" : "2025-01-22",
     "cardDetails" : [ "3242342342342342", "05/28", "234" ],
     "moviesWatched" : 0,
-    "userId" : 2,
-    "expired" : false
+    "expired" : false,
+    "userId" : 2
   }, {
     "user_id" : 3,
     "plans" : "Premium",
@@ -37,8 +37,8 @@
     "endDate" : "2025-01-22",
     "cardDetails" : [ "3242342342342342", "02/28", "2342" ],
     "moviesWatched" : 30,
-    "userId" : 3,
-    "expired" : false
+    "expired" : false,
+    "userId" : 3
   }, {
     "user_id" : 4,
     "plans" : "Standard",
@@ -47,8 +47,8 @@
     "endDate" : "2024-12-21",
     "cardDetails" : [ "2342342342342342", "12/41", "2342" ],
     "moviesWatched" : 0,
-    "userId" : 4,
-    "expired" : true
+    "expired" : true,
+    "userId" : 4
   }, {
     "user_id" : 8,
     "plans" : "Premium",
@@ -57,8 +57,8 @@
     "endDate" : "2025-01-22",
     "cardDetails" : [ "6757657657657657", "02/29", "2442" ],
     "moviesWatched" : 0,
-    "userId" : 8,
-    "expired" : false
+    "expired" : false,
+    "userId" : 8
   }, {
     "user_id" : 10,
     "plans" : "Premium",
@@ -67,8 +67,8 @@
     "endDate" : "2025-01-24",
     "cardDetails" : [ "1216548945644656", "06/29", "2342" ],
     "moviesWatched" : 0,
-    "userId" : 10,
-    "expired" : false
+    "expired" : false,
+    "userId" : 10
   } ],
   "static_data" : {
     "current_year" : 2024
