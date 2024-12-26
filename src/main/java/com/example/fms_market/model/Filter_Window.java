@@ -1,17 +1,12 @@
 package com.example.fms_market.model;
 
-import com.example.fms_market.model.User_Filter;
+import com.example.fms_market.pages.SearchForShow;
 import com.example.fms_market.util.LanguageManager;
-import javafx.animation.FadeTransition;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.geometry.Insets;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.example.fms_market.util;
 
 import com.example.fms_market.admin.Revenue_page;
-import com.example.fms_market.model.SearchForShow;
+import com.example.fms_market.pages.SearchForShow;
 import com.example.fms_market.model.User;
 import com.example.fms_market.pages.*;
 import javafx.scene.Node;
@@ -73,8 +73,7 @@ public class Banner {
         searchField.setPromptText(LanguageManager.getLanguageBasedString("\uD83D\uDD0D Suche nach Stichwort", "Series, Shows and Movies"));
         searchField.setFont(Font.font("Arial", 15));
         searchField.setOnMouseClicked(event -> {
-            if (!currentPage.equals("SearchForShow")) {
-                try {
+            if (!currentPage.equals("SearchForShow") && !currentPage.equals("DetailsPage")) {                try {
                     new SearchForShow(currentUser, stage, searchField.getText());
                 } catch (Exception e) {
                     e.printStackTrace();
