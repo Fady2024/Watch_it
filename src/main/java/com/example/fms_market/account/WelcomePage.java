@@ -23,9 +23,11 @@ import javafx.scene.text.Font;
 public class WelcomePage {
 
     private final Button languageButton;
+    private final Button signInButton;
+    private final Button loginButton;
+    private final ImageView imageView;
 
     public WelcomePage(Stage stage) {
-
         languageButton = new Button("🌐");
         languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: white;");
         Popup popup = new Popup();
@@ -43,22 +45,11 @@ public class WelcomePage {
         menuBox.getChildren().addAll(englishLabel, germanLabel);
         popup.getContent().add(menuBox);
 
-        // Create the PauseTransition
         PauseTransition hideTransition = new PauseTransition(Duration.seconds(2));
         hideTransition.setOnFinished(_ -> popup.hide());
 
-        // Add mouse event handlers to reset the transition if the mouse hovers over the popup
         menuBox.setOnMouseEntered(_ -> hideTransition.stop());
         menuBox.setOnMouseExited(_ -> hideTransition.play());
-        if (popup.isShowing()) {
-            ScaleTransition hideScaleTransition = new ScaleTransition(Duration.millis(300), menuBox);
-            hideScaleTransition.setFromX(1.0);
-            hideScaleTransition.setFromY(1.0);
-            hideScaleTransition.setToX(0.1);
-            hideScaleTransition.setToY(0.1);
-            hideScaleTransition.setOnFinished(_ -> popup.hide());
-            hideScaleTransition.play();
-        }
 
         languageButton.setOnMouseClicked(event -> {
             double popupX = languageButton.localToScreen(languageButton.getBoundsInLocal()).getMaxX() - 70;
@@ -88,26 +79,29 @@ public class WelcomePage {
         });
 
         englishLabel.setOnMouseClicked(_ -> {
-            if(!"English".equals(LanguageManager.getInstance().getLanguage())){
-                LanguageManager.getInstance().toggleLanguage();}
+            if (!"English".equals(LanguageManager.getInstance().getLanguage())) {
+                LanguageManager.getInstance().toggleLanguage();
+                updateTexts();
+            }
             popup.hide();
         });
 
         germanLabel.setOnMouseClicked(_ -> {
-            if(!"German".equals(LanguageManager.getInstance().getLanguage())){
-                LanguageManager.getInstance().toggleLanguage();}
-
+            if (!"German".equals(LanguageManager.getInstance().getLanguage())) {
+                LanguageManager.getInstance().toggleLanguage();
+                updateTexts();
+            }
             popup.hide();
         });
 
-        Image gifImage = new Image(LanguageManager.getLanguageBasedString("file:src/main/resources/image/ff.gif","file:src/main/resources/image/final.gif"));
-        ImageView imageView = new ImageView(gifImage);
+        Image gifImage = new Image(LanguageManager.getLanguageBasedString("file:src/main/resources/image/ff.gif", "file:src/main/resources/image/final.gif"));
+        imageView = new ImageView(gifImage);
         imageView.setPreserveRatio(false);
         imageView.fitWidthProperty().bind(stage.widthProperty());
         imageView.fitHeightProperty().bind(stage.heightProperty());
 
-        Button signInButton = new Button(LanguageManager.getLanguageBasedString("anmelden","Sign in"));
-        Button loginButton = new Button(LanguageManager.getLanguageBasedString("einloggen","Login"));
+        signInButton = new Button(LanguageManager.getLanguageBasedString("anmelden", "Sign in"));
+        loginButton = new Button(LanguageManager.getLanguageBasedString("einloggen", "Login"));
 
         TopPanel topPanel = new TopPanel();
         topPanel.addActionListener(() -> {
@@ -152,6 +146,13 @@ public class WelcomePage {
         stage.show();
     }
 
+    private void updateTexts() {
+        signInButton.setText(LanguageManager.getLanguageBasedString("anmelden", "Sign in"));
+        loginButton.setText(LanguageManager.getLanguageBasedString("einloggen", "Login"));
+        Image gifImage = new Image(LanguageManager.getLanguageBasedString("file:src/main/resources/image/ff.gif", "file:src/main/resources/image/final.gif"));
+        imageView.setImage(gifImage);
+    }
+
     private void styleButton(Button button, boolean isDay) {
         String dayStyle = "-fx-background-color: linear-gradient(#ff5400, #be1d00); " +
                 "-fx-background-radius: 30; " +
@@ -173,13 +174,7 @@ public class WelcomePage {
         button.setOnMouseEntered(e -> {
             button.setScaleX(1.1);
             button.setScaleY(1.1);
-            button.setStyle("-fx-background-color: linear-gradient(#ff7f50, #ff4500); " +
-                    "-fx-background-radius: 30; " +
-                    "-fx-background-insets: 0; " +
-                    "-fx-text-fill: " + (!isDay ? "black" : "white") + "; " +
-                    "-fx-font-size: 16px; " +
-                    "-fx-padding: 10 20 10 20; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 4, 0.5, 0, 0);");
+            button.setStyle(STR."-fx-background-color: linear-gradient(#ff7f50, #ff4500); -fx-background-radius: 30; -fx-background-insets: 0; -fx-text-fill: \{!isDay ? "black" : "white"}; -fx-font-size: 16px; -fx-padding: 10 20 10 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 4, 0.5, 0, 0);");
         });
         button.setOnMouseExited(e -> {
             button.setScaleX(1);
@@ -190,10 +185,8 @@ public class WelcomePage {
 
     private void applyTheme(boolean isDay) {
         if (!isDay) {
-            // Apply day theme
             languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: gray;");
         } else {
-            // Apply night theme
             languageButton.setStyle("-fx-font-size: 25px; -fx-background-color: transparent; -fx-text-fill: white;");
         }
     }

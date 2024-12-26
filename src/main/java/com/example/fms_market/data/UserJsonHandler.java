@@ -17,7 +17,7 @@ public class UserJsonHandler {
         List<User> users = readUsers();
 
         boolean userExists = false;
-        for (int i = 1; i < users.size(); i++) {
+        for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId() == user.getId()) {
                 users.set(i, user);
                 userExists = true;
