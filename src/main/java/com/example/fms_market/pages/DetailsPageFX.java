@@ -142,7 +142,13 @@ public class DetailsPageFX {
     private void displayCastDetails(VBox contentBox, Cast cast, Stage stage) {
         if (cast != null) {
             Button backButton = new Button(LanguageManager.getLanguageBasedString("Zurück","Back"));
-            backButton.setOnAction(_ -> new MoviePageFX(user, show, stage));
+            backButton.setOnAction(_ -> {
+                try {
+                    new SearchForShow(user, stage);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
             HBox backButtonBox = new HBox(backButton);
             backButtonBox.setPadding(new Insets(10));
             backButtonBox.setAlignment(Pos.TOP_LEFT);

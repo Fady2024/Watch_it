@@ -60,6 +60,15 @@ public class SearchForShow {
         MovieSearch(stage, Banner.currentUser);
     }
 
+    public SearchForShow(User user, Stage stage) throws Exception {
+
+        this.keyword = null;
+        this.user_filter = null;
+        this.mainSection = new VBox();
+        MovieSearch(stage,user);
+
+    }
+
     public void MovieSearch(Stage stage, User user) throws Exception {
         List<Show> allShows = ShowJsonHandler.readShows();
         List<Movie> Movie_results = ShowJsonHandler.readMovies();
@@ -96,7 +105,7 @@ public class SearchForShow {
 
         Button filterButton = new Button();
         filterButton.setStyle("-fx-background-color: #451952; -fx-text-fill: white; -fx-background-radius: 20px; -fx-cursor: hand;");
-        filterButton.setVisible(false);
+        filterButton.setVisible(true);
         try {
             String imagePath = Objects.requireNonNull(SearchForShow.class.getResource("/filter.png")).toExternalForm();
             Image filterImage = new Image(imagePath);
@@ -168,19 +177,18 @@ public class SearchForShow {
 
         if (Movie_results.isEmpty() && seriesResults.isEmpty()) {
             movieFlowPane.getChildren().clear();
+            seriesFlowPane.getChildren().clear();
 
             List<Cast> castResults = CastJsonHandler.readCast().stream()
-                    .filter(cast -> {
-                        if (cast.getFirst_name().toLowerCase().contains(keyword.toLowerCase())) return true;
-                        assert keyword != null;
-                        return cast.getLast_name().toLowerCase().contains(keyword.toLowerCase());
-                    })
+                    .filter(cast -> keyword != null && (cast.getFirst_name().toLowerCase().contains(keyword.toLowerCase())|| cast.getLast_name().toLowerCase().contains(keyword.toLowerCase())))
                     .collect(Collectors.toList());
 
+
             List<Director> directorResults = DirectorJsonHandler.readDirectors().stream()
-                    .filter(director -> director.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
-                            director.getLastName().toLowerCase().contains(keyword.toLowerCase()))
+                    .filter(director -> keyword != null && (director.getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
+                            director.getLastName().toLowerCase().contains(keyword.toLowerCase())))
                     .collect(Collectors.toList());
+
 
             if (castResults.isEmpty() && directorResults.isEmpty()) {
                 Label notFoundLabel = new Label("No movies, series, cast, or directors found");

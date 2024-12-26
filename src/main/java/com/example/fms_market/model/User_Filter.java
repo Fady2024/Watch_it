@@ -7,7 +7,9 @@ import com.example.fms_market.model.Show;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 public class User_Filter {
 
     private List<String> genres = new ArrayList<>();
@@ -16,7 +18,7 @@ public class User_Filter {
     private List<String> countries = new ArrayList<>();
     private List<String> types = new ArrayList<>(); // Movie or series
     private List<String> years = new ArrayList<>();  // years of selected movies
-
+    private static final Logger logger = Logger.getLogger(User_Filter.class.getName());
 
     // Getters and Setters
     public void setGenres(List<String> genres) {
@@ -60,33 +62,55 @@ public class User_Filter {
     public void setYears(List<String> years) {
         this.years = years;
     }
-
     public List<Movie> filterMovies(List<Show> allShows) {
-        return allShows.stream()
+        System.out.println("Starting filterMovies with " + allShows.size() + " shows");
+        System.out.println("Types: " + types);
+
+        List<Movie> movies = allShows.stream()
                 .filter(show -> show instanceof Movie)
-                .filter(show -> types.isEmpty() || types.contains("movie"))
+                .peek(show -> System.out.println("Filtered Movie: " + show.getTitle()))
+                .filter(show -> types.isEmpty() || types.contains("Movie"))
                 .map(show -> (Movie) show)
                 .filter(movie -> genres.isEmpty() || genres.stream().anyMatch(genre -> movie.getGenres().contains(genre)))
+                .peek(movie -> System.out.println("Filtered by genre: " + movie.getTitle()))
                 .filter(movie -> languages.isEmpty() || languages.stream().anyMatch(language -> movie.getLanguage().contains(language)))
+                .peek(movie -> System.out.println("Filtered by language: " + movie.getTitle()))
                 .filter(movie -> movie.getImdb_score() >= imdbRating)
+                .peek(movie -> System.out.println("Filtered by IMDB rating: " + movie.getTitle()))
                 .filter(movie -> countries.isEmpty() || countries.contains(movie.getCountry()))
-                .filter(movie -> types.isEmpty() || types.contains(movie.getType()))
-                .filter(movie -> years.isEmpty() || years.contains(String.valueOf(movie.getDate().getYear() + 1900)))
+                .peek(movie -> System.out.println("Filtered by country: " + movie.getTitle()))
+                .filter(movie -> years.isEmpty() || years.contains(String.valueOf(movie.getYear())))
+                .peek(movie -> System.out.println("Filtered by year: " + movie.getTitle()))
                 .collect(Collectors.toList());
+
+        System.out.println("Finished filterMovies with " + movies.size() + " movies");
+        return movies;
     }
 
     public List<Series> filterSeries(List<Show> allShows) {
-        return allShows.stream()
+        System.out.println("Starting filterSeries with " + allShows.size() + " shows");
+
+        List<Series> seriesList = allShows.stream()
                 .filter(show -> show instanceof Series)
-                .filter(show -> types.isEmpty() || types.contains("series"))
+                .peek(show -> System.out.println("Filtered Series: " + show.getTitle()))
+                .filter(show -> types.isEmpty() || types.contains("Series"))
                 .map(show -> (Series) show)
                 .filter(series -> genres.isEmpty() || genres.stream().anyMatch(genre -> series.getGenres().contains(genre)))
+                .peek(series -> System.out.println("Filtered by genre: " + series.getTitle()))
                 .filter(series -> languages.isEmpty() || languages.stream().anyMatch(language -> series.getLanguage().contains(language)))
+                .peek(series -> System.out.println("Filtered by language: " + series.getTitle()))
                 .filter(series -> series.getImdb_score() >= imdbRating)
+                .peek(series -> System.out.println("Filtered by IMDB rating: " + series.getTitle()))
                 .filter(series -> countries.isEmpty() || countries.contains(series.getCountry()))
+                .peek(series -> System.out.println("Filtered by country: " + series.getTitle()))
                 .filter(series -> types.isEmpty() || types.contains(series.getType()))
-                .filter(series -> years.isEmpty() || years.contains(String.valueOf(series.getDate().getYear() + 1900)))
+                .peek(series -> System.out.println("Filtered by type: " + series.getTitle()))
+                .filter(series -> years.isEmpty() || years.contains(String.valueOf(series.getYear())))
+                .peek(series -> System.out.println("Filtered by year: " + series.getTitle()))
                 .collect(Collectors.toList());
+
+        System.out.println("Finished filterSeries with " + seriesList.size() + " series");
+        return seriesList;
     }
 }
 

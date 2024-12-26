@@ -32,7 +32,17 @@ public abstract class Show {
     private String type;
     private String description;
     private int views;
+    private int year;
 
+
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
     public void setId(int id) {
         this.id = id;
     }
