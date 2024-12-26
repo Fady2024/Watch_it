@@ -1,10 +1,8 @@
 package com.example.fms_market.data;
+
 import com.example.fms_market.model.User;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ public class UserJsonHandler {
         }
 
         if (!userExists) {
-            int newUserId = users.isEmpty() ? 1 : users.get(users.size() - 1).getId() + 1;
+            int newUserId = users.isEmpty() ? 1 : users.getLast().getId() + 1;
             user.setId(newUserId);
             users.add(user);
         }

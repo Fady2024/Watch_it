@@ -4,7 +4,6 @@ import com.example.fms_market.util.LanguageManager;
 import com.example.fms_market.util.TopPanel;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
