@@ -23,7 +23,8 @@ public class CommentJsonHandler {
         if (commentsArrayNode == null) {
             return new ArrayList<>();
         }
-        List<Comment> allComments = objectMapper.readValue(commentsArrayNode.toString(), new TypeReference<List<Comment>>() {});
+        List<Comment> allComments = objectMapper.readValue(commentsArrayNode.toString(), new TypeReference<>() {
+        });
         List<Comment> videoComments = new ArrayList<>();
         for (Comment comment : allComments) {
             if (comment.getVideoId() == videoId) {
@@ -45,7 +46,8 @@ public class CommentJsonHandler {
         if (commentsArrayNode == null) {
             return new ArrayList<>();
         }
-        return objectMapper.readValue(commentsArrayNode.toString(), new TypeReference<List<Comment>>() {});
+        return objectMapper.readValue(commentsArrayNode.toString(), new TypeReference<>() {
+        });
     }
 
     public static void saveComments(List<Comment> comments) throws IOException {

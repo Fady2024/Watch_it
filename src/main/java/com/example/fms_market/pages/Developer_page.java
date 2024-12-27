@@ -10,12 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.awt.*;
@@ -81,10 +83,11 @@ public class Developer_page {
         projectName.setTextFill(Color.WHITE);
         headerBox.getChildren().add(projectName);
 
-        String fullDescription = LanguageManager.getLanguageBasedString("„Watch It ist eine umfassende Filmplattform, die Ihr Kinoerlebnis verbessern soll.“ +\n" +
-                "„Entdecken Sie neue Favoriten durch personalisierte Empfehlungen, die auf Ihren individuellen Geschmack zugeschnitten sind.“ +\n" +
-                "„Erstellen Sie ein persönliches Profil, um Ihre angesehenen Filme zu verfolgen, Ihre Favoriten zu bewerten und eine benutzerdefinierte Beobachtungsliste zu erstellen.“ +\n" +
-                "„Mit einer benutzerfreundlichen Oberfläche und intuitiver Navigation macht es Watch It einfach, die Filme zu finden, anzusehen und zu genießen, die Sie lieben."
+        String fullDescription = LanguageManager.getLanguageBasedString("""
+                        „Watch It ist eine umfassende Filmplattform, die Ihr Kinoerlebnis verbessern soll.“ +
+                        „Entdecken Sie neue Favoriten durch personalisierte Empfehlungen, die auf Ihren individuellen Geschmack zugeschnitten sind.“ +
+                        „Erstellen Sie ein persönliches Profil, um Ihre angesehenen Filme zu verfolgen, Ihre Favoriten zu bewerten und eine benutzerdefinierte Beobachtungsliste zu erstellen.“ +
+                        „Mit einer benutzerfreundlichen Oberfläche und intuitiver Navigation macht es Watch It einfach, die Filme zu finden, anzusehen und zu genießen, die Sie lieben."""
         ,"Watch It is a comprehensive movie platform designed to enhance your cinematic experience. " +
                         "Discover new favorites through personalized recommendations tailored to your unique tastes. " +
                         "Create a personal profile to track your watched movies, rate your favorites, and build a custom watchlist. " +
@@ -174,7 +177,7 @@ public class Developer_page {
         VBox memberBox = new VBox(10);
         memberBox.setAlignment(Pos.CENTER);
 
-        ImageView memberImage = new ImageView(member.getPersonImage());
+        ImageView memberImage = new ImageView(member.personImage());
         memberImage.setFitWidth(width);
         memberImage.setFitHeight(height);
         memberImage.setPreserveRatio(false);
@@ -186,10 +189,15 @@ public class Developer_page {
 
         StackPane imageContainer = new StackPane();
         imageContainer.getChildren().add(memberImage);
-        imageContainer.setStyle("-fx-border-color: #1c1c1c; -fx-border-radius: 15; -fx-background-radius: 15;");
         imageContainer.setPrefSize(width, height);
 
-        Label memberName = new Label(member.getName());
+        if (member.name().equals("Fady Gerges Kodsy")) {
+            imageContainer.setStyle("-fx-border-color: gold; -fx-border-width: 3px; -fx-border-radius: 15; -fx-background-radius: 15;");
+        } else {
+            imageContainer.setStyle("-fx-border-color: #1c1c1c; -fx-border-radius: 15; -fx-background-radius: 15;");
+        }
+
+        Label memberName = new Label(member.name());
         memberName.setTextFill(Color.WHITE);
         memberName.setFont(Font.font(18));
         memberName.setAlignment(Pos.CENTER);
@@ -198,9 +206,17 @@ public class Developer_page {
         imageAndNameBox.setAlignment(Pos.CENTER);
         imageAndNameBox.setPrefHeight(height + 30);
 
+        if (member.name().equals("Fady Gerges Kodsy")) {
+            memberName.setTextFill(Color.GOLD);
+            memberName.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+            memberImage.setEffect(new DropShadow(20, Color.GOLD));
+        }
+
         if (isCenterMember) {
             ScrollPane tasksScrollPane = createTasksScrollPane(member);
-            memberBox.getChildren().addAll(imageAndNameBox, tasksScrollPane);
+            VBox centeredBox = new VBox(10, imageAndNameBox, tasksScrollPane);
+            centeredBox.setAlignment(Pos.CENTER);
+            memberBox.getChildren().add(centeredBox);
         } else {
             memberBox.getChildren().add(imageAndNameBox);
         }
@@ -213,14 +229,20 @@ public class Developer_page {
         tasksScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         tasksScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        Label tasks = new Label(String.join("\n", member.getTasks()));
-        tasks.setWrapText(true);
-        tasks.setMaxWidth(200);
-        tasks.setFont(Font.font(13));
-        tasks.setTextFill(Color.web("#7D7C7C"));
-        tasks.setAlignment(Pos.CENTER);
+        VBox tasksContainer = new VBox();
+        tasksContainer.setAlignment(Pos.CENTER);
 
-        tasksScrollPane.setContent(tasks);
+        for (String task : member.tasks()) {
+            Label taskLabel = new Label(task);
+            taskLabel.setWrapText(true);
+            taskLabel.setMaxWidth(200);
+            taskLabel.setFont(Font.font(13));
+            taskLabel.setTextFill(Color.web("#7D7C7C"));
+            taskLabel.setAlignment(Pos.CENTER);
+            tasksContainer.getChildren().add(taskLabel);
+        }
+
+        tasksScrollPane.setContent(tasksContainer);
         tasksScrollPane.setPrefHeight(100);
         tasksScrollPane.setStyle("-fx-background-color: #1c1c1c; -fx-background: #1c1c1c;");
 
@@ -234,19 +256,51 @@ public class Developer_page {
         transition.play();
     }
 
-     private List<Team_members> getTeamMembers() {
+    private List<Team_members> getTeamMembers() {
         List<Team_members> team = new ArrayList<>();
-        team.add(new Team_members("Salma Fawzy", List.of("- Class: User Watch record/ Team Members", "- Display top-rated shows", "- Developer page", "- GUI"),
-                new Image(Objects.requireNonNull(getClass().getResource("/dev/salma (2).jpg")).toString())));
-        team.add(new Team_members("Mahmoud Ahmed", List.of("- Class: Movie, - GUI", "- JSON files,- UI design", "- Display recent shows", "- Display top watched shows", "- Add & remove shows"),
-                new Image(Objects.requireNonNull(getClass().getResource("/dev/Mahoud..jpg")).toString())));
-        team.add(new Team_members("Sandra Hany", List.of("- Class: Series, GUI", "- Search & filter (shows/director/actor)", "- Categorized movie search results", "- Edit shows (show, cast, director)", "- Restriction on subscriptions"),
-                new Image(Objects.requireNonNull(getClass().getResource("/dev/Sandra.jpg")).toString())));
-        team.add(new Team_members("Sara Emad", List.of("- Class: Subscription, GUI", "- Subscribed plans", "- Admin find highest revenue month"),
-                new Image(Objects.requireNonNull(getClass().getResource("/dev/Sara.jpg")).toString())));
-        team.add(new Team_members("Fady Gerges", List.of("- Class: User, GUI", "- Banner", "- Add to favorite", "- JSON files, Add Rate", "- Display watched shows", "- Add shows to watch & Favorite list"),
+        team.add(new Team_members("Fady Gerges Kodsy", List.of(
+                "Class: User, GUI",
+                "Banner",
+                "Favorite Page",
+                "JSON files, Add Rate",
+                "Display watched shows",
+                "Add shows to watch",
+                "Sidebar",
+                "Subscription page",
+                "Account page",
+                "Animations in pages"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Fady.png")).toString())));
-        team.add(new Team_members("Marwan Waleed", List.of("- Class: Cast/ Director", "- GUI", "- Login in", "- Sign up", "- Best Actor"),
+        team.add(new Team_members("Salma Fawzy", List.of(
+                "Class: User Watch record/ Team Members",
+                "Display top-rated shows",
+                "Developer page",
+                "GUI"),
+                new Image(Objects.requireNonNull(getClass().getResource("/dev/salma (2).jpg")).toString())));
+        team.add(new Team_members("Mahmoud Ahmed", List.of(
+                "Class: Movie, GUI",
+                "JSON files, UI design",
+                "Display recent shows",
+                "Display top watched shows",
+                "Add & remove shows"),
+                new Image(Objects.requireNonNull(getClass().getResource("/dev/Mahoud..jpg")).toString())));
+        team.add(new Team_members("Sandra Hany", List.of(
+                "Class: Series, GUI",
+                "Search & filter (shows/director/actor)",
+                "Categorized movie search results",
+                "Edit shows (show, cast, director)",
+                "Restriction on subscriptions"),
+                new Image(Objects.requireNonNull(getClass().getResource("/dev/Sandra.jpg")).toString())));
+        team.add(new Team_members("Sara Emad", List.of(
+                "Class: Subscription, GUI",
+                "Subscribed plans",
+                "Admin find highest revenue month"),
+                new Image(Objects.requireNonNull(getClass().getResource("/dev/Sara.jpg")).toString())));
+        team.add(new Team_members("Marwan Waleed", List.of(
+                "Class: Cast/ Director",
+                "GUI",
+                "Login in",
+                "Sign up",
+                "Best Actor"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Marwan.jpg")).toString())));
 
         return team;

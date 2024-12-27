@@ -8,12 +8,6 @@ public class Movie extends Show {
     private int movie_id;
     private List<Movie> movies;
 
-//
-//    public Movie(String title, String genre, int movie_id) {
-//        super(title, List.of(genre)); // Call Show constructor
-//        this.movie_id = movie_id;
-//    }
-
     public void setMovie_id(int movie_id) {
         this.movie_id = movie_id;
     }
@@ -57,7 +51,7 @@ public class Movie extends Show {
         }
 
         if (results.isEmpty()) {
-            throw new Exception("No movies found matching the criteria: " + criteria + " with keyword: " + keyword);
+            throw new Exception(STR."No movies found matching the criteria: \{criteria} with keyword: \{keyword}");
         }
 
         return results;

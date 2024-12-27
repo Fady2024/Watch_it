@@ -1,16 +1,9 @@
-// src/main/java/com/example/fms_market/admin/UpdateShowPage.java
 package com.example.fms_market.admin;
 
 import com.example.fms_market.data.ShowJsonHandler;
-import com.example.fms_market.model.Director;
 import com.example.fms_market.model.Show;
 import com.example.fms_market.model.User;
-
-
-import com.example.fms_market.data.CastJsonHandler;
-import com.example.fms_market.data.DirectorJsonHandler;
 import com.example.fms_market.pages.HomePage;
-import com.example.fms_market.data.ShowJsonHandler;
 import com.example.fms_market.model.*;
 import com.example.fms_market.util.LanguageManager;
 import com.example.fms_market.util.ShowCardUtil;
@@ -29,23 +22,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.awt.*;
 import javafx.scene.control.TextArea;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.StageStyle;
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.example.fms_market.util.Banner.currentUser;
 import static com.example.fms_market.util.ShowCardUtil.SHOW_CARD_WIDTH;
 
 public class UpdateShowPage {
@@ -166,12 +152,6 @@ public class UpdateShowPage {
         adjustLayout(showContainer, stageWidth, allMovies,allSeries, user, stage);
     }
 
-
-
-
-
-
-
     /**
      * Reloads the shows from the JSON file into the UI.
      */
@@ -183,9 +163,6 @@ public class UpdateShowPage {
         showDetailsTable.getItems().clear();
     }
 
-    /**
-     * Loads the shows from the JSON file.
-     */
     /**
      * Loads the shows from the JSON file.
      */
@@ -368,7 +345,7 @@ public class UpdateShowPage {
         for (int i = 0; i < cast.size(); i++) {
             TextField castField = new TextField(cast.get(i));
           //  grid.add(createLabel("Cast Member " + (i + 1) + ":"), 0, 13 + i);
-            grid.add(createLabel(LanguageManager.getLanguageBasedString("Cast Member " + (i + 1) + ":", "Cast Member " + (i + 1) + ":")), 0, 13 + i);
+            grid.add(createLabel(LanguageManager.getLanguageBasedString(STR."Cast Member \{i + 1}:", STR."Cast Member \{i + 1}:")), 0, 13 + i);
             grid.add(castField, 1, 13 + i);
         }
         //Select Type

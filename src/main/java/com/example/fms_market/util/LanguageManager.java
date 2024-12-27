@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LanguageManager {
-    private static LanguageManager instance = new LanguageManager();
+    private static final LanguageManager instance = new LanguageManager();
 
-    private StringProperty language = new SimpleStringProperty("English");
+    private final StringProperty language = new SimpleStringProperty("English");
     private final List<Runnable> actionListeners = new ArrayList<>();
 
 
@@ -65,10 +65,8 @@ public class LanguageManager {
         }
 
         Label label = new Label();
-        label.setStyle("-fx-font-size: " + fontSize + "; -fx-text-fill: " + color + ";");
+        label.setStyle(STR."-fx-font-size: \{fontSize}; -fx-text-fill: \{color};");
         label.textProperty().bind(textProperty);
-
-        // إرجاع الكائن
         return label;
     }
 
@@ -97,7 +95,7 @@ public class LanguageManager {
         }
 
         Text text = new Text();
-        text.setStyle("-fx-font-size: " + fontSize + "; -fx-fill: " + color + ";");
+        text.setStyle(STR."-fx-font-size: \{fontSize}; -fx-fill: \{color};");
         text.textProperty().bind(text_property);
 
         return text;
@@ -124,7 +122,7 @@ public class LanguageManager {
         }
 
         Button button = new Button();
-        button.setStyle("-fx-font-size: " + fontSize + "; -fx-text-fill: " + color + ";");
+        button.setStyle(STR."-fx-font-size: \{fontSize}; -fx-text-fill: \{color};");
         button.textProperty().bind(buttonTextProperty);
 
         return button;
@@ -151,7 +149,7 @@ public class LanguageManager {
         }
 
         TextField textField = new TextField();
-        textField.setStyle("-fx-font-size: " + fontSize + "; -fx-text-fill: " + color + ";");
+        textField.setStyle(STR."-fx-font-size: \{fontSize}; -fx-text-fill: \{color};");
 
         textField.promptTextProperty().bind(promptTextProperty);
 

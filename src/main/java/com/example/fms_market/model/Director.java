@@ -3,7 +3,6 @@ package com.example.fms_market.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.ArrayList;
 import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,14 +27,13 @@ public class Director {
              {
         this.first_name = first_name;
         this.last_name = last_name;
-        this.shows = shows;
         this.age = age;
         this.gender = gender;
         this.nationality = nationality;
 
     }
 
-    public Director(){};
+    public Director(){}
 
     @JsonProperty("first_name")
     public String getFirstName() {

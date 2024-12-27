@@ -19,6 +19,8 @@ import javafx.scene.control.ScrollPane;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -142,7 +144,7 @@ public class Revenue_page  {
         double basic_arr = Subscription.getFreq_month()[cuurent_index][0];
         double standard_arr = Subscription.getFreq_month()[cuurent_index][1];
         double premium_arr = Subscription.getFreq_month()[cuurent_index][2];
-        System.out.println(cuurent_index+" "+Subscription.getFreq_month()[cuurent_index][2]);
+        System.out.println(STR."\{cuurent_index} \{Subscription.getFreq_month()[cuurent_index][2]}");
 
             series.getData().add(new XYChart.Data<>(LanguageManager.getLanguageBasedString("Prämie","Premium")
                     , premium_arr));
@@ -153,14 +155,14 @@ public class Revenue_page  {
 
 
 
-        series.getData().sort((d1, d2) -> Double.compare(d1.getYValue().doubleValue(), d2.getYValue().doubleValue()));
+        series.getData().sort(Comparator.comparingDouble(d -> d.getYValue().doubleValue()));
 
         Platform.runLater(() -> {
             for (int i = 0; i < series.getData().size(); i++) {
                 XYChart.Data<String, Number> data = series.getData().get(i);
                 String color = getColorForValue(i);
 
-                data.getNode().setStyle("-fx-bar-fill: " + color + ";");
+                data.getNode().setStyle(STR."-fx-bar-fill: \{color};");
             }
         });
 
@@ -253,16 +255,16 @@ stack_max_month.getChildren().addAll(image_box_max,max_month);
     }
     public  Text createStyledText(String content, String fontSize, String color) {
         Text text = new Text(content);
-        text.setStyle("-fx-font-size: " + fontSize + "; -fx-fill: " + color + ";");
+        text.setStyle(STR."-fx-font-size: \{fontSize}; -fx-fill: \{color};");
         return text;
     }
 private String getColorForValue(int index) {
-    switch (index) {
-        case 0: return "red";
-        case 1: return "green";
-        case 2: return "purple";
-        default: return "gray";
-    }
+    return switch (index) {
+        case 0 -> "red";
+        case 1 -> "green";
+        case 2 -> "purple";
+        default -> "gray";
+    };
 }
     private Text createMonthLabel(String month) {
         Text text = new Text(month);
@@ -271,7 +273,7 @@ private String getColorForValue(int index) {
         return text;
     }
 
-    private int shiftMonthsRight(HBox hbox, String[] months) {
+    private void shiftMonthsRight(HBox hbox, String[] months) {
         Text first = (Text) hbox.getChildren().get(0);
         Text middle = (Text) hbox.getChildren().get(1);
         Text last = (Text) hbox.getChildren().get(2);
@@ -285,10 +287,9 @@ private String getColorForValue(int index) {
         last.setText(months[(nextIndex + 1) % months.length]);
 
         updateMonthColors(hbox);
-        return nextIndex;
     }
 
-    private int shiftMonthsLeft(HBox hbox, String[] months) {
+    private void shiftMonthsLeft(HBox hbox, String[] months) {
         Text first = (Text) hbox.getChildren().get(0);
         Text middle = (Text) hbox.getChildren().get(1);
         Text last = (Text) hbox.getChildren().get(2);
@@ -302,7 +303,6 @@ private String getColorForValue(int index) {
         last.setText(months[middleIndex]);
 
         updateMonthColors(hbox);
-        return nextIndex;
     }
     private void handleScroll(ScrollEvent event, HBox hbox, String[] months) {
         if (event.getDeltaY() > 0) {
@@ -393,18 +393,14 @@ private String getColorForValue(int index) {
         chartContainer.setMinSize(300, 200);
         chartContainer.setMaxSize(500, 400);
 
-
-        // تخصيص ألوان الأعمدة
         Platform.runLater(() -> {
             for (int i = 0; i < series.getData().size(); i++) {
                 XYChart.Data<String, Number> data = series.getData().get(i);
                 String color = getColorForValue(i);
-                data.getNode().setStyle("-fx-bar-fill: " + color + ";");
+                data.getNode().setStyle(STR."-fx-bar-fill: \{color};");
             }
         });
     }
-
-
 
     private void  createSimpleLineChart(StackPane chartContainer, double stageWidth, double stageHeight, Text currentMonth, String[] months) {
         int current_index = getMonthIndex(currentMonth.getText(), months);

@@ -136,25 +136,6 @@ public class RemoveShowPage {
         adjustLayout(showContainer, stageWidth, allMovies,allSeries, user, stage);
     }
 
-    /**
-     * Configures the TableView for displaying show details.
-     */
-//    private void setupTable() {
-//        TableColumn<Show, Integer> idColumn = new TableColumn<>("ID");
-//        idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
-//        idColumn.setPrefWidth(50);
-//
-//        TableColumn<Show, String> titleColumn = new TableColumn<>("Title");
-//        titleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
-//        titleColumn.setPrefWidth(200);
-//
-//        TableColumn<Show, String> descriptionColumn = new TableColumn<>("Description");
-//        descriptionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
-//        descriptionColumn.setPrefWidth(200);
-//
-//        showDetailsTable.getColumns().addAll(idColumn, titleColumn, descriptionColumn);
-//        showDetailsTable.setPrefHeight(200);
-//    }
 
     /**
      * Reloads the shows from the JSON file into the UI.

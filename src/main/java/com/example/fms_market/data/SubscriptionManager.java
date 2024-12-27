@@ -1,19 +1,21 @@
-// src/main/java/com/example/fms_market/data/SubscriptionManager.java
 package com.example.fms_market.data;
 
 import com.example.fms_market.model.Subscription;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
+
 
 public class SubscriptionManager {
-    private static final String FILE_NAME = "src/main/resources/data/subscriptions.json";
-    private static final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    private static final ObjectMapper objectMapper = DataManager.getObjectMapper();
+    private static final File subscriptionsFile = DataManager.getSubscriptionsFile();
     private static List<Subscription> subscriptions = new ArrayList<>();
 
     static {
@@ -33,12 +35,11 @@ public class SubscriptionManager {
 
     public static void writeSubscriptions() {
         try {
-            File file = new File(FILE_NAME);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+            // Load existing data
+            JsonNode existingData = objectMapper.readTree(subscriptionsFile);
 
-            Map<String, Object> data = Map.of(
+            // Create new data
+            Map<String, Object> newData = Map.of(
                     "subscriptions", subscriptions,
                     "static_data", Map.of(
                             "current_year", Subscription.getCurrent_year()
@@ -46,7 +47,12 @@ public class SubscriptionManager {
                     "freq_month", Subscription.getFreq_month()
             );
 
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, data);
+            // Merge new data with existing data
+            ObjectNode mergedData = (ObjectNode) existingData;
+            mergedData.setAll(objectMapper.convertValue(newData, ObjectNode.class));
+
+            // Save merged data back to the JSON file
+            objectMapper.writeValue(subscriptionsFile, mergedData);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,28 +60,18 @@ public class SubscriptionManager {
     }
 
     public static void readSubscriptions() {
-        try {
-            File file = new File(FILE_NAME);
-            if (!file.exists()) {
-                return;
-            }
+        ObjectNode subscriptionsRootNode = DataManager.getSubscriptionsRootNode();
 
-            Map<String, Object> data = objectMapper.readValue(file, new TypeReference<Map<String, Object>>() {});
+        List<Map<String, Object>> subscriptionList = objectMapper.convertValue(subscriptionsRootNode.get("subscriptions"), new TypeReference<>() {});
+        if (subscriptionList != null) {
+            subscriptions = objectMapper.convertValue(subscriptionList, new TypeReference<>() {});
+        }
 
-            List<Map<String, Object>> subscriptionList = (List<Map<String, Object>>) data.get("subscriptions");
-            if (subscriptionList != null) {
-                subscriptions = objectMapper.convertValue(subscriptionList, new TypeReference<List<Subscription>>() {});
-            }
-
-            List<List<Integer>> freqMonthData = (List<List<Integer>>) data.get("freq_month");
-            if (freqMonthData != null) {
-                Subscription.setFreq_month(freqMonthData.stream()
-                        .map(list -> list.stream().mapToInt(Integer::intValue).toArray())
-                        .toArray(int[][]::new));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<List<Integer>> freqMonthData = objectMapper.convertValue(subscriptionsRootNode.get("freq_month"), new TypeReference<>() {});
+        if (freqMonthData != null) {
+            Subscription.setFreq_month(freqMonthData.stream()
+                    .map(list -> list.stream().mapToInt(Integer::intValue).toArray())
+                    .toArray(int[][]::new));
         }
     }
 

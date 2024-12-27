@@ -48,25 +48,22 @@ public class SearchForShow {
     public SearchForShow(User user, Stage stage, String keyword) throws Exception {
         this.user_filter = null; // No user filter in this constructor(for filtering show )
         this.keyword = keyword;
-        this.mainSection = new VBox();
-        MovieSearch(stage,user);
+        SearchForShow.mainSection = new VBox();
+        MovieSearch(stage, user);
     }
 
-    // Constructor for invoking from user_filter
     public SearchForShow(User_Filter userFilter, Stage stage) throws Exception {
         this.user_filter = userFilter;
         this.keyword = null; // No keyword in this constructor(for searching using keyword)
-        this.mainSection = new VBox();
+        SearchForShow.mainSection = new VBox();
         MovieSearch(stage, Banner.currentUser);
     }
 
     public SearchForShow(User user, Stage stage) throws Exception {
-
         this.keyword = null;
         this.user_filter = null;
-        this.mainSection = new VBox();
+        SearchForShow.mainSection = new VBox();
         MovieSearch(stage,user);
-
     }
 
     public void MovieSearch(Stage stage, User user) throws Exception {
@@ -114,11 +111,11 @@ public class SearchForShow {
             filterIcon.setFitHeight(20);
             filterButton.setGraphic(filterIcon);
         } catch (RuntimeException e) {
-            System.out.println("Error loading image: " + e.getMessage());
+            System.out.println(STR."Error loading image: \{e.getMessage()}");
             e.printStackTrace();
         }
 
-        Label searchedForLabel = new Label("You searched for: \"" + keyword + "\"");
+        Label searchedForLabel = new Label(STR."You searched for: \"\{keyword}\"");
         searchedForLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
         searchedForLabel.setVisible(false);
 
@@ -170,7 +167,7 @@ public class SearchForShow {
         contentBox.setSpacing(10);
 
         mainSection.getChildren().addAll(
-                Banner.getBanner(stage, keyword != null ? "Search Results for: " + keyword : "SearchForShow", "SearchForShow"),
+                Banner.getBanner(stage, keyword != null ? STR."Search Results for: \{keyword}" : "SearchForShow", "SearchForShow"),
                 filterBox,
                 contentBox
         );
@@ -262,7 +259,7 @@ public class SearchForShow {
         int stageHeight = (int) (screenSize.getHeight() / 1.1);
         Scene scene = new Scene(layout, stageWidth, stageHeight);
         stage.setScene(scene);
-        stage.setTitle(keyword != null ? "Search Results for: " + keyword : "Filtered Results");
+        stage.setTitle(keyword != null ? STR."Search Results for: \{keyword}" : "Filtered Results");
         stage.show();
     }
 
@@ -284,7 +281,7 @@ public class SearchForShow {
     private static VBox createPersonCard(String firstName, String lastName, String gender, User user, Stage stage, Runnable onClick) {
         VBox personCard = new VBox(5);
         personCard.setAlignment(Pos.TOP_CENTER);
-        Label name = new Label(firstName + " " + lastName);
+        Label name = new Label(STR."\{firstName} \{lastName}");
         name.setFont(Font.loadFont(Objects.requireNonNull(ShowCardUtil.class.getResource("/LexendDecaRegular.ttf")).toString(), 14));
         name.setTextFill(Color.WHITE);
         name.setAlignment(Pos.CENTER);
@@ -323,15 +320,11 @@ public class SearchForShow {
     }
 
     public static VBox createDirectorCard(Director director, User user, Stage stage) {
-        return createPersonCard(director.getFirstName(), director.getLastName(), director.getGender(), user, stage, () -> {
-            new DetailsPageFX(user, director.getFirstName() + " " + director.getLastName(), stage, null);
-        });
+        return createPersonCard(director.getFirstName(), director.getLastName(), director.getGender(), user, stage, () -> new DetailsPageFX(user, STR."\{director.getFirstName()} \{director.getLastName()}", stage, null));
     }
 
     public static VBox createCastCard(Cast cast, User user, Stage stage) {
-        return createPersonCard(cast.getFirst_name(), cast.getLast_name(), cast.getGender(), user, stage, () -> {
-            new DetailsPageFX(user, cast.getFirst_name() + " " + cast.getLast_name(), stage, null);
-        });
+        return createPersonCard(cast.getFirst_name(), cast.getLast_name(), cast.getGender(), user, stage, () -> new DetailsPageFX(user, STR."\{cast.getFirst_name()} \{cast.getLast_name()}", stage, null));
     }
 
     private List<Movie> searchMoviesByKeyword(List<Movie> movies, String keyword, User user, Stage stage) throws Exception {
@@ -362,7 +355,7 @@ public class SearchForShow {
         return results;
     }
 
-    private List<Series> searchSeriesByKeyword(List<Series> seriesList, String keyword, User user, Stage stage) throws Exception {
+    private List<Series> searchSeriesByKeyword(List<Series> seriesList, String keyword, User user, Stage stage) {
         List<Series> results = seriesList.stream()
                 .filter(series -> series.getTitle() != null && series.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
                 .collect(Collectors.toList());

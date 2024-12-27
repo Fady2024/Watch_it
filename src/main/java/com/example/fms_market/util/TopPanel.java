@@ -1,15 +1,11 @@
 package com.example.fms_market.util;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +87,8 @@ public class TopPanel {
         Color trackColor = lerpColor(Color.rgb(57, 57, 57), position);
         gc.setFill(trackColor);
 
-        gc.fillRoundRect((double) (width - trackWidth) / 2, (double) (height - trackHeight) / 2, trackWidth, trackHeight, trackHeight, trackHeight);
+        double arcSize = 30;
+        gc.fillRoundRect((double) (width - trackWidth) / 2, (double) (height - trackHeight) / 2, trackWidth, trackHeight, arcSize, arcSize);
 
         if (isDay && position < 0.5) {
             gc.setFill(Color.YELLOW);

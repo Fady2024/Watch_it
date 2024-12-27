@@ -24,7 +24,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.shape.Rectangle;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -36,11 +36,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 public class SignUpPage {
     private final Pane contentPane;
-    private File profileImage;
     private final VBox profileImagePanel = new VBox();
     private String user_photo_path;
     private String username;
-    private final Label signup;
     private final HBox loginLabel;
     private final Button signUpButton;
 
@@ -65,7 +63,7 @@ public class SignUpPage {
 
     public SignUpPage(Stage primaryStage) {
 
-        signup = labelSignup();
+        Label signup = labelSignup();
         signUpButton = createButton();
         signUpButton.setOnAction(event -> handleSignUp(primaryStage));
         contentPane = new Pane();
@@ -569,7 +567,7 @@ public class SignUpPage {
     private void selectProfileImage(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-        profileImage = fileChooser.showOpenDialog(primaryStage);
+        File profileImage = fileChooser.showOpenDialog(primaryStage);
 
         profileImagePanel.getChildren().clear();
 

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class Filter_Window {
     private final User_Filter user_filter;
-    private VBox filterPane;
+    private final VBox filterPane;
     private  User user;
 
     public Filter_Window(User_Filter userFilter) {
@@ -24,7 +24,6 @@ public class Filter_Window {
         //this.filterPane = new VBox(); // Initialize the filterPane
         this.filterPane = new VBox(); // Initialize the filterPane
         this.filterPane.setStyle("-fx-background-color: rgba(64,64,64,255); -fx-background-radius: 20px; -fx-padding: 20px;");
-        this.user=user;
     }
     public VBox getFilterVBox() {
         // Genres Section

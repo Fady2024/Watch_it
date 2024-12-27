@@ -47,7 +47,7 @@ public class subscription_page {
             button1.setPrefHeight(stageHeight * 0.05);
 
             String image_path;
-            ImageView imageView = null;
+            ImageView imageView;
             String plan_name;
             if (i == 0) {
                 image_path = LanguageManager.getLanguageBasedString("file:src/main/resources/image/1 german.png", "file:src/main/resources/image/Basic plan.png");
@@ -71,9 +71,7 @@ public class subscription_page {
             }
 
             String finalImagePath = image_path;
-            button1.setOnAction(_ -> {
-                new payment_page(stage, user, finalImagePath, plan_name);
-            });
+            button1.setOnAction(_ -> new payment_page(stage, user, finalImagePath, plan_name));
 
             Runnable onHover = () -> {
                 button1.setStyle("-fx-background-color: linear-gradient(to top left, #5C0C5A, #9C0479); -fx-text-fill: white; -fx-background-radius: 80;");
@@ -146,7 +144,7 @@ public class subscription_page {
             innerRect.setHeight(height * 0.73);
 
             double fontSize = Math.min(button.getWidth(), button.getHeight()) / 4;
-            button.setStyle("-fx-font-size: " + fontSize + "px;");
+            button.setStyle(STR."-fx-font-size: \{fontSize}px;");
             button.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-background-radius: 80;");
             StackPane.setAlignment(button, Pos.BOTTOM_CENTER);
             StackPane.setMargin(button, new Insets(0, 0, height * 0.2, 0));
@@ -176,10 +174,10 @@ public class subscription_page {
             ImageView imageView = (ImageView) stack.getChildren().get(3);
 
             // Update button text
-            button.setText(LanguageManager.getInstance().getLanguageBasedString("Abonnieren", "Subscribe"));
+            button.setText(LanguageManager.getLanguageBasedString("Abonnieren", "Subscribe"));
 
             // Update image based on the language
-            String imagePath = LanguageManager.getInstance().getLanguageBasedString(
+            String imagePath = LanguageManager.getLanguageBasedString(
                     "file:src/main/resources/image/1 german.png",
                     "file:src/main/resources/image/Basic plan.png"
             );

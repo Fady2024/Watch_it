@@ -16,12 +16,14 @@ public class DataManager {
     private static final String DIRECTORS_FILE_PATH = Path.of(RESOURCES_DIR, "director.json").toString();
     private static final String CAST_FILE_PATH = Path.of(RESOURCES_DIR, "cast.json").toString();
     private static final String COMMENTS_FILE_PATH = Path.of(RESOURCES_DIR, "comments.json").toString();
+    private static final String SUBSCRIPTIONS_FILE_PATH = Path.of(RESOURCES_DIR, "subscriptions.json").toString();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static ObjectNode showsRootNode;
     private static ObjectNode usersRootNode;
     private static ObjectNode directorsRootNode;
     private static ObjectNode castRootNode;
     private static ObjectNode commentsRootNode;
+    private static ObjectNode subscriptionsRootNode;
 
     public static void loadData() throws IOException {
         showsRootNode = readFile(SHOWS_FILE_PATH);
@@ -29,6 +31,7 @@ public class DataManager {
         directorsRootNode = readFile(DIRECTORS_FILE_PATH);
         castRootNode = readFile(CAST_FILE_PATH);
         commentsRootNode = readFile(COMMENTS_FILE_PATH);
+        subscriptionsRootNode = readFile(SUBSCRIPTIONS_FILE_PATH);
     }
 
     public static void saveData() throws IOException {
@@ -37,9 +40,10 @@ public class DataManager {
         writeFile(DIRECTORS_FILE_PATH, directorsRootNode);
         writeFile(CAST_FILE_PATH, castRootNode);
         writeFile(COMMENTS_FILE_PATH, commentsRootNode);
+        writeFile(SUBSCRIPTIONS_FILE_PATH, subscriptionsRootNode);
     }
 
-    private static ObjectNode readFile(String filePath) throws IOException {
+    public static ObjectNode readFile(String filePath) throws IOException {
         File file = new File(filePath);
         if (!file.exists() || file.length() == 0) {
             return objectMapper.createObjectNode();
@@ -48,13 +52,13 @@ public class DataManager {
             return (ObjectNode) objectMapper.readTree(file);
         } catch (JsonParseException | JsonMappingException e) {
             // Handle JSON parsing exceptions
-            System.err.println("Error parsing JSON file: " + filePath);
+            System.err.println(STR."Error parsing JSON file: \{filePath}");
             e.printStackTrace();
             return objectMapper.createObjectNode();
         }
     }
 
-    private static void writeFile(String filePath, ObjectNode rootNode) throws IOException {
+    public static void writeFile(String filePath, ObjectNode rootNode) throws IOException {
         objectMapper.writeValue(new File(filePath), rootNode);
     }
 
@@ -78,7 +82,15 @@ public class DataManager {
         return commentsRootNode;
     }
 
+    public static ObjectNode getSubscriptionsRootNode() {
+        return subscriptionsRootNode;
+    }
+
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
+    }
+
+    public static File getSubscriptionsFile() {
+        return new File(SUBSCRIPTIONS_FILE_PATH);
     }
 }

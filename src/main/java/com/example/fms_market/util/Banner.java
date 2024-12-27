@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-// In Banner.java
 public class Banner {
     public static User currentUser;
     private static Sidebar.SidebarListener sidebarListener;
@@ -84,7 +83,7 @@ public class Banner {
         searchField.setOnAction(event -> {
             String keyword = searchField.getText();
                 try {
-                    System.out.println("Search triggered for keyword: " + keyword);
+                    System.out.println(STR."Search triggered for keyword: \{keyword}");
                     new SearchForShow(currentUser, stage, keyword);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -105,7 +104,7 @@ public class Banner {
     private static Text createNavLabel(String text, boolean isCurrentPage, Runnable action) {
         Text label = new Text(text);
         label.setFont(Font.loadFont(Objects.requireNonNull(Banner.class.getResource("/LexendDecaRegular.ttf")).toString(), 20));
-        label.setStyle("-fx-fill: " + (isCurrentPage ? "white" : "#888888") + "; -fx-cursor: hand;");
+        label.setStyle(STR."-fx-fill: \{isCurrentPage ? "white" : "#888888"}; -fx-cursor: hand;");
         label.addEventHandler(MouseEvent.MOUSE_ENTERED, _ -> {
             if (!isCurrentPage) label.setStyle("-fx-fill: lightgrey; -fx-cursor: hand; -fx-font-weight: bold;");
         });

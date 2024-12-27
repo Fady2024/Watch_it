@@ -36,9 +36,9 @@ public class payment_page {
     boolean valid = true;
     boolean valid2 = true;
     boolean valid3 = true;
-    private TextField numberField_card;
-    private TextField numberField_date;
-    private TextField numberField_cvc;
+    private final TextField numberField_card;
+    private final TextField numberField_date;
+    private final TextField numberField_cvc;
 
     public payment_page(Stage stage, User user, String finalImagePath, String plane_name) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -274,8 +274,8 @@ public class payment_page {
         }
         String str = String.valueOf(price);
         Text addNewText = new Text(LanguageManager.getLanguageBasedString(
-                "Möchten Sie wirklich fortfahren? Hinweis: Wenn Sie fortfahren, zahlen Sie " + str + "$",
-                "Are You Sure You Want to Continue? Note: if you continue you will pay " + str + "$"
+                STR."Möchten Sie wirklich fortfahren? Hinweis: Wenn Sie fortfahren, zahlen Sie \{str}$",
+                STR."Are You Sure You Want to Continue? Note: if you continue you will pay \{str}$"
         ));
         addNewText.setFill(Paint.valueOf("white"));
         addNewText.setFont(Font.loadFont(Objects.requireNonNull(getClass().getResource("/LexendDecaRegular.ttf")).toString(), 20));

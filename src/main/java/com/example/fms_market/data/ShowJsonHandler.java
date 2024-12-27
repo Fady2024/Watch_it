@@ -1,7 +1,5 @@
 package com.example.fms_market.data;
 
-import com.example.fms_market.data.DataManager;
-import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.Movie;
 import com.example.fms_market.model.Series;
 import com.example.fms_market.model.Show;
@@ -10,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;

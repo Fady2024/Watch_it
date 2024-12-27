@@ -1,5 +1,4 @@
-package com.example.fms_market.model;//package com.example.fms_market;
-import com.example.fms_market.model.Show;
+package com.example.fms_market.model;
 
 import java.util.ArrayList;
 import java.util.List;

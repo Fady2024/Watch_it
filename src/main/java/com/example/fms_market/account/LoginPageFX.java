@@ -4,12 +4,10 @@ import com.example.fms_market.data.SubscriptionManager;
 import com.example.fms_market.model.Subscription;
 import com.example.fms_market.pages.HomePage;
 import com.example.fms_market.pages.subscription_page;
-import com.example.fms_market.util.TopPanel;
 import com.example.fms_market.data.UserJsonHandler;
 import com.example.fms_market.model.User;
 import com.example.fms_market.util.LanguageManager;
 import javafx.geometry.Pos;
-import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Cursor;
@@ -318,7 +316,7 @@ public class LoginPageFX {
                     playShakeTransition(messageText);
                 }
             } catch (IOException ex) {
-                messageText.setText("Error reading user data: " + ex.getMessage());
+                messageText.setText(STR."Error reading user data: \{ex.getMessage()}");
                 playShakeTransition(loginForm);
             }
         } else {

@@ -35,11 +35,9 @@ import java.util.List;
 
 public class AddShow {
 
-    private final User currentUser;
     private final Stage stage;
 
     public AddShow(User currentUser, Stage stage) throws IOException {
-        this.currentUser = currentUser;
         this.stage = stage;
         GridPane showContainer = new GridPane();
         showContainer.setPadding(new Insets(20));
@@ -1006,8 +1004,8 @@ public class AddShow {
             String firstname = name[0];
             String lastname = name[1];
             List<Director> allDirectors = DirectorJsonHandler.readDirectors();
-            for (int i = 0; i < allDirectors.size(); i++) {
-                if ((allDirectors.get(i).getFirstName().toLowerCase() + allDirectors.get(i).getLastName().toLowerCase()).equals(firstname + lastname)) {
+            for (Director allDirector : allDirectors) {
+                if ((allDirector.getFirstName().toLowerCase() + allDirector.getLastName().toLowerCase()).equals(firstname + lastname)) {
                     return true;
                 }
             }
@@ -1026,8 +1024,8 @@ public class AddShow {
             String firstname = name[0];
             String lastname = name[1];
             List<Cast> allCast = CastJsonHandler.readCast();
-            for (int i = 0; i < allCast.size(); i++) {
-                if ((allCast.get(i).getFirst_name().toLowerCase() + allCast.get(i).getLast_name().toLowerCase()).equals(firstname + lastname)) {
+            for (Cast cast : allCast) {
+                if ((cast.getFirst_name().toLowerCase() + cast.getLast_name().toLowerCase()).equals(firstname + lastname)) {
                     return true;
                 }
             }
@@ -1054,7 +1052,7 @@ public class AddShow {
         }
         if(directorExists)
         {
-            List <String> shows = new ArrayList<>();
+            List <String> shows;
             shows = allDirectors.get(index).getShows();
             shows.add(title);
             allDirectors.get(index).setShows(shows);
@@ -1077,7 +1075,7 @@ public class AddShow {
         }
         if(directorExists)
         {
-            List <String> shows = new ArrayList<>();
+            List <String> shows;
             shows = allCast.get(index).getShows();
             shows.add(title);
             allCast.get(index).setShows(shows);
