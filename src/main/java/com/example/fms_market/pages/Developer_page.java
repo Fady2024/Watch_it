@@ -284,7 +284,7 @@ public class Developer_page {
                 "Add & remove shows"),
                 new Image(Objects.requireNonNull(getClass().getResource("/dev/Mahoud..jpg")).toString())));
         team.add(new Team_members("Sandra Hany", List.of(
-                "Class: Series, GUI",
+                "Class: =User_filter, GUI",
                 "Search & filter (shows/director/actor)",
                 "Categorized movie search results",
                 "Edit shows (show, cast, director)",
